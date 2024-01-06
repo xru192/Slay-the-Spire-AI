@@ -16,6 +16,7 @@ import newaimod.AI.BasicIroncladPlayer.BasicIroncladPlayer;
 import newaimod.Properties.PropertyManager;
 import newaimod.actions.DoCombatMoveAction;
 import newaimod.commands.CardInfoCommand;
+import newaimod.commands.MonsterInfoCommand;
 import newaimod.commands.TestCommand;
 import newaimod.commands.TestDoCombatMoveActionCommand;
 import newaimod.util.CombatUtils;
@@ -57,7 +58,7 @@ public class NewAIMod implements
     private static int waitCounter = 0;
     private static boolean stateChanged = false;
 
-    private static final int WAIT = 30;       // wait time (frames) between auto actions
+    private static final int WAIT = 10;       // wait time (frames) between auto actions
     private AutoPlayer autoPlayer;
     public static AutoPlayer.CombatMove move = null;
     private static boolean creating = false;
@@ -77,6 +78,7 @@ public class NewAIMod implements
         ConsoleCommand.addCommand("test", TestCommand.class);
         ConsoleCommand.addCommand("move", TestDoCombatMoveActionCommand.class);
         ConsoleCommand.addCommand("cardinfo", CardInfoCommand.class);
+        ConsoleCommand.addCommand("monsterinfo", MonsterInfoCommand.class);
     }
 
     @Override
