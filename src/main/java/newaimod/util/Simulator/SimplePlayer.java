@@ -9,7 +9,6 @@ import newaimod.util.CombatUtils;
 import newaimod.util.Simulator.Cards.AbstractSimpleCard;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * A SimplePlayer represents a simplified version of the state of the player during combat. This includes health, a
@@ -22,9 +21,13 @@ public class SimplePlayer {
     public int health;
     public int block;
     public int strength;
-//    public int metallicize;
+    public int dexterity;
+    //    public int metallicize;
 //    public int demonForm;
-//    boolean weakened;
+    boolean weakened;
+    boolean frail;
+
+    boolean entangled;
 //    boolean vulnerable;
 //    boolean intangible;
 
@@ -43,9 +46,12 @@ public class SimplePlayer {
         health = p.currentHealth;
         block = p.currentBlock;
         strength = CombatUtils.amountOfPower(p, StrengthPower.POWER_ID);
+        dexterity = CombatUtils.amountOfPower(p, DexterityPower.POWER_ID);
 //        metallicize = CombatUtils.amountOfPower(p, MetallicizePower.POWER_ID);
 //        demonForm = CombatUtils.amountOfPower(p, DemonFormPower.POWER_ID);
-//        weakened = p.hasPower(WeakPower.POWER_ID);
+        weakened = p.hasPower(WeakPower.POWER_ID);
+        frail = p.hasPower(FrailPower.POWER_ID);
+        entangled = p.hasPower(EntanglePower.POWER_ID);
 //        vulnerable = p.hasPower(VulnerablePower.POWER_ID);
 //        intangible = p.hasPower(IntangiblePlayerPower.POWER_ID);
     }
@@ -61,6 +67,10 @@ public class SimplePlayer {
         this.health = player.health;
         this.block = player.block;
         this.strength = player.strength;
+        this.dexterity = player.dexterity;
+        this.weakened = player.weakened;
+        this.frail = player.frail;
+        this.entangled = player.entangled;
     }
 
     public void payForAndUseCard(AbstractSimpleCard card) {
@@ -72,41 +82,35 @@ public class SimplePlayer {
 
     /**
      * Returns how much damage an attack will do (per hit) after player modifications. These include strength and
-     * weakened. TODO weakened/relics
+     * weakened. TODO relics
      *
      * @param base the base damage of the attack (per hit)
      * @return the damage after player modifications
      */
     public int getModifiedDamage(int base) {
-        return base + strength;
+        double weakFactor = weakened ? 0.75 : 1.0;
+        int result = (int) ((base + strength) * weakFactor);
+        return Math.max(0, result);
     }
 
 
     /**
      * Returns how much block will be gained by a card after player modifications. These include dexterity and frail.
-     * TODO dex/frail/relics
+     * TODO relics
      *
      * @param base the base block gain of the card
      * @return the block gain after player modifications
      */
     public int getModifiedBlock(int base) {
-        return base;
+        double frailFactor = frail ? 0.75 : 1.0;
+        int result = (int) ((base + dexterity) * frailFactor);
+        return Math.max(0, result);
     }
 
-    // TODO update (make sure simulator doesn't have to be equal)
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SimplePlayer that = (SimplePlayer) o;
-        return energy == that.energy && health == that.health && block == that.block && strength == that.strength && Objects.equals(hand, that.hand);
+    public boolean isEntangled() {
+        return entangled;
     }
 
-    // TODO update
-    @Override
-    public int hashCode() {
-        return Objects.hash(hand, energy, health, block);
-    }
 
     @Override
     public String toString() {
@@ -116,6 +120,7 @@ public class SimplePlayer {
                 ", health=" + health +
                 ", block=" + block +
                 ", strength=" + strength +
+                ", weakened=" + weakened +
                 '}';
     }
 }

@@ -1,17 +1,18 @@
 package newaimod.util.Simulator;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.red.Bash;
-import com.megacrit.cardcrawl.cards.red.Defend_Red;
-import com.megacrit.cardcrawl.cards.red.Strike_Red;
+import com.megacrit.cardcrawl.cards.red.*;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import newaimod.NewAIMod;
 import newaimod.util.Simulator.Cards.AbstractSimpleCard;
 import newaimod.util.Simulator.Cards.Filler;
-import newaimod.util.Simulator.Cards.Ironclad.SimpleBash;
-import newaimod.util.Simulator.Cards.Ironclad.SimpleDefend_Red;
-import newaimod.util.Simulator.Cards.Ironclad.SimpleStrike_Red;
+import newaimod.util.Simulator.Cards.Ironclad.Attacks.SimpleBash;
+import newaimod.util.Simulator.Cards.Ironclad.Attacks.SimpleIronWave;
+import newaimod.util.Simulator.Cards.Ironclad.Attacks.SimpleStrike_Red;
+import newaimod.util.Simulator.Cards.Ironclad.Attacks.SimpleTwinStrike;
+import newaimod.util.Simulator.Cards.Ironclad.Skills.SimpleDefend_Red;
+import newaimod.util.Simulator.Cards.Ironclad.Skills.SimpleShrugItOff;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -90,6 +91,12 @@ public class CombatSimulator {
                 return new SimpleDefend_Red(this, (Defend_Red) card);
             case Bash.ID:
                 return new SimpleBash(this, (Bash) card);
+            case TwinStrike.ID:
+                return new SimpleTwinStrike(this, (TwinStrike) card);
+            case IronWave.ID:
+                return new SimpleIronWave(this, (IronWave) card);
+            case ShrugItOff.ID:
+                return new SimpleShrugItOff(this, card);
         }
         return new Filler(this, card.type, card.cost);
     }

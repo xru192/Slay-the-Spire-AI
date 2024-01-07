@@ -21,79 +21,17 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
     public AutoPlayer.CombatMove pickMoveDefault() {
         logger.info("Picking move (default)");
         CombatSimulator currentState = new CombatSimulator();
-
-        List<Pair> endStates = new ArrayList<>();   // States we can reach, along with the first move to reach it
-        endStates.add(new Pair(new CombatMove(CombatMove.TYPE.PASS), currentState));
-
-        // Compute states we can reach by playing exactly one card
-
-        List<Pair> firstStates = new ArrayList<>(); // States we can reach by playing one card
-
-        List<AbstractSimpleCard> currentHand = currentState.player.hand;
-        for (int i = 0; i < currentHand.size(); ++i) {
-            AbstractSimpleCard card = currentHand.get(i);
-
-            if (card.targetsOne) {
-                for (int m_index = 0; m_index < currentState.monsterList.size(); ++m_index) {
-                    SimpleMonster m = currentState.monsterList.get(m_index);
-                    if (card.canPlay(m)) {
-                        CombatMove firstMove = new CombatMove(CombatMove.TYPE.CARD, i, m.originalMonster);
-                        CombatSimulator state = new CombatSimulator(currentState);
-                        state.playCard(state.player.hand.get(i), state.monsterList.get(m_index));
-                        firstStates.add(new Pair(firstMove, state));
-                    }
-                }
-            } else {
-                CombatMove firstMove = new CombatMove(CombatMove.TYPE.CARD, i, null);
-                if (card.canPlay(null)) {
-                    CombatSimulator state = new CombatSimulator(currentState);
-                    state.playCard(state.player.hand.get(i), null);
-                    firstStates.add(new Pair(firstMove, state));
-                }
-            }
-        }
-
-        // Compute states we can reach by playing multiple cards
-        Queue<Pair> queue = new ArrayDeque<>(firstStates);
-        while (!queue.isEmpty()) {
-            Pair pair = queue.poll();
-            endStates.add(pair);
-            CombatSimulator thisState = pair.state;
-            for (int i = 0; i < thisState.player.hand.size(); ++i) {
-                AbstractSimpleCard card = thisState.player.hand.get(i);
-                if (card.targetsOne) {
-                    for (int m_index = 0; m_index < thisState.monsterList.size(); ++m_index) {
-                        SimpleMonster m = thisState.monsterList.get(m_index);
-                        if (card.canPlay(m)) {
-                            CombatSimulator state = new CombatSimulator(thisState);
-                            state.playCard(state.player.hand.get(i), state.monsterList.get(m_index));
-                            queue.add(new Pair(pair.move, state));
-                        }
-                    }
-                } else {
-                    if (card.canPlay(null)) {
-                        CombatSimulator state = new CombatSimulator(thisState);
-                        state.playCard(state.player.hand.get(i), null);
-                        queue.add(new Pair(pair.move, state));
-                    }
-                }
-            }
-        }
-
-//        logger.info("Ending states:");
-//        for (Pair p : endStates) {
-//            logger.info("Pairmove: " + p.move + ". Pairstate: " + p.state);
-//        }
+        List<Future> endStates = calculateFutures(currentState);
 
         double bestEval = -100000;
         CombatMove bestMove = null;
         CombatSimulator bestState = null;
-        for (Pair pair : endStates) {
-            double eval = evalState(pair.state);
+        for (Future future : endStates) {
+            double eval = evalState(future.state);
             if (eval > bestEval) {
                 bestEval = eval;
-                bestMove = pair.move;
-                bestState = pair.state;
+                bestMove = future.move;
+                bestState = future.state;
             }
         }
         logger.info("Best move: " + bestMove);
@@ -129,18 +67,89 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
         return eval;
     }
 
-    class Pair {
-        CombatMove move;
-        CombatSimulator state;
 
-        Pair(CombatMove move, CombatSimulator state) {
+    /**
+     * Returns a list of all possible futures derived from specified starting state. A future consists of a combat state
+     * reachable through a sequence of moves, along with the first move taken to reach that state. For now,
+     * potion-related moves are not considered.
+     *
+     * @param startState the starting state to find futures from
+     * @return a list of futures from the starting state
+     */
+    public List<Future> calculateFutures(CombatSimulator startState) {
+        List<Future> futures = new ArrayList<>();
+        futures.add(new Future(new CombatMove(CombatMove.TYPE.PASS), startState));
+
+        // Compute states we can reach by playing exactly one card
+
+        List<Future> firstStates = new ArrayList<>(); // States we can reach by playing one card
+
+        List<AbstractSimpleCard> currentHand = startState.player.hand;
+        for (int i = 0; i < currentHand.size(); ++i) {
+            AbstractSimpleCard card = currentHand.get(i);
+
+            if (card.targetsOne) {
+                for (int m_index = 0; m_index < startState.monsterList.size(); ++m_index) {
+                    SimpleMonster m = startState.monsterList.get(m_index);
+                    if (card.canPlay(m)) {
+                        CombatMove firstMove = new CombatMove(CombatMove.TYPE.CARD, i, m.originalMonster);
+                        CombatSimulator state = new CombatSimulator(startState);
+                        state.playCard(state.player.hand.get(i), state.monsterList.get(m_index));
+                        firstStates.add(new Future(firstMove, state));
+                    }
+                }
+            } else {
+                CombatMove firstMove = new CombatMove(CombatMove.TYPE.CARD, i, null);
+                if (card.canPlay(null)) {
+                    CombatSimulator state = new CombatSimulator(startState);
+                    state.playCard(state.player.hand.get(i), null);
+                    firstStates.add(new Future(firstMove, state));
+                }
+            }
+        }
+
+        // Compute states we can reach by playing multiple cards
+        Queue<Future> queue = new ArrayDeque<>(firstStates);
+        while (!queue.isEmpty()) {
+            Future future = queue.poll();
+            futures.add(future);
+            CombatSimulator thisState = future.state;
+            for (int i = 0; i < thisState.player.hand.size(); ++i) {
+                AbstractSimpleCard card = thisState.player.hand.get(i);
+                if (card.targetsOne) {
+                    for (int m_index = 0; m_index < thisState.monsterList.size(); ++m_index) {
+                        SimpleMonster m = thisState.monsterList.get(m_index);
+                        if (card.canPlay(m)) {
+                            CombatSimulator state = new CombatSimulator(thisState);
+                            state.playCard(state.player.hand.get(i), state.monsterList.get(m_index));
+                            queue.add(new Future(future.move, state));
+                        }
+                    }
+                } else {
+                    if (card.canPlay(null)) {
+                        CombatSimulator state = new CombatSimulator(thisState);
+                        state.playCard(state.player.hand.get(i), null);
+                        queue.add(new Future(future.move, state));
+                    }
+                }
+            }
+        }
+
+        return futures;
+    }
+
+    static class Future {
+        CombatMove move;    // First move leading to possible future state
+        CombatSimulator state; // Possible future state
+
+        Future(CombatMove move, CombatSimulator state) {
             this.move = move;
             this.state = state;
         }
 
         @Override
         public String toString() {
-            return "Pair{" +
+            return "Future{" +
                     "move=" + move +
                     ", state=" + state +
                     '}';

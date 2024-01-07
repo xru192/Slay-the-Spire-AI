@@ -6,12 +6,12 @@ import newaimod.util.Simulator.SimpleMonster;
 
 public abstract class AbstractSimpleCard {
 
-    public String cardID;
     public CombatSimulator simulator;  // the simulator this card belongs to
+    public String cardID;
     public boolean targetsOne;  // whether this card targets a single monster (not multi/self/random target)
+    public AbstractCard.CardType type;
 
     public boolean isUpgraded;
-    public AbstractCard.CardType type;
     public int cost;
     public int damage = 0;
     public int block = 0;
@@ -38,6 +38,18 @@ public abstract class AbstractSimpleCard {
     abstract public void upgrade();
 
     abstract public AbstractSimpleCard copy(CombatSimulator simulator);
+
+    public final boolean meetsEnoughEnergy(int cost) {
+        return simulator.player.energy >= cost;
+    }
+
+    public final boolean meetsNotEntagled() {
+        return !simulator.player.isEntangled();
+    }
+
+    public final boolean meetsTargetable(SimpleMonster m) {
+        return m != null && m.isTargetable();
+    }
 
     @Override
     public String toString() {

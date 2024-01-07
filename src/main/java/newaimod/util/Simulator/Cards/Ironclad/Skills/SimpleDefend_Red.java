@@ -1,4 +1,4 @@
-package newaimod.util.Simulator.Cards.Ironclad;
+package newaimod.util.Simulator.Cards.Ironclad.Skills;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.red.Defend_Red;
@@ -14,24 +14,28 @@ public class SimpleDefend_Red extends AbstractSimpleCard {
     public SimpleDefend_Red(CombatSimulator simulator, Defend_Red card) {
         super(simulator, ID, TYPE, 1, TARGETSONE);
         this.block = 5;
+        if (card.upgraded) {
+            upgrade();
+        }
     }
 
-    public SimpleDefend_Red(CombatSimulator simulator, int cost) {
+    public SimpleDefend_Red(CombatSimulator simulator, int cost, boolean upgraded) {
         super(simulator, ID, TYPE, cost, TARGETSONE);
         this.block = 5;
+        if (upgraded) {
+            upgrade();
+        }
     }
 
     @Override
     public boolean canPlay(SimpleMonster target) {
-        return simulator.player.energy >= this.cost;
+        return meetsEnoughEnergy(cost);
     }
 
     @Override
     public void play(SimpleMonster target) {
-        // TODO Frail, dexterity
         int modifiedBlock = simulator.player.getModifiedBlock(this.block);
         simulator.player.block += modifiedBlock;
-//        simulator.player.energy -= this.cost;
         simulator.player.payForAndUseCard(this);
     }
 
@@ -43,6 +47,6 @@ public class SimpleDefend_Red extends AbstractSimpleCard {
 
     @Override
     public AbstractSimpleCard copy(CombatSimulator simulator) {
-        return new SimpleDefend_Red(simulator, this.cost);
+        return new SimpleDefend_Red(simulator, this.cost, this.isUpgraded);
     }
 }

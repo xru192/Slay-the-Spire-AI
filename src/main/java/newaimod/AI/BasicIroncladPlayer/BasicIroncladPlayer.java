@@ -3,8 +3,8 @@ package newaimod.AI.BasicIroncladPlayer;
 import communicationmod.ChoiceScreenUtils;
 import newaimod.AI.AbstractCombatMovePicker;
 import newaimod.AI.AutoPlayer;
-import newaimod.AI.BasicIroncladPlayer.BasicIroncladCombatMovePicker.BasicIroncladCombatMovePicker;
 import newaimod.AI.AbstractEventAutoPlayer;
+import newaimod.AI.BasicIroncladPlayer.BasicIroncladCombatMovePicker.SimulatingMovePicker;
 
 public class BasicIroncladPlayer implements AutoPlayer {
 
@@ -29,7 +29,8 @@ public class BasicIroncladPlayer implements AutoPlayer {
         bossRewardPlayer = new BasicIroncladBossRewardPlayer();
         gridPlayer = new BasicIroncladGridPlayer();
         handSelectPlayer = new BasicIroncladHandSelectPlayer();
-        combatPlayer = new BasicIroncladCombatMovePicker();
+//        combatPlayer = new BasicIroncladCombatMovePicker();
+        combatPlayer = new SimulatingMovePicker();
     }
 
     @Override
