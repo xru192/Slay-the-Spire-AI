@@ -15,10 +15,7 @@ import newaimod.AI.AutoPlayer;
 import newaimod.AI.BasicIroncladPlayer.BasicIroncladPlayer;
 import newaimod.Properties.PropertyManager;
 import newaimod.actions.DoCombatMoveAction;
-import newaimod.commands.CardInfoCommand;
-import newaimod.commands.MonsterInfoCommand;
-import newaimod.commands.TestCommand;
-import newaimod.commands.TestDoCombatMoveActionCommand;
+import newaimod.commands.*;
 import newaimod.util.CombatUtils;
 import newaimod.util.GeneralUtils;
 import newaimod.util.TextureLoader;
@@ -58,7 +55,7 @@ public class NewAIMod implements
     private static int waitCounter = 0;
     private static boolean stateChanged = false;
 
-    private static final int WAIT = 10;       // wait time (frames) between auto actions
+    public static int WAIT = 10;       // wait time (frames) between auto actions
     private AutoPlayer autoPlayer;
     public static AutoPlayer.CombatMove move = null;
     private static boolean creating = false;
@@ -79,6 +76,7 @@ public class NewAIMod implements
         ConsoleCommand.addCommand("move", TestDoCombatMoveActionCommand.class);
         ConsoleCommand.addCommand("cardinfo", CardInfoCommand.class);
         ConsoleCommand.addCommand("monsterinfo", MonsterInfoCommand.class);
+        ConsoleCommand.addCommand("settings", SettingsCommand.class);
     }
 
     @Override
@@ -187,6 +185,7 @@ public class NewAIMod implements
                         }
 
                         if (!creating) {
+                            logger.info("Thread started for combat action");
                             creating = true;
                             MovePickerRunner<AutoPlayer> run = new MovePickerRunner<>(autoPlayer);
                             new Thread(run).start();
@@ -217,6 +216,8 @@ public class NewAIMod implements
         // triggers only after not losing a combat
         logger.info("Post Battle received");
         inBattle = false;
+        move = null;
+        creating = false;
     }
 
     @Override
@@ -266,6 +267,7 @@ public class NewAIMod implements
         @Override
         public void run() {
             NewAIMod.move = autoPlayer.pickCombatMove();
+            logger.info("Move computed");
         }
     }
 
