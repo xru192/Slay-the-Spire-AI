@@ -10,6 +10,7 @@ import newaimod.NewAIMod;
 import newaimod.util.Simulator.Cards.AbstractSimpleCard;
 import newaimod.util.Simulator.Cards.Filler;
 import newaimod.util.Simulator.Cards.Ironclad.Attacks.*;
+import newaimod.util.Simulator.Cards.Ironclad.Powers.SimpleInflame;
 import newaimod.util.Simulator.Cards.Ironclad.Skills.SimpleDefend_Red;
 import newaimod.util.Simulator.Cards.Ironclad.Skills.SimpleShrugItOff;
 import org.apache.logging.log4j.LogManager;
@@ -100,6 +101,8 @@ public class CombatSimulator {
                 return new SimpleShrugItOff(this, card);
             case Headbutt.ID:
                 return new SimpleHeadbutt(this, card);
+            case Inflame.ID:
+                return new SimpleInflame(this, card);
         }
         return new Filler(this, card.type, card.cost);
     }

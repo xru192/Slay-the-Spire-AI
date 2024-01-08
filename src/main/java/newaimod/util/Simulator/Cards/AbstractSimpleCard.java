@@ -15,6 +15,7 @@ public abstract class AbstractSimpleCard {
     public int cost;
     public int damage = 0;
     public int block = 0;
+    public int magicNumber = 0;
 
     public AbstractSimpleCard(CombatSimulator simulator, String id, AbstractCard.CardType type, int cost, boolean targetsOne) {
         this.simulator = simulator;

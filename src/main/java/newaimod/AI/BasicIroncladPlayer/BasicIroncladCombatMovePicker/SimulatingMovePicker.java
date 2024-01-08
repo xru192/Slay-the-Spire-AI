@@ -94,6 +94,8 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
         double eval = playerHealth;
         eval -= 6 * aliveMonsters;
         eval -= totalMonsterHealth / 3.0;
+
+        eval += state.player.strength * 5;
         return eval;
     }
 
