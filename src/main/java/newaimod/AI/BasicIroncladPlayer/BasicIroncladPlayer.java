@@ -1,21 +1,19 @@
 package newaimod.AI.BasicIroncladPlayer;
 
 import communicationmod.ChoiceScreenUtils;
-import newaimod.AI.AbstractCombatMovePicker;
-import newaimod.AI.AutoPlayer;
-import newaimod.AI.AbstractEventAutoPlayer;
+import newaimod.AI.*;
 import newaimod.AI.BasicIroncladPlayer.BasicIroncladCombatMovePicker.SimulatingMovePicker;
 
 public class BasicIroncladPlayer implements AutoPlayer {
 
     private final AbstractEventAutoPlayer eventPlayer;
     private final BasicIroncladChestPlayer chestPlayer;
-    private final BasicIroncladRestPlayer restPlayer;
+    private final AbstractRestAutoPlayer restPlayer;
     private final BasicIroncladCardRewardPlayer cardRewardPlayer;
     private final BasicIroncladCombatRewardPlayer combatRewardPlayer;
     private final BasicIroncladMapPlayer mapPlayer;
     private final BasicIroncladBossRewardPlayer bossRewardPlayer;
-    private final BasicIroncladGridPlayer gridPlayer;
+    private final AbstractGridAutoPlayer gridPlayer;
     private final BasicIroncladHandSelectPlayer handSelectPlayer;
     private final AbstractCombatMovePicker combatPlayer;
 
