@@ -28,7 +28,10 @@ public class BasicIroncladChestPlayer {
         }
 
         if (chest.isOpen) {
-            throw new RuntimeException("Chest already open");
+            // Screen where boss chest is already open
+            if (ChoiceScreenUtils.isConfirmButtonAvailable()) {
+                ChoiceScreenUtils.pressConfirmButton();
+            }
         } else {
             if (AbstractDungeon.player.hasRelic(CursedKey.ID) && !isBoss) {
                 logger.info("Skipping Chest");
