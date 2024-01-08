@@ -110,6 +110,8 @@ public class CombatSimulator {
                 return new SimplePommelStrike(this, card);
             case FlameBarrier.ID:
                 return new SimpleFlameBarrier(this, card);
+            case Carnage.ID:
+                return new SimpleCarnage(this, card);
         }
         return new Filler(this, card.type, card.cost);
     }
