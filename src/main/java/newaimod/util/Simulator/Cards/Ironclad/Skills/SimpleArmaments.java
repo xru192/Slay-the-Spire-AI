@@ -40,6 +40,8 @@ public class SimpleArmaments extends AbstractSimpleCard {
                 card.upgrade();
             }
         }
+        int modifiedBlock = simulator.player.getModifiedBlock(this.block);
+        simulator.player.block += modifiedBlock;
         simulator.player.payForAndUseCard(this);
     }
 

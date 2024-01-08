@@ -12,7 +12,7 @@ public class SimpleDefend_Red extends AbstractSimpleCard {
     public static final boolean TARGETSONE = false;
 
     public SimpleDefend_Red(CombatSimulator simulator, Defend_Red card) {
-        super(simulator, ID, TYPE, 1, TARGETSONE);
+        super(simulator, ID, TYPE, card.costForTurn, TARGETSONE);
         this.block = 5;
         if (card.upgraded) {
             upgrade();
