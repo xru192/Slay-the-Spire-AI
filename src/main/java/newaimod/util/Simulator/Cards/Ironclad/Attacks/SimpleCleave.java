@@ -1,26 +1,27 @@
 package newaimod.util.Simulator.Cards.Ironclad.Attacks;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.red.Cleave;
 import newaimod.util.Simulator.Cards.AbstractSimpleCard;
 import newaimod.util.Simulator.CombatSimulator;
 import newaimod.util.Simulator.SimpleMonster;
 
-public class TemplateAttack extends AbstractSimpleCard {
-    public static final String ID = ""; // TODO
+public class SimpleCleave extends AbstractSimpleCard {
+    public static final String ID = Cleave.ID;
     public static final AbstractCard.CardType TYPE = AbstractCard.CardType.ATTACK;
-    public static final boolean TARGETSONE = true; // TODO
+    public static final boolean TARGETSONE = false;
 
-    public TemplateAttack(CombatSimulator simulator, AbstractCard card) {
+    public SimpleCleave(CombatSimulator simulator, AbstractCard card) {
         super(simulator, ID, TYPE, card.costForTurn, TARGETSONE);
-        this.damage = 0; // TODO
+        this.damage = 8;
         if (card.upgraded) {
             upgrade();
         }
     }
 
-    public TemplateAttack(CombatSimulator simulator, int cost, boolean upgraded) {
+    public SimpleCleave(CombatSimulator simulator, int cost, boolean upgraded) {
         super(simulator, ID, TYPE, cost, TARGETSONE);
-        this.damage = 0; // TODO
+        this.damage = 8;
         if (upgraded) {
             upgrade();
         }
@@ -28,28 +29,30 @@ public class TemplateAttack extends AbstractSimpleCard {
 
     @Override
     public boolean canPlay(SimpleMonster target) {
-        return meetsTargetable(target) && meetsEnoughEnergy(cost) && meetsNotEntangled();
+        return meetsEnoughEnergy(cost) && meetsNotEntangled();
     }
 
     @Override
     public void play(SimpleMonster target) {
-        // TODO
         int playerModifiedDamage = simulator.player.getModifiedDamage(this.damage);
-        target.takeAttack(playerModifiedDamage);
+        for (SimpleMonster m : simulator.monsterList) {
+            if (m.isAlive()) {
+                m.takeAttack(playerModifiedDamage);
+            }
+        }
         simulator.player.payForAndUseCard(this);
     }
 
     @Override
     public void upgrade() {
         this.isUpgraded = true;
-        // TODO
+        this.damage = 11;
     }
 
     @Override
     public AbstractSimpleCard copy(CombatSimulator simulator) {
         return new SimpleCleave(simulator, this.cost, this.isUpgraded);
     }
-
 
 
 }

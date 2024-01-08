@@ -29,7 +29,7 @@ public class SimpleStrike_Red extends AbstractSimpleCard {
 
     @Override
     public boolean canPlay(SimpleMonster target) {
-        return meetsTargetable(target) && meetsEnoughEnergy(cost) && meetsNotEntagled();
+        return meetsTargetable(target) && meetsEnoughEnergy(cost) && meetsNotEntangled();
     }
 
     @Override

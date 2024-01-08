@@ -44,7 +44,7 @@ public abstract class AbstractSimpleCard {
         return simulator.player.energy >= cost;
     }
 
-    public final boolean meetsNotEntagled() {
+    public final boolean meetsNotEntangled() {
         return !simulator.player.isEntangled();
     }
 

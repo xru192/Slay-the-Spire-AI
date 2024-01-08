@@ -103,6 +103,10 @@ public class CombatSimulator {
                 return new SimpleHeadbutt(this, card);
             case Inflame.ID:
                 return new SimpleInflame(this, card);
+            case Cleave.ID:
+                return new SimpleCleave(this, card);
+            case PommelStrike.ID:
+                return new SimplePommelStrike(this, card);
         }
         return new Filler(this, card.type, card.cost);
     }
