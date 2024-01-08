@@ -1,26 +1,29 @@
 package newaimod.util.Simulator.Cards.Ironclad.Attacks;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.red.Uppercut;
 import newaimod.util.Simulator.Cards.AbstractSimpleCard;
 import newaimod.util.Simulator.CombatSimulator;
 import newaimod.util.Simulator.SimpleMonster;
 
-public class TemplateAttack extends AbstractSimpleCard {
-    public static final String ID = ""; // TODO
+public class SimpleUppercut extends AbstractSimpleCard {
+    public static final String ID = Uppercut.ID;
     public static final AbstractCard.CardType TYPE = AbstractCard.CardType.ATTACK;
-    public static final boolean TARGETSONE = true; // TODO
+    public static final boolean TARGETSONE = true;
 
-    public TemplateAttack(CombatSimulator simulator, AbstractCard card) {
+    public SimpleUppercut(CombatSimulator simulator, AbstractCard card) {
         super(simulator, ID, TYPE, card.costForTurn, TARGETSONE);
-        this.damage = 0; // TODO
+        this.damage = 13;
+        this.magicNumber = 1;
         if (card.upgraded) {
             upgrade();
         }
     }
 
-    public TemplateAttack(CombatSimulator simulator, int cost, boolean upgraded) {
+    public SimpleUppercut(CombatSimulator simulator, int cost, boolean upgraded) {
         super(simulator, ID, TYPE, cost, TARGETSONE);
-        this.damage = 0; // TODO
+        this.damage = 13;
+        this.magicNumber = 1;
         if (upgraded) {
             upgrade();
         }
@@ -33,21 +36,22 @@ public class TemplateAttack extends AbstractSimpleCard {
 
     @Override
     public void play(SimpleMonster target) {
-        // TODO
         int playerModifiedDamage = simulator.player.getModifiedDamage(this.damage);
         target.takeAttack(playerModifiedDamage);
+        target.takeVulnerable(this.magicNumber);
+        target.takeWeak(this.magicNumber);
         simulator.player.payForAndUseCard(this);
     }
 
     @Override
     public void upgrade() {
         this.isUpgraded = true;
-        // TODO
+        this.magicNumber = 2;
     }
 
     @Override
     public AbstractSimpleCard copy(CombatSimulator simulator) {
-        return new TemplateAttack(simulator, this.cost, this.isUpgraded);
+        return new SimpleUppercut(simulator, this.cost, this.isUpgraded);
     }
 
 

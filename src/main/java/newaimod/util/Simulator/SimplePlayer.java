@@ -28,7 +28,7 @@ public class SimplePlayer {
     boolean frail;
 
     boolean entangled;
-//    boolean vulnerable;
+    boolean vulnerable;
 //    boolean intangible;
 
     /**
@@ -52,7 +52,7 @@ public class SimplePlayer {
         weakened = p.hasPower(WeakPower.POWER_ID);
         frail = p.hasPower(FrailPower.POWER_ID);
         entangled = p.hasPower(EntanglePower.POWER_ID);
-//        vulnerable = p.hasPower(VulnerablePower.POWER_ID);
+        vulnerable = p.hasPower(VulnerablePower.POWER_ID);
 //        intangible = p.hasPower(IntangiblePlayerPower.POWER_ID);
     }
 
@@ -71,6 +71,7 @@ public class SimplePlayer {
         this.weakened = player.weakened;
         this.frail = player.frail;
         this.entangled = player.entangled;
+        this.vulnerable = player.vulnerable;
     }
 
     public void payForAndUseCard(AbstractSimpleCard card) {
@@ -105,6 +106,23 @@ public class SimplePlayer {
         double frailFactor = frail ? 0.75 : 1.0;
         int result = (int) ((base + dexterity) * frailFactor);
         return Math.max(0, result);
+    }
+
+    /**
+     * Have this player take an attack from a monster.
+     *
+     * @param damage the damage of the attack (after monster-side modifications)
+     */
+    public void takeAttack(int damage) {
+        assert damage >= 0;
+        if (vulnerable) {
+            damage = damage + damage / 2;
+        }
+
+        int blockLoss = Math.min(block, damage);
+        int healthLoss = Math.min(health, Math.max(0, damage - block));
+        block -= blockLoss;
+        health -= healthLoss;
     }
 
     public boolean isEntangled() {

@@ -3,8 +3,13 @@ package newaimod.util.Simulator;
 import basemod.ReflectionHacks;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.EnemyMoveInfo;
+import com.megacrit.cardcrawl.powers.StrengthPower;
 import com.megacrit.cardcrawl.powers.VulnerablePower;
+import com.megacrit.cardcrawl.powers.WeakPower;
+import newaimod.AI.BasicIroncladPlayer.BasicIroncladCombatMovePicker.SimulatingMovePicker;
 import newaimod.util.CombatUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import static newaimod.util.CombatUtils.amountOfPower;
 
@@ -13,16 +18,21 @@ import static newaimod.util.CombatUtils.amountOfPower;
  * represented by SimpleMonster, but in the future specific monsters may be subclasses of SimpleMonster.
  */
 public class SimpleMonster {
+    public static final Logger logger = LogManager.getLogger(SimpleMonster.class.getName());
+
     public CombatSimulator simulator;
 
     public int health;
     int block;
     public AbstractMonster originalMonster = null; // reference to monster in combat this is representing
     AbstractMonster.Intent intent;
+    int intentBaseDamage; // base damage of intended attack, -1 if not attacking
     int intentDamage;   // damage of intended attack, -1 if not attacking
     int intentHits;     // number of intended hits, -1 if not attacking
 
     int vulnerable;
+    int weak;
+    int strength;
 
     /**
      * SimpleMonster which represents the current state of the specified AbstractMonster in combat.
@@ -33,11 +43,12 @@ public class SimpleMonster {
         this.block = monster.currentBlock;
         EnemyMoveInfo moveInfo = ReflectionHacks.getPrivate(monster, AbstractMonster.class, "move");
         intent = moveInfo.intent;
+        intentBaseDamage = moveInfo.baseDamage;
         intentDamage = monster.getIntentDmg();
         intentHits = Math.max(1, moveInfo.multiplier);
         vulnerable = amountOfPower(monster, VulnerablePower.POWER_ID);
-//        strength = amountOfPower(monster, StrengthPower.POWER_ID);
-//        weakened = monster.hasPower(WeakPower.POWER_ID);
+        weak = amountOfPower(monster, WeakPower.POWER_ID);
+        strength = amountOfPower(monster, StrengthPower.POWER_ID);
     }
 
     public SimpleMonster(SimpleMonster m, CombatSimulator simulator) {
@@ -46,9 +57,31 @@ public class SimpleMonster {
         this.health = m.health;
         this.block = m.block;
         this.intent = m.intent;
+        this.intentBaseDamage = m.intentBaseDamage;
         this.intentDamage = m.intentDamage;
         this.intentHits = m.intentHits;
         this.vulnerable = m.vulnerable;
+        this.weak = m.weak;
+        this.strength = m.strength;
+    }
+
+    /**
+     * Returns how much damage this monster will do (per hit) after monster modifications. These include strength and
+     * weakened. This does not include when the player is vulnerable.
+     *
+     * @return the damage after player modifications
+     */
+    public int getModifiedDamage() {
+        if (!isAttacking()) {
+            return 0;
+        }
+        if (weak != 0) {
+            logger.info("");
+        }
+
+        double weakFactor = weak == 0 ? 1 : 0.75;
+        int result = (int)((intentBaseDamage + strength) * weakFactor);
+        return Math.max(0, result);
     }
 
     /**
@@ -88,7 +121,11 @@ public class SimpleMonster {
     public void takeVulnerable(int amount) {
         assert amount > 0;
         vulnerable += amount;
+    }
 
+    public void takeWeak(int amount) {
+        assert amount > 0;
+        weak += amount;
     }
 
     /**

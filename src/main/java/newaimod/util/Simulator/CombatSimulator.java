@@ -5,7 +5,6 @@ import com.megacrit.cardcrawl.cards.red.*;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import newaimod.AI.AutoPlayer;
-import newaimod.AI.BasicIroncladPlayer.BasicIroncladCombatMovePicker.SimulatingMovePicker;
 import newaimod.NewAIMod;
 import newaimod.util.Simulator.Cards.AbstractSimpleCard;
 import newaimod.util.Simulator.Cards.Filler;
@@ -112,26 +111,24 @@ public class CombatSimulator {
                 return new SimpleFlameBarrier(this, card);
             case Carnage.ID:
                 return new SimpleCarnage(this, card);
+            case Uppercut.ID:
+                return new SimpleUppercut(this, card);
         }
         return new Filler(this, card.type, card.cost);
     }
 
     /**
-     * Returns the amount of health the player would have after alive monsters perform their attacks
+     * Have the player be attacked by the alive monsters, as if the monsters take their turn.
      */
-    public int getPlayerHealthAfterAttacks() {
-        int health = player.health;
-        int totalIncomingDmg = 0;
+    public void aliveMonstersAttackPlayer() {
         for (SimpleMonster m : monsterList) {
             if (m.isAttacking()) {
                 assert m.intentHits >= 1 && m.intentDamage >= 0;
-                totalIncomingDmg += m.intentDamage * m.intentHits;
+                for (int i = 0; i < m.intentHits; ++i) {
+                    player.takeAttack(m.getModifiedDamage());
+                }
             }
         }
-
-        int blockedDmg = Math.min(player.block, totalIncomingDmg);
-        health -= totalIncomingDmg - blockedDmg;
-        return health;
     }
 
     @Override

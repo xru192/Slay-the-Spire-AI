@@ -47,6 +47,6 @@ public class TemplateSkill extends AbstractSimpleCard {
 
     @Override
     public AbstractSimpleCard copy(CombatSimulator simulator) {
-        return new SimpleFlameBarrier(simulator, this.cost, this.isUpgraded);
+        return new TemplateSkill(simulator, this.cost, this.isUpgraded);
     }
 }

@@ -37,7 +37,6 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
         logger.info("Best state: " + bestState);
         logger.info("Best eval: " + bestEval);
         assert bestState != null;
-        logger.info("Health after attacks" + bestState.getPlayerHealthAfterAttacks());
 
         return bestMove;
     }
@@ -86,7 +85,8 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
             }
         }
 
-        int playerHealth = state.getPlayerHealthAfterAttacks();
+        state.aliveMonstersAttackPlayer();
+        int playerHealth = state.player.health;
         if (aliveMonsters == 0) {
             return 1000;
         }

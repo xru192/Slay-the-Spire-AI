@@ -45,6 +45,6 @@ public class TemplatePower extends AbstractSimpleCard {
 
     @Override
     public AbstractSimpleCard copy(CombatSimulator simulator) {
-        return new SimpleInflame(simulator, this.cost, this.isUpgraded);
+        return new TemplatePower(simulator, this.cost, this.isUpgraded);
     }
 }
