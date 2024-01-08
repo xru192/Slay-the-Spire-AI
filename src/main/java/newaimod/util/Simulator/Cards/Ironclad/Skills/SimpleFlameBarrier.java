@@ -1,26 +1,29 @@
 package newaimod.util.Simulator.Cards.Ironclad.Skills;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.red.FlameBarrier;
 import newaimod.util.Simulator.Cards.AbstractSimpleCard;
 import newaimod.util.Simulator.CombatSimulator;
 import newaimod.util.Simulator.SimpleMonster;
 
-public class TemplateSkill extends AbstractSimpleCard {
-    public static final String ID = ""; // TODO
+public class SimpleFlameBarrier extends AbstractSimpleCard {
+    public static final String ID = FlameBarrier.ID;
     public static final AbstractCard.CardType TYPE = AbstractCard.CardType.SKILL;
-    public static final boolean TARGETSONE = false; // TODO
+    public static final boolean TARGETSONE = false;
 
-    public TemplateSkill(CombatSimulator simulator, AbstractCard card) {
+    public SimpleFlameBarrier(CombatSimulator simulator, AbstractCard card) {
         super(simulator, ID, TYPE, card.costForTurn, TARGETSONE);
-        this.block = 0; // TODO
+        this.block = 12;
+        this.magicNumber = 4;
         if (card.upgraded) {
             upgrade();
         }
     }
 
-    public TemplateSkill(CombatSimulator simulator, int cost, boolean upgraded) {
+    public SimpleFlameBarrier(CombatSimulator simulator, int cost, boolean upgraded) {
         super(simulator, ID, TYPE, cost, TARGETSONE);
-        this.block = 0; // TODO
+        this.block = 12;
+        this.magicNumber = 4;
         if (upgraded) {
             upgrade();
         }
@@ -28,21 +31,22 @@ public class TemplateSkill extends AbstractSimpleCard {
 
     @Override
     public boolean canPlay(SimpleMonster target) {
-        // TODO depends on TARGETSONE
-//        return meetsTargetable(target) && meetsEnoughEnergy(this.cost);
         return meetsEnoughEnergy(this.cost);
     }
 
     @Override
     public void play(SimpleMonster target) {
-        // TODO
+        int modifiedBlock = simulator.player.getModifiedBlock(this.block);
+        simulator.player.block += modifiedBlock;
         simulator.player.payForAndUseCard(this);
+        // TODO secondary effect
     }
 
     @Override
     public void upgrade() {
         this.isUpgraded = true;
-        // TODO
+        this.block = 16;
+        this.magicNumber = 6;
     }
 
     @Override

@@ -12,6 +12,7 @@ import newaimod.util.Simulator.Cards.Filler;
 import newaimod.util.Simulator.Cards.Ironclad.Attacks.*;
 import newaimod.util.Simulator.Cards.Ironclad.Powers.SimpleInflame;
 import newaimod.util.Simulator.Cards.Ironclad.Skills.SimpleDefend_Red;
+import newaimod.util.Simulator.Cards.Ironclad.Skills.SimpleFlameBarrier;
 import newaimod.util.Simulator.Cards.Ironclad.Skills.SimpleShrugItOff;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -107,6 +108,8 @@ public class CombatSimulator {
                 return new SimpleCleave(this, card);
             case PommelStrike.ID:
                 return new SimplePommelStrike(this, card);
+            case FlameBarrier.ID:
+                return new SimpleFlameBarrier(this, card);
         }
         return new Filler(this, card.type, card.cost);
     }
