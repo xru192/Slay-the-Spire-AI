@@ -12,7 +12,7 @@ public class SimpleIronWave extends AbstractSimpleCard {
     public static final boolean TARGETSONE = true;
 
     public SimpleIronWave(CombatSimulator simulator, IronWave card) {
-        super(simulator, ID, TYPE, 1, TARGETSONE);
+        super(simulator, ID, TYPE, card.costForTurn, TARGETSONE);
         this.damage = 5;
         this.block = 5;
         if (card.upgraded) {

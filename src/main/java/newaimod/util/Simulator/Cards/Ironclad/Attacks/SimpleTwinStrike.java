@@ -12,7 +12,7 @@ public class SimpleTwinStrike extends AbstractSimpleCard {
     public static final boolean TARGETSONE = true;
 
     public SimpleTwinStrike(CombatSimulator simulator, TwinStrike card) {
-        super(simulator, ID, TYPE, 1, TARGETSONE);
+        super(simulator, ID, TYPE, card.costForTurn, TARGETSONE);
         this.damage = 5;
         if (card.upgraded) {
             upgrade();

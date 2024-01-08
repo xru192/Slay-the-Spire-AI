@@ -12,7 +12,7 @@ public class SimpleBash extends AbstractSimpleCard {
     public static final boolean TARGETSONE = true;
 
     public SimpleBash(CombatSimulator simulator, Bash card) {
-        super(simulator, ID, TYPE, 2, TARGETSONE);
+        super(simulator, ID, TYPE, card.costForTurn, TARGETSONE);
         this.damage = 8;
         if (card.upgraded) {
             upgrade();

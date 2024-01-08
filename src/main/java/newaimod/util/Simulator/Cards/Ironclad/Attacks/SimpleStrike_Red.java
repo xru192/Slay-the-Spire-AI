@@ -12,7 +12,7 @@ public class SimpleStrike_Red extends AbstractSimpleCard {
     public static final boolean TARGETSONE = true;
 
     public SimpleStrike_Red(CombatSimulator simulator, Strike_Red card) {
-        super(simulator, ID, TYPE, 1, TARGETSONE);
+        super(simulator, ID, TYPE, card.costForTurn, TARGETSONE);
         this.damage = 6;
         if (card.upgraded) {
             upgrade();

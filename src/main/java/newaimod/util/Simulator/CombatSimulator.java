@@ -113,6 +113,8 @@ public class CombatSimulator {
                 return new SimpleCarnage(this, card);
             case Uppercut.ID:
                 return new SimpleUppercut(this, card);
+            case Whirlwind.ID:
+                return new SimpleWhirlwind(this, card);
         }
         return new Filler(this, card.type, card.cost);
     }
