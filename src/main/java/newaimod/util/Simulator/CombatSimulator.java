@@ -10,6 +10,7 @@ import newaimod.util.Simulator.Cards.AbstractSimpleCard;
 import newaimod.util.Simulator.Cards.Filler;
 import newaimod.util.Simulator.Cards.Ironclad.Attacks.*;
 import newaimod.util.Simulator.Cards.Ironclad.Powers.SimpleInflame;
+import newaimod.util.Simulator.Cards.Ironclad.Skills.SimpleArmaments;
 import newaimod.util.Simulator.Cards.Ironclad.Skills.SimpleDefend_Red;
 import newaimod.util.Simulator.Cards.Ironclad.Skills.SimpleFlameBarrier;
 import newaimod.util.Simulator.Cards.Ironclad.Skills.SimpleShrugItOff;
@@ -115,6 +116,8 @@ public class CombatSimulator {
                 return new SimpleUppercut(this, card);
             case Whirlwind.ID:
                 return new SimpleWhirlwind(this, card);
+            case Armaments.ID:
+                return new SimpleArmaments(this, card);
         }
         return new Filler(this, card.type, card.cost);
     }
