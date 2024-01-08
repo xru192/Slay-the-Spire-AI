@@ -4,21 +4,22 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.red.*;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import newaimod.AI.AutoPlayer;
+import newaimod.AI.BasicIroncladPlayer.BasicIroncladCombatMovePicker.SimulatingMovePicker;
 import newaimod.NewAIMod;
 import newaimod.util.Simulator.Cards.AbstractSimpleCard;
 import newaimod.util.Simulator.Cards.Filler;
-import newaimod.util.Simulator.Cards.Ironclad.Attacks.SimpleBash;
-import newaimod.util.Simulator.Cards.Ironclad.Attacks.SimpleIronWave;
-import newaimod.util.Simulator.Cards.Ironclad.Attacks.SimpleStrike_Red;
-import newaimod.util.Simulator.Cards.Ironclad.Attacks.SimpleTwinStrike;
+import newaimod.util.Simulator.Cards.Ironclad.Attacks.*;
 import newaimod.util.Simulator.Cards.Ironclad.Skills.SimpleDefend_Red;
 import newaimod.util.Simulator.Cards.Ironclad.Skills.SimpleShrugItOff;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * A CombatSimulator simulates a simplified version of Slay the Spire combat. An instance represents a state of combat,
@@ -97,6 +98,8 @@ public class CombatSimulator {
                 return new SimpleIronWave(this, (IronWave) card);
             case ShrugItOff.ID:
                 return new SimpleShrugItOff(this, card);
+            case Headbutt.ID:
+                return new SimpleHeadbutt(this, card);
         }
         return new Filler(this, card.type, card.cost);
     }
@@ -125,5 +128,93 @@ public class CombatSimulator {
                 "player=" + player +
                 ", monsterList=" + monsterList +
                 '}';
+    }
+
+    /**
+     * Returns a list of all possible futures derived from this state. A future consists of a combat state
+     * reachable through a sequence of moves, along with the first move taken to reach that state. For now,
+     * potion-related moves are not considered.
+     *
+     * @param startState the starting state to find futures from
+     * @return a list of futures from the starting state
+     */
+    public static List<Future> calculateFutures(CombatSimulator startState) {
+        List<Future> futures = new ArrayList<>();
+        futures.add(new Future(new AutoPlayer.CombatMove(AutoPlayer.CombatMove.TYPE.PASS), startState));
+
+        // Compute states we can reach by playing exactly one card
+
+        List<Future> firstStates = new ArrayList<>(); // States we can reach by playing one card
+
+        List<AbstractSimpleCard> currentHand = startState.player.hand;
+        for (int i = 0; i < currentHand.size(); ++i) {
+            AbstractSimpleCard card = currentHand.get(i);
+
+            if (card.targetsOne) {
+                for (int m_index = 0; m_index < startState.monsterList.size(); ++m_index) {
+                    SimpleMonster m = startState.monsterList.get(m_index);
+                    if (card.canPlay(m)) {
+                        AutoPlayer.CombatMove firstMove = new AutoPlayer.CombatMove(AutoPlayer.CombatMove.TYPE.CARD, i, m.originalMonster);
+                        CombatSimulator state = new CombatSimulator(startState);
+                        state.playCard(state.player.hand.get(i), state.monsterList.get(m_index));
+                        firstStates.add(new Future(firstMove, state));
+                    }
+                }
+            } else {
+                AutoPlayer.CombatMove firstMove = new AutoPlayer.CombatMove(AutoPlayer.CombatMove.TYPE.CARD, i, null);
+                if (card.canPlay(null)) {
+                    CombatSimulator state = new CombatSimulator(startState);
+                    state.playCard(state.player.hand.get(i), null);
+                    firstStates.add(new Future(firstMove, state));
+                }
+            }
+        }
+
+        // Compute states we can reach by playing multiple cards
+        Queue<Future> queue = new ArrayDeque<>(firstStates);
+        while (!queue.isEmpty()) {
+            Future future = queue.poll();
+            futures.add(future);
+            CombatSimulator thisState = future.state;
+            for (int i = 0; i < thisState.player.hand.size(); ++i) {
+                AbstractSimpleCard card = thisState.player.hand.get(i);
+                if (card.targetsOne) {
+                    for (int m_index = 0; m_index < thisState.monsterList.size(); ++m_index) {
+                        SimpleMonster m = thisState.monsterList.get(m_index);
+                        if (card.canPlay(m)) {
+                            CombatSimulator state = new CombatSimulator(thisState);
+                            state.playCard(state.player.hand.get(i), state.monsterList.get(m_index));
+                            queue.add(new Future(future.move, state));
+                        }
+                    }
+                } else {
+                    if (card.canPlay(null)) {
+                        CombatSimulator state = new CombatSimulator(thisState);
+                        state.playCard(state.player.hand.get(i), null);
+                        queue.add(new Future(future.move, state));
+                    }
+                }
+            }
+        }
+
+        return futures;
+    }
+    
+    public static class Future {
+        public AutoPlayer.CombatMove move;    // First move leading to possible future state
+        public CombatSimulator state; // Possible future state
+
+        Future(AutoPlayer.CombatMove move, CombatSimulator state) {
+            this.move = move;
+            this.state = state;
+        }
+
+        @Override
+        public String toString() {
+            return "Future{" +
+                    "move=" + move +
+                    ", state=" + state +
+                    '}';
+        }
     }
 }

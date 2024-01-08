@@ -43,27 +43,27 @@ public abstract class AbstractCombatMovePicker {
      * Returns a move to be executed in the current combat state versus a Gremlin Nob encounter.
      * Can be overridden to use a different move-picking algorithm instead of the default one.
      */
-    CombatMove pickMoveGremlinNob() {
+    protected CombatMove pickMoveGremlinNob() {
         return pickMoveDefault();
     }
 
-    CombatMove pickMoveLagavulin() {
+    protected CombatMove pickMoveLagavulin() {
         return pickMoveDefault();
     }
 
-    CombatMove pickMove3Sentries() {
+    protected CombatMove pickMove3Sentries() {
         return pickMoveDefault();
     }
 
-    CombatMove pickMoveTheGuardian() {
+    protected CombatMove pickMoveTheGuardian() {
         return pickMoveDefault();
     }
 
-    CombatMove pickMoveHexaghost() {
+    protected CombatMove pickMoveHexaghost() {
         return pickMoveDefault();
     }
 
-    CombatMove pickMoveSlimeBoss() {
+    protected CombatMove pickMoveSlimeBoss() {
         return pickMoveDefault();
     }
 
