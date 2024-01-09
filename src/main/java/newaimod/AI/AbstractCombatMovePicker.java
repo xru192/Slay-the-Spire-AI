@@ -28,22 +28,24 @@ public abstract class AbstractCombatMovePicker {
                 return pickMoveSlimeBoss();
             case MonsterHelper.SPHERE_GUARDIAN_ENC:
                 return pickMoveSphericGuardian();
+            case MonsterHelper.SENTRY_SPHERE_ENC:
+                return pickMoveSentrySphere();
             default:
                 return pickMoveDefault();
         }
     }
 
     /**
-     * Returns a move to be executed in the current combat state.
-     * This method will be called and the move returned will be used for all encounters by default.
+     * Returns a move to be executed in the current combat state. This method will be called and the move returned will
+     * be used for all encounters by default.
      *
      * @return move to be executed in the current combat state.
      */
     abstract public CombatMove pickMoveDefault();
 
     /**
-     * Returns a move to be executed in the current combat state versus a Gremlin Nob encounter.
-     * Can be overridden to use a different move-picking algorithm instead of the default one.
+     * Returns a move to be executed in the current combat state versus a Gremlin Nob encounter. Can be overridden to
+     * use a different move-picking algorithm instead of the default one.
      */
     protected CombatMove pickMoveGremlinNob() {
         return pickMoveDefault();
@@ -70,6 +72,10 @@ public abstract class AbstractCombatMovePicker {
     }
 
     protected CombatMove pickMoveSphericGuardian() {
+        return pickMoveDefault();
+    }
+
+    protected CombatMove pickMoveSentrySphere() {
         return pickMoveDefault();
     }
 

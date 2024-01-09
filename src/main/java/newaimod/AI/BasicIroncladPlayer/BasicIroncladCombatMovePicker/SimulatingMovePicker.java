@@ -98,6 +98,10 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
         return bestMove;
     }
 
+    @Override
+    protected CombatMove pickMoveSentrySphere() {
+        return pickMoveSphericGuardian();
+    }
 
     public double evalState(CombatSimulator state) {
         int aliveMonsters = 0;
