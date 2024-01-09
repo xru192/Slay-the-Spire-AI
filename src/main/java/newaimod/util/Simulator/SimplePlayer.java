@@ -31,6 +31,8 @@ public class SimplePlayer {
     boolean vulnerable;
 //    boolean intangible;
 
+    int exhaustedSlimed;
+
     /**
      * SimplePlayer which represents the current state of the player in combat.
      */
@@ -54,6 +56,7 @@ public class SimplePlayer {
         entangled = p.hasPower(EntanglePower.POWER_ID);
         vulnerable = p.hasPower(VulnerablePower.POWER_ID);
 //        intangible = p.hasPower(IntangiblePlayerPower.POWER_ID);
+        exhaustedSlimed = 0;
     }
 
     public SimplePlayer(SimplePlayer player, CombatSimulator simulator) {
@@ -72,6 +75,7 @@ public class SimplePlayer {
         this.frail = player.frail;
         this.entangled = player.entangled;
         this.vulnerable = player.vulnerable;
+        this.exhaustedSlimed = player.exhaustedSlimed;
     }
 
     public void payForAndUseCard(AbstractSimpleCard card) {
@@ -123,6 +127,22 @@ public class SimplePlayer {
         int healthLoss = Math.min(health, Math.max(0, damage - block));
         block -= blockLoss;
         health -= healthLoss;
+    }
+
+    /**
+     * Have this player exhaust a Slimed card.
+     */
+    public void exhaustSlimed() {
+        ++exhaustedSlimed;
+    }
+
+    /**
+     * Returns the number of Slimed cards this player has exhausted.
+     *
+     * @return the number of Slimed cards this player has exhausted
+     */
+    public int getExhaustedSlimed() {
+        return exhaustedSlimed;
     }
 
     public boolean isEntangled() {

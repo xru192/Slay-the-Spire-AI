@@ -47,7 +47,7 @@ public class SimpleCarnage extends AbstractSimpleCard {
 
     @Override
     public AbstractSimpleCard copy(CombatSimulator simulator) {
-        return new SimpleCleave(simulator, this.cost, this.isUpgraded);
+        return new SimpleCarnage(simulator, this.cost, this.isUpgraded);
     }
 
 }

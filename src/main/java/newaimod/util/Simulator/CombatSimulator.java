@@ -2,6 +2,7 @@ package newaimod.util.Simulator;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.red.*;
+import com.megacrit.cardcrawl.cards.status.Slimed;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import newaimod.AI.AutoPlayer;
@@ -14,6 +15,7 @@ import newaimod.util.Simulator.Cards.Ironclad.Skills.SimpleArmaments;
 import newaimod.util.Simulator.Cards.Ironclad.Skills.SimpleDefend_Red;
 import newaimod.util.Simulator.Cards.Ironclad.Skills.SimpleFlameBarrier;
 import newaimod.util.Simulator.Cards.Ironclad.Skills.SimpleShrugItOff;
+import newaimod.util.Simulator.Cards.Neutral.Status.SimpleSlimed;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -118,6 +120,8 @@ public class CombatSimulator {
                 return new SimpleWhirlwind(this, card);
             case Armaments.ID:
                 return new SimpleArmaments(this, card);
+            case Slimed.ID:
+                return new SimpleSlimed(this, card);
         }
         return new Filler(this, card.type, card.cost);
     }
