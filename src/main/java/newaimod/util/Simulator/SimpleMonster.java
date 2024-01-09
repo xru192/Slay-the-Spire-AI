@@ -23,7 +23,7 @@ public class SimpleMonster {
     public CombatSimulator simulator;
 
     public int health;
-    int block;
+    public int block;
     public AbstractMonster originalMonster = null; // reference to monster in combat this is representing
     AbstractMonster.Intent intent;
     int intentBaseDamage; // base damage of intended attack, -1 if not attacking

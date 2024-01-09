@@ -73,6 +73,32 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
         return bestMove;
     }
 
+    @Override
+    protected CombatMove pickMoveSphericGuardian() {
+        logger.info("Picking move (Spheric)");
+        CombatSimulator currentState = new CombatSimulator();
+        List<Future> endStates = CombatSimulator.calculateFutures(currentState);
+
+        double bestEval = -100000;
+        CombatMove bestMove = null;
+        CombatSimulator bestState = null;
+        for (Future future : endStates) {
+            double eval = evalStateWithMonsterBlock(future.state);
+            if (eval > bestEval) {
+                bestEval = eval;
+                bestMove = future.move;
+                bestState = future.state;
+            }
+        }
+        logger.info("Best move: " + bestMove);
+        logger.info("Best state: " + bestState);
+        logger.info("Best eval: " + bestEval);
+        assert bestState != null;
+
+        return bestMove;
+    }
+
+
     public double evalState(CombatSimulator state) {
         int aliveMonsters = 0;
         int totalMonsterHealth = 0;
@@ -99,5 +125,30 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
         return eval;
     }
 
+    public double evalStateWithMonsterBlock(CombatSimulator state) {
+        int aliveMonsters = 0;
+        int totalMonsterHealth = 0;
+        int lowestAliveHealth = Integer.MAX_VALUE;
+        for (SimpleMonster m : state.monsterList) {
+            if (m.isAlive()) {
+                aliveMonsters += 1;
+                totalMonsterHealth += m.health + m.block;
+                lowestAliveHealth = Math.min(lowestAliveHealth, m.health + m.block);
+            }
+        }
+
+        state.aliveMonstersAttackPlayer();
+        int playerHealth = state.player.health;
+        if (aliveMonsters == 0) {
+            return 1000;
+        }
+
+        double eval = playerHealth;
+        eval -= 6 * aliveMonsters;
+        eval -= totalMonsterHealth / 3.0;
+
+        eval += state.player.strength * 5;
+        return eval;
+    }
 
 }

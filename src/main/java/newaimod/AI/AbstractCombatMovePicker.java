@@ -26,6 +26,8 @@ public abstract class AbstractCombatMovePicker {
                 return pickMoveHexaghost();
             case MonsterHelper.SLIME_BOSS_ENC:
                 return pickMoveSlimeBoss();
+            case MonsterHelper.SPHERE_GUARDIAN_ENC:
+                return pickMoveSphericGuardian();
             default:
                 return pickMoveDefault();
         }
@@ -64,6 +66,10 @@ public abstract class AbstractCombatMovePicker {
     }
 
     protected CombatMove pickMoveSlimeBoss() {
+        return pickMoveDefault();
+    }
+
+    protected CombatMove pickMoveSphericGuardian() {
         return pickMoveDefault();
     }
 

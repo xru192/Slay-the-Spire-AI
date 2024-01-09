@@ -59,16 +59,31 @@ public class BasicIroncladCardRewardPlayer {
 
     }
 
+    /**
+     * Returns an evaluation signalling how good it would be to add the specified card to the player's deck. The greater
+     * the evaluation the better, and a negative evaluation means adding the card is worse than adding nothing.
+     *
+     * @param card the card to evaluate adding to the player's deck
+     * @return evaluation of the card
+     */
     private double evalCard(AbstractCard card) {
+        ArrayList<AbstractCard> deck = AbstractDungeon.player.masterDeck.group;
         switch (card.cardID) {
+            case Inflame.ID:
+                return 10;
             case Armaments.ID:
+                for (AbstractCard c : deck) {
+                    if (c.cardID.equals(Armaments.ID)) {
+                        return -1;
+                    }
+                }
+                return 8;
             case Cleave.ID:
             case Headbutt.ID:
             case IronWave.ID:
             case PommelStrike.ID:
             case ShrugItOff.ID:
             case TwinStrike.ID:
-            case Inflame.ID:
             case FlameBarrier.ID:
             case Uppercut.ID:
             case Whirlwind.ID:

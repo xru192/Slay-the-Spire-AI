@@ -45,6 +45,7 @@ public class SimpleIronWave extends AbstractSimpleCard {
 
     @Override
     public void upgrade() {
+        this.isUpgraded = true;
         this.damage = 7;
         this.block = 7;
     }
