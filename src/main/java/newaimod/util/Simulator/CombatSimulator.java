@@ -4,7 +4,9 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.red.*;
 import com.megacrit.cardcrawl.cards.status.Slimed;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.MonsterHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.monsters.city.SphericGuardian;
 import newaimod.AI.AutoPlayer;
 import newaimod.NewAIMod;
 import newaimod.util.Simulator.Cards.AbstractSimpleCard;
@@ -129,7 +131,7 @@ public class CombatSimulator {
     /**
      * Have the player be attacked by the alive monsters, as if the monsters take their turn.
      */
-    public void aliveMonstersAttackPlayer() {
+    private void aliveMonstersAttackPlayer() {
         for (SimpleMonster m : monsterList) {
             if (m.isAttacking()) {
                 assert m.intentHits >= 1 && m.intentDamage >= 0;
@@ -138,6 +140,78 @@ public class CombatSimulator {
                 }
             }
         }
+    }
+
+    /**
+     * Simulates some of the effects of the player ending their turn. In particular, powers and relics which activate at
+     * the end of turn will trigger, and then any alive monsters will attack the player.
+     */
+    public void triggerEndTurnEffects() {
+        aliveMonstersAttackPlayer();
+    }
+
+    /**
+     * Returns whether the player is allowed to play cards in this state. False is only returned if there is something
+     * explicitly preventing the player from playing cards in general, so this does not include a lack of energy.
+     *
+     * @return whether the player is allowed to play cards
+     */
+    public boolean playerCanPlayCards() {
+        return countAliveMonsters() > 0;
+    }
+
+    /**
+     * Returns whether the combat is over. Note that when the Awakened One killed the first time the combat is not yet
+     * over.
+     *
+     * @return whether the combat is over
+     */
+    public boolean combatOver() {
+        assert !AbstractDungeon.lastCombatMetricKey.equals(MonsterHelper.AWAKENED_ENC);
+        return countAliveMonsters() == 0;
+    }
+
+    /**
+     * Returns the amount of health the player has. Returns 0 if the player has lost all health. Note that Fairy in a
+     * Bottle/Lizard Tail revivals are not accounted for.
+     *
+     * @return the health of the player
+     */
+    public int getPlayerHealth() {
+        assert player.health >= 0;
+        return player.health;
+    }
+
+    /**
+     * Returns the total effective health of all monsters. A monster's effective health is the same as its health,
+     * except for the Spheric Guardian. Since it has barricade, a living Spheric Guardian's block is counted as health.
+     *
+     * @return total effective health of monsters in this state
+     */
+    public int getTotalMonsterEffectiveHealth() {
+        int totalHealth = 0;
+        for (SimpleMonster m : monsterList) {
+            if (m.isAlive()) {
+                totalHealth += m.health;
+                if (m.originalMonster instanceof SphericGuardian) {
+                    totalHealth += m.block;
+                }
+            }
+        }
+        return totalHealth;
+    }
+
+    /**
+     * @return the number of alive monsters in this state
+     */
+    public int countAliveMonsters() {
+        int aliveMonsters = 0;
+        for (SimpleMonster m : monsterList) {
+            if (m.isAlive()) {
+                ++aliveMonsters;
+            }
+        }
+        return aliveMonsters;
     }
 
     @Override
@@ -149,9 +223,9 @@ public class CombatSimulator {
     }
 
     /**
-     * Returns a list of all possible futures derived from this state. A future consists of a combat state
-     * reachable through a sequence of moves, along with the first move taken to reach that state. For now,
-     * potion-related moves are not considered.
+     * Returns a list of all possible futures derived from this state. A future consists of a combat state reachable
+     * through a sequence of moves (this turn only), along with the first move taken to reach that state. Note that the
+     * starting state will be a state reachable by the move PASS. For now, potion-related moves are not considered.
      *
      * @param startState the starting state to find futures from
      * @return a list of futures from the starting state
@@ -194,6 +268,9 @@ public class CombatSimulator {
             Future future = queue.poll();
             futures.add(future);
             CombatSimulator thisState = future.state;
+            if (!thisState.playerCanPlayCards()) {
+                continue;
+            }
             for (int i = 0; i < thisState.player.hand.size(); ++i) {
                 AbstractSimpleCard card = thisState.player.hand.get(i);
                 if (card.targetsOne) {
@@ -217,7 +294,7 @@ public class CombatSimulator {
 
         return futures;
     }
-    
+
     public static class Future {
         public AutoPlayer.CombatMove move;    // First move leading to possible future state
         public CombatSimulator state; // Possible future state

@@ -73,95 +73,43 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
         return bestMove;
     }
 
-    @Override
-    protected CombatMove pickMoveSphericGuardian() {
-        logger.info("Picking move (Spheric)");
-        CombatSimulator currentState = new CombatSimulator();
-        List<Future> endStates = CombatSimulator.calculateFutures(currentState);
 
-        double bestEval = -100000;
-        CombatMove bestMove = null;
-        CombatSimulator bestState = null;
-        for (Future future : endStates) {
-            double eval = evalStateWithMonsterBlock(future.state);
-            if (eval > bestEval) {
-                bestEval = eval;
-                bestMove = future.move;
-                bestState = future.state;
+    private int vulnerableBonus(CombatSimulator state) {
+        int totalBonus = 0;
+        for (SimpleMonster m : state.monsterList) {
+            if (m.isAlive() && m.health >= 5 && m.vulnerable > 1) {
+                int bonus = m.vulnerable == 2 ? 3 : 8;
+                totalBonus += bonus;
             }
         }
-        logger.info("Best move: " + bestMove);
-        logger.info("Best state: " + bestState);
-        logger.info("Best eval: " + bestEval);
-        assert bestState != null;
-
-        return bestMove;
-    }
-
-    @Override
-    protected CombatMove pickMoveSentrySphere() {
-        return pickMoveSphericGuardian();
+        return totalBonus;
     }
 
     public double evalState(CombatSimulator state) {
-        int aliveMonsters = 0;
-        int totalMonsterHealth = 0;
-        int lowestAliveHealth = Integer.MAX_VALUE;
-        for (SimpleMonster m : state.monsterList) {
-            if (m.isAlive()) {
-                aliveMonsters += 1;
-                totalMonsterHealth += m.health;
-                lowestAliveHealth = Math.min(lowestAliveHealth, m.health);
-            }
-        }
-
-        state.aliveMonstersAttackPlayer();
-        int playerHealth = state.player.health;
-        if (aliveMonsters == 0) {
+        if (state.combatOver()) {
             return 1000;
         }
 
-        double eval = playerHealth;
-        eval -= 6 * aliveMonsters;
-        eval -= totalMonsterHealth / 3.0;
+        state.triggerEndTurnEffects();
+        int PH = state.getPlayerHealth();                                  // player health
+        int AM = state.countAliveMonsters();                               // alive monsters
+        int TMH = state.getTotalMonsterEffectiveHealth();                  // total monster health
+        int PS = state.player.strength;                                    // player strength
+        int ES = state.player.getExhaustedSlimed();                        // exhausted Slimed
+        int VB = vulnerableBonus(state);                                   // vulnerable bonus
 
-        eval += state.player.strength * 5;
-        eval += state.player.getExhaustedSlimed() * 0.001;
+        double PHw = 1.0;
+        double AMw = -6;
+        double TMHw = -1.0 / 3;
+        double PSw = 5;
+        double ESw = 0.001;
+        double VBw = 1.0 / 3;
 
-        if (playerHealth <= 0) {
+        double eval = (PH * PHw) + (AM * AMw) + (TMH * TMHw) + (PS * PSw) + (ES * ESw) + (VB * VBw);
+        if (PH <= 0) {
             eval -= 1000;
         }
 
-        return eval;
-    }
-
-    public double evalStateWithMonsterBlock(CombatSimulator state) {
-        int aliveMonsters = 0;
-        int totalMonsterHealth = 0;
-        int lowestAliveHealth = Integer.MAX_VALUE;
-        for (SimpleMonster m : state.monsterList) {
-            if (m.isAlive()) {
-                aliveMonsters += 1;
-                totalMonsterHealth += m.health + m.block;
-                lowestAliveHealth = Math.min(lowestAliveHealth, m.health + m.block);
-            }
-        }
-
-        state.aliveMonstersAttackPlayer();
-        int playerHealth = state.player.health;
-        if (aliveMonsters == 0) {
-            return 1000;
-        }
-
-        double eval = playerHealth;
-        eval -= 6 * aliveMonsters;
-        eval -= totalMonsterHealth / 3.0;
-
-        eval += state.player.strength * 5;
-        eval += state.player.getExhaustedSlimed() * 0.001;
-        if (playerHealth <= 0) {
-            eval -= 1000;
-        }
         return eval;
     }
 

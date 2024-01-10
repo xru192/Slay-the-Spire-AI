@@ -24,13 +24,13 @@ public class SimpleMonster {
 
     public int health;
     public int block;
-    public AbstractMonster originalMonster = null; // reference to monster in combat this is representing
+    public AbstractMonster originalMonster; // reference to monster in combat this is representing
     AbstractMonster.Intent intent;
     int intentBaseDamage; // base damage of intended attack, -1 if not attacking
     int intentDamage;   // damage of intended attack, -1 if not attacking
     int intentHits;     // number of intended hits, -1 if not attacking
 
-    int vulnerable;
+    public int vulnerable;
     int weak;
     int strength;
 
