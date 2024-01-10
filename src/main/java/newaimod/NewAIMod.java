@@ -77,6 +77,7 @@ public class NewAIMod implements
         ConsoleCommand.addCommand("cardinfo", CardInfoCommand.class);
         ConsoleCommand.addCommand("monsterinfo", MonsterInfoCommand.class);
         ConsoleCommand.addCommand("settings", SettingsCommand.class);
+        ConsoleCommand.addCommand("mapinfo", MapInfoCommand.class);
     }
 
     @Override

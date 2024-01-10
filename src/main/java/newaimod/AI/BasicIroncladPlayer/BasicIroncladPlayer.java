@@ -11,7 +11,7 @@ public class BasicIroncladPlayer implements AutoPlayer {
     private final AbstractRestAutoPlayer restPlayer;
     private final BasicIroncladCardRewardPlayer cardRewardPlayer;
     private final BasicIroncladCombatRewardPlayer combatRewardPlayer;
-    private final BasicIroncladMapPlayer mapPlayer;
+    private final AbstractMapAutoPlayer mapPlayer;
     private final BasicIroncladBossRewardPlayer bossRewardPlayer;
     private final AbstractGridAutoPlayer gridPlayer;
     private final BasicIroncladHandSelectPlayer handSelectPlayer;
