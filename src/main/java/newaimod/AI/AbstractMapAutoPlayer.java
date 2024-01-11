@@ -68,7 +68,7 @@ public abstract class AbstractMapAutoPlayer {
      * acts).
      */
     public static class Path {
-        enum ROOMS {
+        public enum ROOM {
             UNKNOWN, MERCHANT, TREASURE, REST, ENEMY, ELITE, BURNING_ELITE, OTHER
         }
 
@@ -76,8 +76,8 @@ public abstract class AbstractMapAutoPlayer {
         @NotNull
         public MapRoomNode end; // the room this path ends in
 
-        List<MapRoomNode> roomNodes;
-        List<ROOMS> rooms;
+        public List<MapRoomNode> roomNodes;
+        public List<ROOM> rooms;
 
         public Path(@NotNull MapRoomNode start) {
             this.start = start;
@@ -100,27 +100,27 @@ public abstract class AbstractMapAutoPlayer {
             rooms.add(getType(node));
         }
 
-        private ROOMS getType(MapRoomNode node) {
+        private ROOM getType(MapRoomNode node) {
             String symbol = ReflectionHacks.getPrivate(node.room, AbstractRoom.class, "mapSymbol");
             switch (symbol) {
                 case "?":
-                    return ROOMS.UNKNOWN;
+                    return ROOM.UNKNOWN;
                 case "$":
-                    return ROOMS.MERCHANT;
+                    return ROOM.MERCHANT;
                 case "T":
-                    return ROOMS.TREASURE;
+                    return ROOM.TREASURE;
                 case "R":
-                    return ROOMS.REST;
+                    return ROOM.REST;
                 case "M":
-                    return ROOMS.ENEMY;
+                    return ROOM.ENEMY;
                 case "E":
                     if (node.hasEmeraldKey) {
-                        return ROOMS.BURNING_ELITE;
+                        return ROOM.BURNING_ELITE;
                     } else {
-                        return ROOMS.ELITE;
+                        return ROOM.ELITE;
                     }
             }
-            return ROOMS.OTHER;
+            return ROOM.OTHER;
         }
 
         /**

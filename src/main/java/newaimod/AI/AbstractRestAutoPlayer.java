@@ -3,6 +3,7 @@ package newaimod.AI;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.rooms.RestRoom;
 import communicationmod.ChoiceScreenUtils;
+import newaimod.NewAIMod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -42,7 +43,9 @@ public abstract class AbstractRestAutoPlayer {
             return;
         }
         if (choices.size() == 1) {
+            logger.info("Done: making only choice");
             ChoiceScreenUtils.makeRestRoomChoice(0);
+            return;
         }
 
         boolean canRest = choices.contains("rest");
@@ -84,6 +87,7 @@ public abstract class AbstractRestAutoPlayer {
                 return false;
             }
             ChoiceScreenUtils.makeRestRoomChoice(choices.indexOf(choice.toString()));
+            NewAIMod.delayAction(100);
             return true;
         } catch (Exception e) {
             logger.info("Failed to make choice: " + choice + ". Error: " + e.getMessage());
