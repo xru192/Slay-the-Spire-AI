@@ -1,5 +1,6 @@
 package newaimod.AI.BasicIroncladPlayer;
 
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import newaimod.AI.AbstractMapAutoPlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,6 +30,8 @@ public class BasicIroncladMapPlayer extends AbstractMapAutoPlayer {
         int startY = path.roomNodes.get(0).y;
         int rests = 0;
         double eliteEval = 0;
+        boolean lowHealth = AbstractDungeon.player.currentHealth < 30;
+
         for (int i = 0; i < path.rooms.size(); ++i) {
             int y = startY + i;
             boolean early = y < 5;
@@ -45,13 +48,24 @@ public class BasicIroncladMapPlayer extends AbstractMapAutoPlayer {
                 case ENEMY:
                     break;
                 case ELITE:
-                    if (early) {
-                        eliteEval -= 1;
-                    } else if (mid) {
-                        eliteEval += 1;
+                    if (lowHealth) {
+                        if (early) {
+                            eliteEval += -2;
+                        } else if (mid) {
+                            eliteEval += -1;
+                        } else {
+                            eliteEval += -0.5;
+                        }
                     } else {
-                        eliteEval += 1.5;
+                        if (early) {
+                            eliteEval += -1;
+                        } else if (mid) {
+                            eliteEval += 1;
+                        } else {
+                            eliteEval += 1.5;
+                        }
                     }
+
                     break;
                 case BURNING_ELITE:
                     break;
