@@ -87,7 +87,6 @@ public abstract class AbstractRestAutoPlayer {
                 return false;
             }
             ChoiceScreenUtils.makeRestRoomChoice(choices.indexOf(choice.toString()));
-            NewAIMod.delayAction(100);
             return true;
         } catch (Exception e) {
             logger.info("Failed to make choice: " + choice + ". Error: " + e.getMessage());

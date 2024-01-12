@@ -8,6 +8,7 @@ public class BasicIroncladPlayer implements AutoPlayer {
 
     private final AbstractEventAutoPlayer eventPlayer;
     private final BasicIroncladChestPlayer chestPlayer;
+    private final AbstractShopAutoPlayer shopPlayer;
     private final AbstractRestAutoPlayer restPlayer;
     private final BasicIroncladCardRewardPlayer cardRewardPlayer;
     private final BasicIroncladCombatRewardPlayer combatRewardPlayer;
@@ -20,6 +21,7 @@ public class BasicIroncladPlayer implements AutoPlayer {
     public BasicIroncladPlayer() {
         eventPlayer = new BasicIroncladEventPlayer();
         chestPlayer = new BasicIroncladChestPlayer();
+        shopPlayer = new BasicIroncladShopPlayer();
         restPlayer = new BasicIroncladRestPlayer();
         cardRewardPlayer = new BasicIroncladCardRewardPlayer();
         combatRewardPlayer = new BasicIroncladCombatRewardPlayer();
@@ -43,7 +45,7 @@ public class BasicIroncladPlayer implements AutoPlayer {
 
     @Override
     public void playShop() {
-        ChoiceScreenUtils.pressConfirmButton();
+        shopPlayer.execute();
     }
 
     @Override
