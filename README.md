@@ -13,7 +13,7 @@ of
 functionality which must be captured (cards, relics, monsters, potions).
 So the simulator is a work in progress, where functionality is implemented as it becomes a priority.
 
-[More on Simulator implementation](src/main/java/newaimod/util/Simulator/README.md)
+[More on Simulator implementation](src/main/java/newaimod/util/simulator/README.md)
 
 ## Milestones
 

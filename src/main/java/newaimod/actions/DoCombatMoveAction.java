@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.utility.NewQueueCardAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import newaimod.AI.AutoPlayer;
+import newaimod.ai.AutoPlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,7 +35,7 @@ public class DoCombatMoveAction extends AbstractGameAction {
                 AbstractCard toPlay = cards.get(combatMove.index);
                 if (toPlay == null || !toPlay.canUse(AbstractDungeon.player, combatMove.target)) {
                     isDone = true;
-                    logger.info("ERROR Illegal card on target played: " + combatMove.toString());
+                    logger.info("ERROR Illegal card on target played: " + combatMove);
                     return;
                 }
                 logger.info("Playing card: " + toPlay.name);

@@ -11,9 +11,9 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import communicationmod.ChoiceScreenUtils;
 import communicationmod.GameStateListener;
-import newaimod.AI.AutoPlayer;
-import newaimod.AI.BasicIroncladPlayer.BasicIroncladPlayer;
-import newaimod.Properties.PropertyManager;
+import newaimod.ai.AutoPlayer;
+import newaimod.ai.basicIroncladPlayer.BasicIroncladPlayer;
+import newaimod.properties.PropertyManager;
 import newaimod.actions.DoCombatMoveAction;
 import newaimod.commands.*;
 import newaimod.util.CombatUtils;
@@ -48,7 +48,7 @@ public class NewAIMod implements
     public static final Logger logger = LogManager.getLogger(modID); //Used to output to the console.
     private static final String resourcesFolder = "newaimod";
 
-    public static PropertyManager myPropertyManager = PropertyManager.getInstance();
+    public static final PropertyManager myPropertyManager = PropertyManager.getInstance();
     public static boolean inBattle;     // whether user is in a combat
     public static boolean inGame;       // whether user is in the game
 
@@ -104,8 +104,6 @@ public class NewAIMod implements
             if (!GameStateListener.checkForDungeonStateChange()) {
                 return;
             }
-//            return;
-//            throw new RuntimeException("Here");
         } else {
             boolean change = GameStateListener.checkForDungeonStateChange();
             if (change && stateChanged) {
@@ -127,7 +125,6 @@ public class NewAIMod implements
 
         ChoiceScreenUtils.ChoiceType type = ChoiceScreenUtils.getCurrentChoiceType();
         if (!myPropertyManager.enabled) {
-//            logger.info("Actions disabled in settings");
             return;
         }
 

@@ -4,7 +4,7 @@ import basemod.DevConsole;
 import basemod.devcommands.ConsoleCommand;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import newaimod.AI.AutoPlayer;
+import newaimod.ai.AutoPlayer;
 import newaimod.actions.DoCombatMoveAction;
 import newaimod.util.CombatUtils;
 
