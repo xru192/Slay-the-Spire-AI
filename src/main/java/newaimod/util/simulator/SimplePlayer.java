@@ -29,9 +29,12 @@ public class SimplePlayer {
 
     boolean entangled;
     boolean vulnerable;
-//    boolean intangible;
+    // boolean intangible;
+    boolean noDraw;
 
     int exhaustedSlimed;
+    int cardsDrawnWithEnergy;   // number of cards drawn while player has at least 1 energy left (after simulator start)
+
 
     /**
      * SimplePlayer which represents the current state of the player in combat.
@@ -56,7 +59,9 @@ public class SimplePlayer {
         entangled = p.hasPower(EntanglePower.POWER_ID);
         vulnerable = p.hasPower(VulnerablePower.POWER_ID);
 //        intangible = p.hasPower(IntangiblePlayerPower.POWER_ID);
+        noDraw = p.hasPower(NoDrawPower.POWER_ID);
         exhaustedSlimed = 0;
+        cardsDrawnWithEnergy = 0;
     }
 
     public SimplePlayer(SimplePlayer player, CombatSimulator simulator) {
@@ -75,7 +80,9 @@ public class SimplePlayer {
         this.frail = player.frail;
         this.entangled = player.entangled;
         this.vulnerable = player.vulnerable;
+        this.noDraw = player.noDraw;
         this.exhaustedSlimed = player.exhaustedSlimed;
+        this.cardsDrawnWithEnergy = player.cardsDrawnWithEnergy;
     }
 
     public void payForAndUseCard(AbstractSimpleCard card) {
@@ -143,6 +150,22 @@ public class SimplePlayer {
      */
     public int getExhaustedSlimed() {
         return exhaustedSlimed;
+    }
+
+    public void gainNoDraw() {
+        noDraw = true;
+    }
+
+    /**
+     * Have this player draw cards from the draw pile. If the source of draw is from a card, this method should be
+     * called after the card is paid for.
+     *
+     * @param amount the number of cards to draw
+     */
+    public void drawCards(int amount) {
+        if (!noDraw && energy >= 1) {
+            cardsDrawnWithEnergy += amount;
+        }
     }
 
     public boolean isEntangled() {

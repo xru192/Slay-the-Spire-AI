@@ -13,10 +13,7 @@ import newaimod.util.simulator.cards.AbstractSimpleCard;
 import newaimod.util.simulator.cards.Filler;
 import newaimod.util.simulator.cards.ironclad.attacks.*;
 import newaimod.util.simulator.cards.ironclad.powers.SimpleInflame;
-import newaimod.util.simulator.cards.ironclad.skills.SimpleArmaments;
-import newaimod.util.simulator.cards.ironclad.skills.SimpleDefend_Red;
-import newaimod.util.simulator.cards.ironclad.skills.SimpleFlameBarrier;
-import newaimod.util.simulator.cards.ironclad.skills.SimpleShrugItOff;
+import newaimod.util.simulator.cards.ironclad.skills.*;
 import newaimod.util.simulator.cards.Neutral.status.SimpleSlimed;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -122,6 +119,8 @@ public class CombatSimulator {
                 return new SimpleWhirlwind(this, card);
             case Armaments.ID:
                 return new SimpleArmaments(this, card);
+            case BattleTrance.ID:
+                return new SimpleBattleTrance(this, card);
             case Slimed.ID:
                 return new SimpleSlimed(this, card);
         }

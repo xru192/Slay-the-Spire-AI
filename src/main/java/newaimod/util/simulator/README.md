@@ -21,16 +21,17 @@ must be implemented separately. Below is a summary of the status of the implemen
 | Cleave        | Attack   | Done                  | Multi-attack                                         |
 | Headbutt      | Attack   | Partial               | Putting card on top*                                 |
 | Iron Wave     | Attack   | Done                  | Block                                                |
-| Pommel Strike | Attack   | Partial               | Draw card(s)*                                        |
+| Pommel Strike | Attack   | Done                  | Draw card(s)                                         |
 | Strike        | Attack   | Done                  |                                                      |
 | Twin Strike   | Attack   | Done                  | Multi-attack                                         |
 | Uppercut      | Attack   | Done                  | Weak, Vulnerable                                     |
 | Whirlwind     | Attack   | Done                  | Cost-X, Multi-attack                                 |
 | Inflame       | Power    | Done                  | Strength                                             |
 | Armaments     | Skill    | Partial               | Choose a card to upgrade*, Upgrade all cards in hand |
+| Battle Trance | Skill    | Done                  | Draw cards, no-draw this turn                        |
 | Defend        | Skill    | Done                  |                                                      |
 | Flame Barrier | Skill    | Partial               | Flame Barrier effect                                 |
-| Shrug it Off  | Skill    | Partial               | Draw card*                                           |
+| Shrug it Off  | Skill    | Partial               | Draw card                                            |
 | Slimed        | Status   | Done                  | Exhaust                                              |
 
 ### Relics
@@ -80,7 +81,6 @@ the status of the implementation of each relic.
 | Du-Vu Doll         | Done                  | Player strength is known                                                    |
 | Fossilized Helix   | Unimplemented         | Buffer is unknown*                                                          |
 | ...                |                       |                                                                             |
-
 
 ### Monsters
 

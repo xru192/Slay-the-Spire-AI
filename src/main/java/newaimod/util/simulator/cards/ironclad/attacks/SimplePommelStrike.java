@@ -39,7 +39,7 @@ public class SimplePommelStrike extends AbstractSimpleCard {
         int playerModifiedDamage = simulator.player.getModifiedDamage(this.damage);
         target.takeAttack(playerModifiedDamage);
         simulator.player.payForAndUseCard(this);
-        // TODO draw card(s)
+        simulator.player.drawCards(this.magicNumber);
     }
 
     @Override
