@@ -1,36 +1,64 @@
-# Basic Mod
+# Slay the Spire AI
 
-This is an empty Slay the Spire mod + a modding tutorial.
+Slay the Spire mod which has a program play the game. Provides an interface for creating one's own AI to play the game.
 
-This tutorial will help with setup and the basics of Slay the Spire modding, but it will not teach you Java. If you know nothing of Java or programming in general, you are strongly recommended to look up a free online course and do at least some of it. It is possible to do modding with almost no proper knowledge, but it will make things much more difficult.
+## Implementation details
 
----
+### Combat Simulator
 
-## Check the wiki to get started:
+In order to make in-combat decisions, the AI simulates playing different combinations of cards, and then evaluates the
+resulting states.
+A fully complete simulator would accurately simulate the playing of any card in any situation. However, there is a lot
+of
+functionality which must be captured (cards, relics, monsters, potions).
+So the simulator is a work in progress, where functionality is implemented as it becomes a priority.
 
-https://github.com/Alchyr/BasicMod/wiki
+[More on Simulator implementation](src/main/java/newaimod/util/simulator/README.md)
 
----
+## Milestones
 
-## Know what you're doing?
+Some targets to aim for when it comes implementing and improving the AI. For now, the focus is entirely on an AI for
+Ironclad on Ascension 0/1.
 
-You can still use this mod as a base, or you could use another template like https://github.com/DarkVexon/ProTemplate
+### Performance (Basic)
 
-You can find more options in the pins of the #modding-technical channel in the Slay the Spire discord server.
+- [ ] Consistently (95+%) reaches Act I boss
+- [ ] Often (80+%) defeats Act I boss
+- [ ] Frequently (50+%) reaches Act II boss
+- [ ] Occasionally (20+%) defeats Act II boss
 
----
+### Performance (Decent)
 
-### Some HD Slay the Spire art assets (courtesy of Gremious, creator of DefaultMod):
+- [ ] Always reaches Act I boss
+- [ ] Consistently (95+%) defeats Act I boss
+- [ ] Often (80+%) reaches Act II boss
+- [ ] Usually (70+%) defeats Act II boss
+- [ ] Frequently (50+%) reaches Act III boss
+- [ ] Occasionally (20+%) defeats Act III boss
 
-Includes:
-- Empty Relic Template feat. empty bottle
-- Empty Card Template
-- Color-Changable cardback
-- A couple of HD Monster vectors (Louse, Nob, Sentry, Sneaky Gremlin)
-- A coupe of HD items (J.A.X., A Coin)
-- 2 people silhouettes
-- A curse Background
+### Performance (Advanced)
 
-https://github.com/Gremious/StS-DefaultModBase#some-hd-slay-the-spire-art-assets
+- [ ] Always reaches Act I boss
+- [ ] Consistently (95+%) defeats Act I boss
+- [ ] Consistently (95+%) reaches Act II boss
+- [ ] Very often (90+%) defeats Act II boss
+- [ ] Often (80+%) reaches Act III boss
+- [ ] Usually (70+%) defeats Act III boss
+- [ ] Occasionally (20+%) defeats Act IV boss
 
----
+### Performance (Amazing)
+
+- [ ] Always reaches Act I boss
+- [ ] Consistently (95+%) defeats Act I boss
+- [ ] Consistently (95+%) reaches Act II boss
+- [ ] Very often (90+%) defeats Act II boss
+- [ ] Very often (90+%) reaches Act III boss
+- [ ] Often (80+%) defeats Act III boss
+- [ ] Frequently (50+%) defeats Act IV boss
+
+## Run history
+
+| Version | Runs | Average Floors Cleared | Reached Act I Boss | Defeated Act I Boss | Reached Act II Boss | Defeated Act II Boss | Reached Act III Boss | Defeated Act III Boss |
+|:-------:|:----:|:----------------------:|:------------------:|:-------------------:|:-------------------:|:--------------------:|:--------------------:|:---------------------:|
+|  0.0.0  |  20  |          23.4          |         18         |         11          |          6          |          1           |          0           |           0           |
+
