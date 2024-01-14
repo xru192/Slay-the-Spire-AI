@@ -33,8 +33,11 @@ public class SimplePlayer {
     boolean noDraw;
 
     int exhaustedSlimed;
-    int cardsDrawnWithEnergy;   // number of cards drawn while player has at least 1 energy left (after simulator start)
 
+    int cardsDrawnWith0Energy;      // # cards drawn while player has at least 1 energy left (after simulator start)
+    int cardsDrawnWith1Energy;      // # cards drawn while player has at least 1 energy left (after simulator start)
+    int cardsDrawnWith2Energy;      // # cards drawn while player has at least 2 energy left (after simulator start)
+    int cardsDrawnWith3Energy;      // # cards drawn while player has at least 3 energy left (after simulator start)
 
     /**
      * SimplePlayer which represents the current state of the player in combat.
@@ -61,7 +64,10 @@ public class SimplePlayer {
 //        intangible = p.hasPower(IntangiblePlayerPower.POWER_ID);
         noDraw = p.hasPower(NoDrawPower.POWER_ID);
         exhaustedSlimed = 0;
-        cardsDrawnWithEnergy = 0;
+        cardsDrawnWith0Energy = 0;
+        cardsDrawnWith1Energy = 0;
+        cardsDrawnWith2Energy = 0;
+        cardsDrawnWith3Energy = 0;
     }
 
     public SimplePlayer(SimplePlayer player, CombatSimulator simulator) {
@@ -82,7 +88,10 @@ public class SimplePlayer {
         this.vulnerable = player.vulnerable;
         this.noDraw = player.noDraw;
         this.exhaustedSlimed = player.exhaustedSlimed;
-        this.cardsDrawnWithEnergy = player.cardsDrawnWithEnergy;
+        this.cardsDrawnWith0Energy = player.cardsDrawnWith0Energy;
+        this.cardsDrawnWith1Energy = player.cardsDrawnWith1Energy;
+        this.cardsDrawnWith2Energy = player.cardsDrawnWith2Energy;
+        this.cardsDrawnWith3Energy = player.cardsDrawnWith3Energy;
     }
 
     public void payForAndUseCard(AbstractSimpleCard card) {
@@ -163,9 +172,37 @@ public class SimplePlayer {
      * @param amount the number of cards to draw
      */
     public void drawCards(int amount) {
-        if (!noDraw && energy >= 1) {
-            cardsDrawnWithEnergy += amount;
+        if (noDraw) {
+            return;
         }
+
+        switch (energy) {
+            case 3:
+                cardsDrawnWith3Energy += amount;
+            case 2:
+                cardsDrawnWith2Energy += amount;
+            case 1:
+                cardsDrawnWith1Energy += amount;
+            case 0:
+                cardsDrawnWith0Energy += amount;
+        }
+
+    }
+
+    public int getCardsDrawnWith0Energy() {
+        return cardsDrawnWith0Energy;
+    }
+
+    public int getCardsDrawnWith1Energy() {
+        return cardsDrawnWith1Energy;
+    }
+
+    public int getCardsDrawnWith2Energy() {
+        return cardsDrawnWith2Energy;
+    }
+
+    public int getCardsDrawnWith3Energy() {
+        return cardsDrawnWith3Energy;
     }
 
     public boolean isEntangled() {

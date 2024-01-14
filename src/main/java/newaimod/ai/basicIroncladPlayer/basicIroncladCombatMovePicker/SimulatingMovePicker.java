@@ -91,12 +91,16 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
         }
 
         state.triggerEndTurnEffects();
-        int PH = state.getPlayerHealth();                                  // player health
-        int AM = state.countAliveMonsters();                               // alive monsters
-        int TMH = state.getTotalMonsterEffectiveHealth();                  // total monster health
-        int PS = state.player.strength;                                    // player strength
-        int ES = state.player.getExhaustedSlimed();                        // exhausted Slimed
-        int VB = vulnerableBonus(state);                                   // vulnerable bonus
+        int PH = state.getPlayerHealth();                                    // player health
+        int AM = state.countAliveMonsters();                                 // alive monsters
+        int TMH = state.getTotalMonsterEffectiveHealth();                    // total monster health
+        int PS = state.player.strength;                                      // player strength
+        int ES = state.player.getExhaustedSlimed();                          // exhausted Slimed
+        int VB = vulnerableBonus(state);                                     // vulnerable bonus
+        int CDW0E = state.player.getCardsDrawnWith0Energy();                 // cards drawn with 0+ energy
+        int CDW1E = state.player.getCardsDrawnWith1Energy();                 // cards drawn with 1+ energy
+        int CDW2E = state.player.getCardsDrawnWith2Energy();                 // cards drawn with 2+ energy
+        int CDW3E = state.player.getCardsDrawnWith3Energy();                 // cards drawn with 3+ energy
 
         double PHw = 1.0;
         double AMw = -6;
@@ -104,8 +108,12 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
         double PSw = 5;
         double ESw = 0.001;
         double VBw = 1.0 / 3;
+        double CDW0Ew = 0;
+        double CDW1Ew = 0.01;
+        double CDW2Ew = 0.01;
+        double CDW3Ew = 0.01;
 
-        double eval = (PH * PHw) + (AM * AMw) + (TMH * TMHw) + (PS * PSw) + (ES * ESw) + (VB * VBw);
+        double eval = (PH * PHw) + (AM * AMw) + (TMH * TMHw) + (PS * PSw) + (ES * ESw) + (VB * VBw) + (CDW0E * CDW0Ew) + (CDW1E * CDW1Ew) + (CDW2E * CDW2Ew) + (CDW3E * CDW3Ew);
         if (PH <= 0) {
             eval -= 1000;
         }
