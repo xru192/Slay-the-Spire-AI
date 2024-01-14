@@ -12,7 +12,9 @@ import newaimod.NewAIMod;
 import newaimod.util.simulator.cards.AbstractSimpleCard;
 import newaimod.util.simulator.cards.Filler;
 import newaimod.util.simulator.cards.ironclad.attacks.*;
+import newaimod.util.simulator.cards.ironclad.powers.SimpleDemonForm;
 import newaimod.util.simulator.cards.ironclad.powers.SimpleInflame;
+import newaimod.util.simulator.cards.ironclad.powers.SimpleMetallicize;
 import newaimod.util.simulator.cards.ironclad.skills.*;
 import newaimod.util.simulator.cards.Neutral.status.SimpleSlimed;
 import org.apache.logging.log4j.LogManager;
@@ -103,8 +105,12 @@ public class CombatSimulator {
                 return new SimpleShrugItOff(this, card);
             case Headbutt.ID:
                 return new SimpleHeadbutt(this, card);
+            case DemonForm.ID:
+                return new SimpleDemonForm(this, card);
             case Inflame.ID:
                 return new SimpleInflame(this, card);
+            case Metallicize.ID:
+                return new SimpleMetallicize(this, card);
             case Cleave.ID:
                 return new SimpleCleave(this, card);
             case PommelStrike.ID:
@@ -146,6 +152,7 @@ public class CombatSimulator {
      * the end of turn will trigger, and then any alive monsters will attack the player.
      */
     public void triggerEndTurnEffects() {
+        player.triggerEndTurnPowers();
         aliveMonstersAttackPlayer();
     }
 

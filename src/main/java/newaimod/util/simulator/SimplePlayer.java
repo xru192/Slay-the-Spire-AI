@@ -22,11 +22,10 @@ public class SimplePlayer {
     public int block;
     public int strength;
     public int dexterity;
-    //    public int metallicize;
-//    public int demonForm;
     boolean weakened;
     boolean frail;
-
+    public int metallicize;
+    public int demonForm;
     boolean entangled;
     boolean vulnerable;
     // boolean intangible;
@@ -55,10 +54,10 @@ public class SimplePlayer {
         block = p.currentBlock;
         strength = CombatUtils.amountOfPower(p, StrengthPower.POWER_ID);
         dexterity = CombatUtils.amountOfPower(p, DexterityPower.POWER_ID);
-//        metallicize = CombatUtils.amountOfPower(p, MetallicizePower.POWER_ID);
-//        demonForm = CombatUtils.amountOfPower(p, DemonFormPower.POWER_ID);
         weakened = p.hasPower(WeakPower.POWER_ID);
         frail = p.hasPower(FrailPower.POWER_ID);
+        metallicize = CombatUtils.amountOfPower(p, MetallicizePower.POWER_ID);
+        demonForm = CombatUtils.amountOfPower(p, DemonFormPower.POWER_ID);
         entangled = p.hasPower(EntanglePower.POWER_ID);
         vulnerable = p.hasPower(VulnerablePower.POWER_ID);
 //        intangible = p.hasPower(IntangiblePlayerPower.POWER_ID);
@@ -84,6 +83,8 @@ public class SimplePlayer {
         this.dexterity = player.dexterity;
         this.weakened = player.weakened;
         this.frail = player.frail;
+        this.metallicize = player.metallicize;
+        this.demonForm = player.demonForm;
         this.entangled = player.entangled;
         this.vulnerable = player.vulnerable;
         this.noDraw = player.noDraw;
@@ -100,6 +101,14 @@ public class SimplePlayer {
         energy -= card.cost;
     }
 
+    /**
+     * Have this player trigger all effects which occur due to powers when the player ends their turn. Examples:
+     * Metallicize, Combust.
+     */
+    public void triggerEndTurnPowers() {
+        assert metallicize >= 0;
+        block += metallicize;
+    }
 
     /**
      * Returns how much damage an attack will do (per hit) after player modifications. These include strength and

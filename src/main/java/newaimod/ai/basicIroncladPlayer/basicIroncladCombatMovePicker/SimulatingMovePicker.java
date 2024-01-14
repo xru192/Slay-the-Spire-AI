@@ -95,6 +95,8 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
         int AM = state.countAliveMonsters();                                 // alive monsters
         int TMH = state.getTotalMonsterEffectiveHealth();                    // total monster health
         int PS = state.player.strength;                                      // player strength
+        int PM = state.player.metallicize;                                   // player metallicize
+        int PDF = state.player.demonForm;                                    // player demon form
         int ES = state.player.getExhaustedSlimed();                          // exhausted Slimed
         int VB = vulnerableBonus(state);                                     // vulnerable bonus
         int CDW0E = state.player.getCardsDrawnWith0Energy();                 // cards drawn with 0+ energy
@@ -105,7 +107,9 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
         double PHw = 1.0;
         double AMw = -6;
         double TMHw = -1.0 / 3;
-        double PSw = 5;
+        double PSw = 5.0;
+        double PMw = 1.0;
+        double PDFw = TMH >= 100 ? 8 : 1.0;
         double ESw = 0.001;
         double VBw = 1.0 / 3;
         double CDW0Ew = 0;
@@ -113,7 +117,7 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
         double CDW2Ew = 0.01;
         double CDW3Ew = 0.01;
 
-        double eval = (PH * PHw) + (AM * AMw) + (TMH * TMHw) + (PS * PSw) + (ES * ESw) + (VB * VBw) + (CDW0E * CDW0Ew) + (CDW1E * CDW1Ew) + (CDW2E * CDW2Ew) + (CDW3E * CDW3Ew);
+        double eval = (PH * PHw) + (AM * AMw) + (TMH * TMHw) + (PS * PSw) + (PM * PMw) + (PDF * PDFw) + (ES * ESw) + (VB * VBw) + (CDW0E * CDW0Ew) + (CDW1E * CDW1Ew) + (CDW2E * CDW2Ew) + (CDW3E * CDW3Ew);
         if (PH <= 0) {
             eval -= 1000;
         }
