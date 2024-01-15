@@ -80,6 +80,9 @@ public class CombatSimulator {
         }
 
         card.play(target);
+        for (SimpleMonster m : monsterList) {
+            m.onUseCard(card);
+        }
         return true;
     }
 
