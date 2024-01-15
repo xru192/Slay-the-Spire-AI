@@ -26,7 +26,9 @@ must be implemented separately. Below is a summary of the status of the implemen
 | Twin Strike   | Attack   | Done                  | Multi-attack                                         |
 | Uppercut      | Attack   | Done                  | Weak, Vulnerable                                     |
 | Whirlwind     | Attack   | Done                  | Cost-X, Multi-attack                                 |
+| Demon Form    | Power    | Done                  |                                                      |
 | Inflame       | Power    | Done                  | Strength                                             |
+| Metallicize   | Power    | Done                  | End of turn block                                    |
 | Armaments     | Skill    | Partial               | Choose a card to upgrade*, Upgrade all cards in hand |
 | Battle Trance | Skill    | Done                  | Draw cards, no-draw this turn                        |
 | Defend        | Skill    | Done                  |                                                      |
