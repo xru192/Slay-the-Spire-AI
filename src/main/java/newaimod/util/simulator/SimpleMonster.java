@@ -24,10 +24,10 @@ public class SimpleMonster {
     public int health;
     public int block;
     public final AbstractMonster originalMonster; // reference to monster in combat this is representing
-    AbstractMonster.Intent intent;
-    int intentBaseDamage; // base damage of intended attack, -1 if not attacking
-    int intentDamage;   // damage of intended attack, -1 if not attacking
-    int intentHits;     // number of intended hits, -1 if not attacking
+    protected AbstractMonster.Intent intent;
+    protected int intentBaseDamage; // base damage of intended attack, -1 if not attacking
+    protected int intentDamage;   // damage of intended attack, -1 if not attacking
+    protected int intentHits;     // number of intended hits, -1 if not attacking
 
     public int vulnerable;
     int weak;
@@ -63,6 +63,10 @@ public class SimpleMonster {
         this.vulnerable = m.vulnerable;
         this.weak = m.weak;
         this.strength = m.strength;
+    }
+
+    public SimpleMonster copy(CombatSimulator simulator) {
+        return new SimpleMonster(this, simulator);
     }
 
     /**

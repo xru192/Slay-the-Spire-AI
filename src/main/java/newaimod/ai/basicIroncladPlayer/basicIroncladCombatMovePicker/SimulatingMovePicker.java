@@ -68,10 +68,15 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
     }
 
     private double evalStateGremlinNob(CombatSimulator state) {
+        StateEvaluator evaluator = new BasicStateEvaluator();
+        double basicEval = evaluator.evaluate(state);
+        if (state.combatOver()) {
+            return basicEval;
+        }
+
         assert state.monsterList.size() == 1 && state.monsterList.get(0) instanceof SimpleGremlinNob;
         int GNS = ((SimpleGremlinNob) state.monsterList.get(0)).getStrength(); // Gremlin Nob strength
         double GNSw = -3;
-        StateEvaluator evaluator = new BasicStateEvaluator();
-        return evaluator.evaluate(state) + GNS * GNSw;
+        return basicEval + GNS * GNSw;
     }
 }

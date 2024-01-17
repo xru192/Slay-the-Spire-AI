@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.MonsterHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.city.SphericGuardian;
+import com.megacrit.cardcrawl.monsters.exordium.GremlinNob;
 import newaimod.ai.AutoPlayer;
 import newaimod.NewAIMod;
 import newaimod.util.simulator.cards.AbstractSimpleCard;
@@ -17,6 +18,7 @@ import newaimod.util.simulator.cards.ironclad.powers.SimpleInflame;
 import newaimod.util.simulator.cards.ironclad.powers.SimpleMetallicize;
 import newaimod.util.simulator.cards.ironclad.skills.*;
 import newaimod.util.simulator.cards.Neutral.status.SimpleSlimed;
+import newaimod.util.simulator.monsters.SimpleGremlinNob;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +27,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+
 
 /**
  * A CombatSimulator simulates a simplified version of Slay the Spire combat. An instance represents a state of combat,
@@ -48,7 +51,14 @@ public class CombatSimulator {
         List<AbstractMonster> roomMonsters = AbstractDungeon.getCurrRoom().monsters.monsters;
         for (AbstractMonster m : roomMonsters) {
             if (!m.isDeadOrEscaped()) {
-                monsterList.add(new SimpleMonster(m, this));
+                switch (m.id) {
+                    case GremlinNob.ID:
+                        monsterList.add(new SimpleGremlinNob((GremlinNob) m, this));
+                        break;
+                    default:
+                        monsterList.add(new SimpleMonster(m, this));
+                }
+
             }
         }
     }
@@ -62,7 +72,8 @@ public class CombatSimulator {
         player = new SimplePlayer(simulator.player, this);
         monsterList = new ArrayList<>();
         for (SimpleMonster m : simulator.monsterList) {
-            monsterList.add(new SimpleMonster(m, this));
+//            monsterList.add(new SimpleMonster(m, this));
+            monsterList.add(m.copy(this));
         }
     }
 

@@ -17,6 +17,16 @@ public class SimpleGremlinNob extends SimpleMonster {
         this.anger = CombatUtils.amountOfPower(monster, AngerPower.POWER_ID);
     }
 
+    SimpleGremlinNob(SimpleGremlinNob m, CombatSimulator simulator) {
+        super(m, simulator);
+        this.anger = m.anger;
+    }
+
+    @Override
+    public SimpleMonster copy(CombatSimulator simulator) {
+        return new SimpleGremlinNob(this, simulator);
+    }
+
     public int getStrength() {
         return strength;
     }
@@ -27,5 +37,18 @@ public class SimpleGremlinNob extends SimpleMonster {
         if (card.type == AbstractCard.CardType.SKILL) {
             this.strength += anger;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "GremlinNob{" +
+                "health=" + health +
+                ", block=" + block +
+                ", anger=" + anger +
+                ", strength=" + strength +
+                ", intent=" + intent +
+                ", intentDamage=" + intentDamage +
+                ", intentHits=" + intentHits +
+                '}';
     }
 }
