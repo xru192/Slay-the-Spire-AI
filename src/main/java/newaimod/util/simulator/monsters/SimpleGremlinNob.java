@@ -11,9 +11,9 @@ import newaimod.util.simulator.cards.AbstractSimpleCard;
 public class SimpleGremlinNob extends SimpleMonster {
     private final int anger;
 
-    public SimpleGremlinNob(GremlinNob monster, CombatSimulator simulator) {
-        super(monster, simulator);
-        this.simulator = simulator;
+    public SimpleGremlinNob(GremlinNob monster) {
+        super(monster);
+//        this.simulator = simulator;
         this.anger = CombatUtils.amountOfPower(monster, AngerPower.POWER_ID);
     }
 
@@ -47,7 +47,6 @@ public class SimpleGremlinNob extends SimpleMonster {
                 ", anger=" + anger +
                 ", strength=" + strength +
                 ", intent=" + intent +
-                ", intentDamage=" + intentDamage +
                 ", intentHits=" + intentHits +
                 '}';
     }

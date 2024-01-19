@@ -5,11 +5,8 @@ import com.megacrit.cardcrawl.cards.red.*;
 import com.megacrit.cardcrawl.cards.status.Slimed;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.MonsterHelper;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.city.SphericGuardian;
-import com.megacrit.cardcrawl.monsters.exordium.GremlinNob;
 import newaimod.ai.AutoPlayer;
-import newaimod.NewAIMod;
 import newaimod.util.simulator.cards.AbstractSimpleCard;
 import newaimod.util.simulator.cards.Filler;
 import newaimod.util.simulator.cards.ironclad.attacks.*;
@@ -18,7 +15,6 @@ import newaimod.util.simulator.cards.ironclad.powers.SimpleInflame;
 import newaimod.util.simulator.cards.ironclad.powers.SimpleMetallicize;
 import newaimod.util.simulator.cards.ironclad.skills.*;
 import newaimod.util.simulator.cards.Neutral.status.SimpleSlimed;
-import newaimod.util.simulator.monsters.SimpleGremlinNob;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -37,30 +33,16 @@ public class CombatSimulator {
     public static final Logger logger = LogManager.getLogger(CombatSimulator.class.getName());
 
     @NotNull
-    public SimplePlayer player;
+    public final SimplePlayer player;
+    @NotNull
     public List<SimpleMonster> monsterList;
 
     /**
-     * CombatSimulator which represents the current state of combat.
+     * CombatSimulator which represents a "default" state. The default state has a "default" player and no monsters.
      */
     public CombatSimulator() {
-        assert NewAIMod.inBattle;
         player = new SimplePlayer(this);
         monsterList = new ArrayList<>();
-
-        List<AbstractMonster> roomMonsters = AbstractDungeon.getCurrRoom().monsters.monsters;
-        for (AbstractMonster m : roomMonsters) {
-            if (!m.isDeadOrEscaped()) {
-                switch (m.id) {
-                    case GremlinNob.ID:
-                        monsterList.add(new SimpleGremlinNob((GremlinNob) m, this));
-                        break;
-                    default:
-                        monsterList.add(new SimpleMonster(m, this));
-                }
-
-            }
-        }
     }
 
     /**
@@ -72,7 +54,6 @@ public class CombatSimulator {
         player = new SimplePlayer(simulator.player, this);
         monsterList = new ArrayList<>();
         for (SimpleMonster m : simulator.monsterList) {
-//            monsterList.add(new SimpleMonster(m, this));
             monsterList.add(m.copy(this));
         }
     }
@@ -147,13 +128,19 @@ public class CombatSimulator {
         return new Filler(this, card.type, card.cost);
     }
 
+    public void addMonster(SimpleMonster monster) {
+        monsterList.add(monster);
+        assert monster.simulator == null;
+        monster.simulator = this;
+    }
+
     /**
      * Have the player be attacked by the alive monsters, as if the monsters take their turn.
      */
     private void aliveMonstersAttackPlayer() {
         for (SimpleMonster m : monsterList) {
             if (m.isAttacking()) {
-                assert m.intentHits >= 1 && m.intentDamage >= 0;
+                assert m.intentHits >= 1 && m.intentBaseDamage >= 0;
                 for (int i = 0; i < m.intentHits; ++i) {
                     player.takeAttack(m.getModifiedDamage());
                 }

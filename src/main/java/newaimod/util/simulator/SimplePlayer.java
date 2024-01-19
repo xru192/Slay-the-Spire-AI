@@ -1,12 +1,7 @@
 package newaimod.util.simulator;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.powers.*;
-import newaimod.NewAIMod;
-import newaimod.util.CombatUtils;
 import newaimod.util.simulator.cards.AbstractSimpleCard;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -15,6 +10,7 @@ import java.util.ArrayList;
  * current hand of cards, and various attributes.
  */
 public class SimplePlayer {
+    @NotNull
     public final CombatSimulator simulator;
     public ArrayList<AbstractSimpleCard> hand;
     public int energy;
@@ -22,46 +18,39 @@ public class SimplePlayer {
     public int block;
     public int strength;
     public int dexterity;
-    boolean weakened;
-    boolean frail;
+    public boolean weakened;
+    public boolean frail;
     public int metallicize;
     public int demonForm;
-    boolean entangled;
-    boolean vulnerable;
-    // boolean intangible;
-    boolean noDraw;
-
-    int exhaustedSlimed;
-
-    int cardsDrawnWith0Energy;      // # cards drawn while player has at least 1 energy left (after simulator start)
-    int cardsDrawnWith1Energy;      // # cards drawn while player has at least 1 energy left (after simulator start)
-    int cardsDrawnWith2Energy;      // # cards drawn while player has at least 2 energy left (after simulator start)
-    int cardsDrawnWith3Energy;      // # cards drawn while player has at least 3 energy left (after simulator start)
+    public boolean entangled;
+    public boolean vulnerable;
+    public boolean noDraw;
+    public int exhaustedSlimed;
+    public int cardsDrawnWith0Energy;      // # cards drawn while player has at least 1 energy left (after simulator start)
+    public int cardsDrawnWith1Energy;      // # cards drawn while player has at least 1 energy left (after simulator start)
+    public int cardsDrawnWith2Energy;      // # cards drawn while player has at least 2 energy left (after simulator start)
+    public int cardsDrawnWith3Energy;      // # cards drawn while player has at least 3 energy left (after simulator start)
 
     /**
-     * SimplePlayer which represents the current state of the player in combat.
+     * A "default" SimplePlayer. The default player has 80 health, 0 block, 3 energy, an empty hand, and no powers.
+     *
+     * @param simulator the simulator the player belongs to
      */
-    public SimplePlayer(CombatSimulator simulator) {
-        assert NewAIMod.inBattle;
+    public SimplePlayer(@NotNull CombatSimulator simulator) {
         this.simulator = simulator;
-        AbstractPlayer p = AbstractDungeon.player;
         hand = new ArrayList<>();
-        for (AbstractCard card : p.hand.group) {
-            hand.add(simulator.convertCard(card));
-        }
-        energy = CombatUtils.usableEnergy();
-        health = p.currentHealth;
-        block = p.currentBlock;
-        strength = CombatUtils.amountOfPower(p, StrengthPower.POWER_ID);
-        dexterity = CombatUtils.amountOfPower(p, DexterityPower.POWER_ID);
-        weakened = p.hasPower(WeakPower.POWER_ID);
-        frail = p.hasPower(FrailPower.POWER_ID);
-        metallicize = CombatUtils.amountOfPower(p, MetallicizePower.POWER_ID);
-        demonForm = CombatUtils.amountOfPower(p, DemonFormPower.POWER_ID);
-        entangled = p.hasPower(EntanglePower.POWER_ID);
-        vulnerable = p.hasPower(VulnerablePower.POWER_ID);
-//        intangible = p.hasPower(IntangiblePlayerPower.POWER_ID);
-        noDraw = p.hasPower(NoDrawPower.POWER_ID);
+        energy = 3;
+        health = 80;
+        block = 0;
+        strength = 0;
+        dexterity = 0;
+        weakened = false;
+        frail = false;
+        metallicize = 0;
+        demonForm = 0;
+        entangled = false;
+        vulnerable = false;
+        noDraw = false;
         exhaustedSlimed = 0;
         cardsDrawnWith0Energy = 0;
         cardsDrawnWith1Energy = 0;
@@ -70,7 +59,6 @@ public class SimplePlayer {
     }
 
     public SimplePlayer(SimplePlayer player, CombatSimulator simulator) {
-        assert NewAIMod.inBattle;
         this.simulator = simulator;
         this.hand = new ArrayList<>();
         for (AbstractSimpleCard card : player.hand) {

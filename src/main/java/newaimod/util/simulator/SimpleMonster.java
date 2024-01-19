@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import static newaimod.util.CombatUtils.amountOfPower;
+import static newaimod.util.CombatUtils.isNotAttack;
 
 /**
  * A SimpleMonster represents a simplified version of the state of a monster during combat. For now, all monsters are
@@ -23,10 +24,9 @@ public class SimpleMonster {
 
     public int health;
     public int block;
-    public final AbstractMonster originalMonster; // reference to monster in combat this is representing
+    public final AbstractMonster originalMonster; // reference to monster in combat this is representing, null if N/A (testing)
     protected AbstractMonster.Intent intent;
     protected int intentBaseDamage; // base damage of intended attack, -1 if not attacking
-    protected int intentDamage;   // damage of intended attack, -1 if not attacking
     protected int intentHits;     // number of intended hits, -1 if not attacking
 
     public int vulnerable;
@@ -36,15 +36,13 @@ public class SimpleMonster {
     /**
      * SimpleMonster which represents the current state of the specified AbstractMonster in combat.
      */
-    public SimpleMonster(AbstractMonster monster, CombatSimulator simulator) {
-        this.simulator = simulator;
+    public SimpleMonster(AbstractMonster monster) {
         originalMonster = monster;
         this.health = monster.escaped ? 0 : monster.currentHealth;
         this.block = monster.currentBlock;
         EnemyMoveInfo moveInfo = ReflectionHacks.getPrivate(monster, AbstractMonster.class, "move");
         intent = moveInfo.intent;
         intentBaseDamage = moveInfo.baseDamage;
-        intentDamage = monster.getIntentDmg();
         intentHits = Math.max(1, moveInfo.multiplier);
         vulnerable = amountOfPower(monster, VulnerablePower.POWER_ID);
         weak = amountOfPower(monster, WeakPower.POWER_ID);
@@ -58,11 +56,19 @@ public class SimpleMonster {
         this.block = m.block;
         this.intent = m.intent;
         this.intentBaseDamage = m.intentBaseDamage;
-        this.intentDamage = m.intentDamage;
         this.intentHits = m.intentHits;
         this.vulnerable = m.vulnerable;
         this.weak = m.weak;
         this.strength = m.strength;
+    }
+
+    public SimpleMonster(int health, int block, AbstractMonster.Intent intent, int baseDamage, int hits) {
+        originalMonster = null;
+        this.health = health;
+        this.block = block;
+        this.intent = intent;
+        this.intentBaseDamage = isNotAttack(intent) ? -1 : baseDamage;
+        this.intentHits = isNotAttack(intent) ? -1 : hits;
     }
 
     public SimpleMonster copy(CombatSimulator simulator) {
@@ -84,7 +90,7 @@ public class SimpleMonster {
         }
 
         double weakFactor = weak == 0 ? 1 : 0.75;
-        int result = (int)((intentBaseDamage + strength) * weakFactor);
+        int result = (int) ((intentBaseDamage + strength) * weakFactor);
         return Math.max(0, result);
     }
 
@@ -125,7 +131,8 @@ public class SimpleMonster {
     /**
      * This method will be called after the player plays a card. Example usage: Gremlin Nob's anger, Time Eater's time warp, The Guardian's sharp hide.
      */
-    public void onUseCard(AbstractSimpleCard card) {}
+    public void onUseCard(AbstractSimpleCard card) {
+    }
 
     public void takeVulnerable(int amount) {
         assert amount > 0;
@@ -139,6 +146,7 @@ public class SimpleMonster {
 
     /**
      * Returns whether this monster is attacking the player this turn. A monster must be alive to be attacking.
+     *
      * @return whether this monster will attack the player this turn
      */
     public boolean isAttacking() {
@@ -159,7 +167,6 @@ public class SimpleMonster {
                 "health=" + health +
                 ", block=" + block +
                 ", intent=" + intent +
-                ", intentDamage=" + intentDamage +
                 ", intentHits=" + intentHits +
                 '}';
     }

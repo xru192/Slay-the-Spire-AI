@@ -2,6 +2,7 @@ package newaimod.ai.basicIroncladPlayer.basicIroncladCombatMovePicker;
 
 import newaimod.ai.AbstractCombatMovePicker;
 import newaimod.ai.AutoPlayer;
+import newaimod.util.DungeonInformationManager;
 import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.CombatSimulator.Future;
 import newaimod.ai.AutoPlayer.CombatMove;
@@ -37,7 +38,7 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
     @Override
     protected CombatMove pickMove3Sentries() {
         BasicStateEvaluator evaluator = new BasicStateEvaluator();
-        CombatSimulator current = new CombatSimulator();
+        CombatSimulator current = DungeonInformationManager.getInstance().getCurrentState();
         if (current.countAliveMonsters() == 3) {
             evaluator.TMHw = -2.0 / 3;
         }
@@ -45,7 +46,8 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
     }
 
     private AutoPlayer.CombatMove pickMoveUsingEval(StateEvaluator evaluator) {
-        CombatSimulator currentState = new CombatSimulator();
+        CombatSimulator currentState = DungeonInformationManager.getInstance().getCurrentState();
+//        CombatSimulator currentState = new CombatSimulator();
         List<Future> endStates = CombatSimulator.calculateFutures(currentState);
 
         double bestEval = -100000;
