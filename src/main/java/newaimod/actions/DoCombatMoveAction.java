@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.utility.NewQueueCardAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import newaimod.ai.AutoPlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,13 +34,27 @@ public class DoCombatMoveAction extends AbstractGameAction {
                 ArrayList<AbstractCard> cards = AbstractDungeon.player.hand.group;
 
                 AbstractCard toPlay = cards.get(combatMove.index);
-                if (toPlay == null || !toPlay.canUse(AbstractDungeon.player, combatMove.target)) {
+                if (combatMove.target == null && !toPlay.canUse(AbstractDungeon.player, null)) {
                     isDone = true;
-                    logger.info("ERROR Illegal card on target played: " + combatMove);
+                    logger.error("Move failed: " + combatMove);
                     return;
                 }
+
+                if (combatMove.target != null) {
+                    if (combatMove.target.originalMonster == null) {
+                        isDone = true;
+                        logger.error("Move failed because target wasn't linked to the game: " + combatMove);
+                        return;
+                    } else if (!toPlay.canUse(AbstractDungeon.player, combatMove.target.originalMonster)) {
+                        isDone = true;
+                        logger.error("Move failed because card cannot be played on target: " + combatMove);
+                        return;
+                    }
+                }
+
                 logger.info("Playing card: " + toPlay.name);
-                NewQueueCardAction queueCard = new NewQueueCardAction(cards.get(combatMove.index), combatMove.target);
+                AbstractMonster target = combatMove.target == null ? null : combatMove.target.originalMonster;
+                NewQueueCardAction queueCard = new NewQueueCardAction(cards.get(combatMove.index), target);
                 this.addToTop(queueCard);
                 isDone = true;
                 break;

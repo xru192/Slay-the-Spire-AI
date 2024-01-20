@@ -253,7 +253,7 @@ public class CombatSimulator {
                 for (int m_index = 0; m_index < startState.monsterList.size(); ++m_index) {
                     SimpleMonster m = startState.monsterList.get(m_index);
                     if (card.canPlay(m)) {
-                        AutoPlayer.CombatMove firstMove = new AutoPlayer.CombatMove(AutoPlayer.CombatMove.TYPE.CARD, i, m.originalMonster);
+                        AutoPlayer.CombatMove firstMove = new AutoPlayer.CombatMove(AutoPlayer.CombatMove.TYPE.CARD, i, m);
                         CombatSimulator state = new CombatSimulator(startState);
                         state.playCard(state.player.hand.get(i), state.monsterList.get(m_index));
                         firstStates.add(new Future(firstMove, state));

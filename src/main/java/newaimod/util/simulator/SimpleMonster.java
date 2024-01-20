@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.monsters.EnemyMoveInfo;
 import com.megacrit.cardcrawl.powers.StrengthPower;
 import com.megacrit.cardcrawl.powers.VulnerablePower;
 import com.megacrit.cardcrawl.powers.WeakPower;
+import newaimod.NewAIMod;
 import newaimod.util.CombatUtils;
 import newaimod.util.simulator.cards.AbstractSimpleCard;
 import org.apache.logging.log4j.LogManager;
@@ -37,6 +38,7 @@ public class SimpleMonster {
      * SimpleMonster which represents the current state of the specified AbstractMonster in combat.
      */
     public SimpleMonster(AbstractMonster monster) {
+        assert NewAIMod.inBattle;
         originalMonster = monster;
         this.health = monster.escaped ? 0 : monster.currentHealth;
         this.block = monster.currentBlock;
@@ -131,7 +133,7 @@ public class SimpleMonster {
     /**
      * This method will be called after the player plays a card. Example usage: Gremlin Nob's anger, Time Eater's time warp, The Guardian's sharp hide.
      */
-    public void onUseCard(AbstractSimpleCard card) {
+    protected void onUseCard(AbstractSimpleCard card) {
     }
 
     public void takeVulnerable(int amount) {
