@@ -9,7 +9,7 @@ public class BasicStateEvaluator implements StateEvaluator {
     public double TMHw = -1.0 / 3;
     public double PSw = 5.0;
     public double PMw = 1.0;
-    public double PDFw = 1.0;
+    public double DFBw = 1.0;
     public double ESw = 0.001;
     public double VBw = 1.0 / 3;
     public double CDW0Ew = 0;
@@ -30,8 +30,15 @@ public class BasicStateEvaluator implements StateEvaluator {
     }
 
     private int demonFormBonus(CombatSimulator state) {
-        int factor = state.getTotalMonsterEffectiveHealth() >= 100 ? 8 : 1;
-        return state.player.demonForm * factor;
+        if (state.player.demonForm == 0) {
+            return 0;
+        }
+        int bonus = state.player.demonForm * 5 - 5;
+        int monsterHealth = state.getTotalMonsterEffectiveHealth();
+        bonus += Math.max(0, Math.min(100, monsterHealth) - 84);
+        bonus += Math.max(0, Math.min(200, monsterHealth) - 184);
+
+        return bonus;
     }
 
     @Override
@@ -46,7 +53,7 @@ public class BasicStateEvaluator implements StateEvaluator {
         int TMH = state.getTotalMonsterEffectiveHealth();                    // total monster health
         int PS = state.player.strength;                                      // player strength
         int PM = state.player.metallicize;                                   // player metallicize
-        int PDF = demonFormBonus(state);                                     // player demon form
+        int DFB = demonFormBonus(state);                                     // demon form bonus
         int ES = state.player.getExhaustedSlimed();                          // exhausted Slimed
         int VB = vulnerableBonus(state);                                     // vulnerable bonus
         int CDW0E = state.player.getCardsDrawnWith0Energy();                 // cards drawn with 0+ energy
@@ -54,7 +61,7 @@ public class BasicStateEvaluator implements StateEvaluator {
         int CDW2E = state.player.getCardsDrawnWith2Energy();                 // cards drawn with 2+ energy
         int CDW3E = state.player.getCardsDrawnWith3Energy();                 // cards drawn with 3+ energy
 
-        double eval = (PH * PHw) + (AM * AMw) + (TMH * TMHw) + (PS * PSw) + (PM * PMw) + (PDF * PDFw) + (ES * ESw) + (VB * VBw) + (CDW0E * CDW0Ew) + (CDW1E * CDW1Ew) + (CDW2E * CDW2Ew) + (CDW3E * CDW3Ew);
+        double eval = (PH * PHw) + (AM * AMw) + (TMH * TMHw) + (PS * PSw) + (PM * PMw) + (DFB * DFBw) + (ES * ESw) + (VB * VBw) + (CDW0E * CDW0Ew) + (CDW1E * CDW1Ew) + (CDW2E * CDW2Ew) + (CDW3E * CDW3Ew);
         if (PH <= 0) {
             eval -= 1000;
             // if player will die, try to draw cards which can save player
