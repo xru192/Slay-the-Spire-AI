@@ -68,9 +68,45 @@ public class BasicIroncladGridPlayer extends AbstractGridAutoPlayer {
         return new CardPair(options.get(0), options.get(1));
     }
 
+    private double evalHeadbuttCard(AbstractCard card) {
+        switch (card.cardID) {
+            case Inflame.ID:
+            case Metallicize.ID:
+            case DemonForm.ID:
+                return card.upgraded ? 10 : 9;
+            case Armaments.ID:
+            case Cleave.ID:
+            case Headbutt.ID:
+            case IronWave.ID:
+            case PommelStrike.ID:
+            case ShrugItOff.ID:
+            case TwinStrike.ID:
+            case FlameBarrier.ID:
+            case Uppercut.ID:
+            case Whirlwind.ID:
+            case Carnage.ID:
+                return card.upgraded ? 2 : 1;
+            case Strike_Red.ID:
+            case Defend_Red.ID:
+                return card.upgraded ? 0.5 : 0;
+            default:
+                return -1;
+        }
+    }
+
     @Override
     protected AbstractCard chooseHeadbuttCard(ArrayList<AbstractCard> options) {
-        return options.get(0);
+        double bestEval = -1_000_000;
+        AbstractCard bestCard = null;
+        for (AbstractCard card : options) {
+            double eval = evalHeadbuttCard(card);
+            if (eval > bestEval) {
+                bestEval = eval;
+                bestCard = card;
+            }
+        }
+
+        return bestCard;
     }
 
     @Override
