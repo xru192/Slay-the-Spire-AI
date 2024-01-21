@@ -5,6 +5,8 @@ import com.megacrit.cardcrawl.cards.red.*;
 import com.megacrit.cardcrawl.cards.status.Slimed;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.MonsterHelper;
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.monsters.beyond.AwakenedOne;
 import com.megacrit.cardcrawl.monsters.city.SphericGuardian;
 import newaimod.ai.AutoPlayer;
 import newaimod.util.simulator.cards.AbstractSimpleCard;
@@ -174,7 +176,12 @@ public class CombatSimulator {
      * @return whether the combat is over
      */
     public boolean combatOver() {
-        assert !AbstractDungeon.lastCombatMetricKey.equals(MonsterHelper.AWAKENED_ENC);
+        if (AbstractDungeon.lastCombatMetricKey.equals(MonsterHelper.AWAKENED_ENC)) {
+            assert AbstractDungeon.getCurrRoom().monsters.monsters.size() == 3;
+            AbstractMonster m = AbstractDungeon.getCurrRoom().monsters.monsters.get(2);
+            assert m instanceof AwakenedOne;
+            return countAliveMonsters() == 0 && !m.halfDead;
+        }
         return countAliveMonsters() == 0;
     }
 
