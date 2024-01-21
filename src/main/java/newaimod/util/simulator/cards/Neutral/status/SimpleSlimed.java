@@ -1,4 +1,4 @@
-package newaimod.util.simulator.cards.Neutral.status;
+package newaimod.util.simulator.cards.neutral.status;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.status.Slimed;
