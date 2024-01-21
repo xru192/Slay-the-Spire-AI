@@ -29,14 +29,14 @@ public class BasicStateEvaluator implements StateEvaluator {
         return totalBonus;
     }
 
-    private int demonFormBonus(CombatSimulator state) {
+    private double demonFormBonus(CombatSimulator state) {
         if (state.player.demonForm == 0) {
             return 0;
         }
-        int bonus = state.player.demonForm * 5 - 5;
+        double bonus = state.player.demonForm * 5 - 5;
         int monsterHealth = state.getTotalMonsterEffectiveHealth();
-        bonus += Math.max(0, Math.min(100, monsterHealth) - 84);
-        bonus += Math.max(0, Math.min(200, monsterHealth) - 184);
+        bonus += 0.16 * Math.max(0, Math.min(100, monsterHealth) - 60);
+        bonus += 0.16 * Math.max(0, Math.min(250, monsterHealth) - 150);
 
         return bonus;
     }
@@ -53,7 +53,7 @@ public class BasicStateEvaluator implements StateEvaluator {
         int TMH = state.getTotalMonsterEffectiveHealth();                    // total monster health
         int PS = state.player.strength;                                      // player strength
         int PM = state.player.metallicize;                                   // player metallicize
-        int DFB = demonFormBonus(state);                                     // demon form bonus
+        double DFB = demonFormBonus(state);                                  // demon form bonus
         int ES = state.player.getExhaustedSlimed();                          // exhausted Slimed
         int VB = vulnerableBonus(state);                                     // vulnerable bonus
         int CDW0E = state.player.getCardsDrawnWith0Energy();                 // cards drawn with 0+ energy
