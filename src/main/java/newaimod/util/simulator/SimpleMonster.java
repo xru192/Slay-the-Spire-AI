@@ -23,6 +23,7 @@ public class SimpleMonster {
     public static final Logger logger = LogManager.getLogger(SimpleMonster.class.getName());
     public CombatSimulator simulator;
 
+    public int maxHealth;
     public int health;
     public int block;
     public final AbstractMonster originalMonster; // reference to monster in combat this is representing, null if N/A (testing)
@@ -31,7 +32,7 @@ public class SimpleMonster {
     protected int intentHits;     // number of intended hits, -1 if not attacking
 
     public int vulnerable;
-    int weak;
+    public int weak;
     protected int strength;
 
     /**
@@ -40,6 +41,7 @@ public class SimpleMonster {
     public SimpleMonster(AbstractMonster monster) {
         assert NewAIMod.inBattle;
         originalMonster = monster;
+        this.maxHealth = monster.maxHealth;
         this.health = monster.escaped ? 0 : monster.currentHealth;
         this.block = monster.currentBlock;
         EnemyMoveInfo moveInfo = ReflectionHacks.getPrivate(monster, AbstractMonster.class, "move");
@@ -54,6 +56,7 @@ public class SimpleMonster {
     public SimpleMonster(SimpleMonster m, CombatSimulator simulator) {
         this.simulator = simulator;
         this.originalMonster = m.originalMonster;
+        this.maxHealth = m.maxHealth;
         this.health = m.health;
         this.block = m.block;
         this.intent = m.intent;
@@ -66,6 +69,7 @@ public class SimpleMonster {
 
     public SimpleMonster(int health, int block, AbstractMonster.Intent intent, int baseDamage, int hits) {
         originalMonster = null;
+        this.maxHealth = health;
         this.health = health;
         this.block = block;
         this.intent = intent;
@@ -166,7 +170,7 @@ public class SimpleMonster {
     @Override
     public String toString() {
         return "SimpleMonster{" +
-                "health=" + health +
+                "health=" + health + "/" + maxHealth +
                 ", block=" + block +
                 ", intent=" + intent +
                 ", intentHits=" + intentHits +

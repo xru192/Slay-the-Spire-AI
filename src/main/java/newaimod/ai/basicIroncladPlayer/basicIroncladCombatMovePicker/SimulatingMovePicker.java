@@ -1,5 +1,10 @@
 package newaimod.ai.basicIroncladPlayer.basicIroncladCombatMovePicker;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.red.DemonForm;
+import com.megacrit.cardcrawl.cards.red.Inflame;
+import com.megacrit.cardcrawl.cards.red.Metallicize;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import newaimod.ai.AbstractCombatMovePicker;
 import newaimod.ai.AutoPlayer;
 import newaimod.util.DungeonInformationManager;
@@ -7,9 +12,11 @@ import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.CombatSimulator.Future;
 import newaimod.ai.AutoPlayer.CombatMove;
 import newaimod.util.simulator.monsters.SimpleGremlinNob;
+import newaimod.util.simulator.monsters.SimpleLagavulin;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SimulatingMovePicker extends AbstractCombatMovePicker {
@@ -30,9 +37,8 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
 
     @Override
     protected CombatMove pickMoveLagavulin() {
-        BasicStateEvaluator evaluator = new BasicStateEvaluator();
-        evaluator.TMHw = -1.0 / 2;
-        return pickMoveUsingEval(evaluator);
+        logger.info("Picking move (Lagavulin)");
+        return pickMoveUsingEval(this::evalStateLagavulin);
     }
 
     @Override
@@ -81,4 +87,46 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
         double GNSw = -3;
         return basicEval + GNS * GNSw;
     }
+
+    private double evalStateLagavulin(CombatSimulator state) {
+        assert state.monsterList.size() == 1 && state.monsterList.get(0) instanceof SimpleLagavulin;
+        ArrayList<AbstractCard> drawPile = AbstractDungeon.player.drawPile.group;
+        boolean hasDemonForm = false;
+        boolean hasInflame = false;
+        boolean hasMetallicize = false;
+        for (AbstractCard card : drawPile) {
+            hasDemonForm |= card.cardID.equals(DemonForm.ID);
+            hasInflame |= card.cardID.equals(Inflame.ID);
+            hasMetallicize |= card.cardID.equals(Metallicize.ID);
+        }
+
+        SimpleLagavulin lagavulin = (SimpleLagavulin) state.monsterList.get(0);
+        SimpleLagavulin.MODE mode = lagavulin.getMode();
+        int healthMissing = lagavulin.maxHealth - lagavulin.health;
+        int vulnerable = lagavulin.vulnerable;
+        int weak = lagavulin.weak;
+
+        BasicStateEvaluator evaluator = new BasicStateEvaluator();
+        switch (mode) {
+            case SLEEP_ONE:
+            case SLEEP_TWO:
+                // prefer not damaging Lagavulin if we have powers we can draw
+                if (hasDemonForm || hasInflame || hasMetallicize) {
+                    evaluator.TMHw = 50;
+                } else {
+                    // otherwise, only damage Lagavulin if we can deal a solid amount this turn
+                    int vulnerableBonus = Math.max(0, vulnerable - 1) * 8;
+                    int weakBonus = Math.max(0, weak - 1) * 5;
+                    if (vulnerableBonus + weakBonus + healthMissing <= 15) {
+                        evaluator.TMHw = 50;
+                    }
+                }
+                break;
+            case SLEEP_THREE:
+            case AWAKE:
+                evaluator.TMHw = -1.0 / 2;
+        }
+        return evaluator.evaluate(state);
+    }
+
 }

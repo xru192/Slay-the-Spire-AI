@@ -5,12 +5,14 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.exordium.GremlinNob;
+import com.megacrit.cardcrawl.monsters.exordium.Lagavulin;
 import com.megacrit.cardcrawl.powers.*;
 import newaimod.NewAIMod;
 import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.SimpleMonster;
 import newaimod.util.simulator.SimplePlayer;
 import newaimod.util.simulator.monsters.SimpleGremlinNob;
+import newaimod.util.simulator.monsters.SimpleLagavulin;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -74,6 +76,8 @@ public class DungeonInformationManager {
         switch (m.id) {
             case GremlinNob.ID:
                 return new SimpleGremlinNob((GremlinNob) m);
+            case Lagavulin.ID:
+                return new SimpleLagavulin((Lagavulin) m);
             default:
                 return new SimpleMonster(m);
 
