@@ -71,9 +71,20 @@ public class BasicIroncladCardRewardPlayer {
         switch (card.cardID) {
             case Inflame.ID:
                 return 10;
+            case Metallicize.ID:
+                return 1;
+            case DemonForm.ID:
+                return 5;
             case Armaments.ID:
                 for (AbstractCard c : deck) {
                     if (c.cardID.equals(Armaments.ID)) {
+                        return -1;
+                    }
+                }
+                return 8;
+            case BattleTrance.ID:
+                for (AbstractCard c : deck) {
+                    if (c.cardID.equals(BattleTrance.ID)) {
                         return -1;
                     }
                 }
