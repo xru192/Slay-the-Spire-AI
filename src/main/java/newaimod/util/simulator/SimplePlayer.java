@@ -126,6 +126,19 @@ public class SimplePlayer {
     }
 
     /**
+     * Have this player take damage from a source which is not a monster's attack. Examples: sharp hide, thorns, decay.
+     *
+     * @param damage the amount of damage the player takes
+     */
+    public void takeDamage(int damage) {
+        assert damage >= 0;
+        int blockLoss = Math.min(block, damage);
+        int healthLoss = Math.min(health, Math.max(0, damage - block));
+        block -= blockLoss;
+        health -= healthLoss;
+    }
+
+    /**
      * Have this player take an attack from a monster.
      *
      * @param damage the damage of the attack (after monster-side modifications)
