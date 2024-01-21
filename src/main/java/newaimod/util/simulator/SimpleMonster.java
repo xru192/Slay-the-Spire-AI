@@ -91,9 +91,6 @@ public class SimpleMonster {
         if (!isAttacking()) {
             return 0;
         }
-        if (weak != 0) {
-            logger.info("");
-        }
 
         double weakFactor = weak == 0 ? 1 : 0.75;
         int result = (int) ((intentBaseDamage + strength) * weakFactor);

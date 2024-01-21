@@ -16,7 +16,7 @@ import newaimod.util.simulator.cards.ironclad.powers.SimpleDemonForm;
 import newaimod.util.simulator.cards.ironclad.powers.SimpleInflame;
 import newaimod.util.simulator.cards.ironclad.powers.SimpleMetallicize;
 import newaimod.util.simulator.cards.ironclad.skills.*;
-import newaimod.util.simulator.cards.Neutral.status.SimpleSlimed;
+import newaimod.util.simulator.cards.neutral.status.SimpleSlimed;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +37,7 @@ public class CombatSimulator {
     @NotNull
     public final SimplePlayer player;
     @NotNull
-    public List<SimpleMonster> monsterList;
+    public final List<SimpleMonster> monsterList;
 
     /**
      * CombatSimulator which represents a "default" state. The default state has a "default" player and no monsters.

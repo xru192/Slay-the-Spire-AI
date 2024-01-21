@@ -58,7 +58,7 @@ public class SimplePlayer {
         cardsDrawnWith3Energy = 0;
     }
 
-    public SimplePlayer(SimplePlayer player, CombatSimulator simulator) {
+    public SimplePlayer(@NotNull SimplePlayer player, @NotNull CombatSimulator simulator) {
         this.simulator = simulator;
         this.hand = new ArrayList<>();
         for (AbstractSimpleCard card : player.hand) {

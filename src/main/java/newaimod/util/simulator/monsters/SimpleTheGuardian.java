@@ -5,7 +5,6 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.exordium.TheGuardian;
 import com.megacrit.cardcrawl.powers.ModeShiftPower;
 import com.megacrit.cardcrawl.powers.SharpHidePower;
-import newaimod.util.CombatUtils;
 import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.SimpleMonster;
 import newaimod.util.simulator.cards.AbstractSimpleCard;
@@ -17,8 +16,6 @@ public class SimpleTheGuardian extends SimpleMonster {
         PREDEFENSIVE,       // will switch to DEFENSIVE next turn
         DEFENSIVE           // has sharp hide active
     }
-
-    private final int DEFENSIVE_BLOCK = 20;
 
     private MODE mode;
     private int modeShiftAmount = -1;    // amount to switch out of OFFENSIVE mode, -1 if not in OFFENSIVE mode
