@@ -100,6 +100,15 @@ public class SimpleMonster {
         return Math.max(0, result);
     }
 
+    public void loseHealth(int amount) {
+        if (amount <= 0) {
+            return;
+        }
+        health -= amount;
+        health = Math.max(0, health);
+        onLoseHealth();
+    }
+
     /**
      * Have this monster take an attack from the player.
      *
@@ -115,7 +124,7 @@ public class SimpleMonster {
         int blockLoss = Math.min(block, damage);
         int healthLoss = Math.min(health, Math.max(0, damage - block));
         block -= blockLoss;
-        health -= healthLoss;
+        loseHealth(healthLoss);
     }
 
     public void takeMultiAttack(int damage, int multiAmt) {
@@ -130,7 +139,7 @@ public class SimpleMonster {
             int blockLoss = Math.min(block, damage);
             int healthLoss = Math.min(health, Math.max(0, damage - block));
             block -= blockLoss;
-            health -= healthLoss;
+            loseHealth(healthLoss);
         }
     }
 
@@ -138,6 +147,12 @@ public class SimpleMonster {
      * This method will be called after the player plays a card. Example usage: Gremlin Nob's anger, Time Eater's time warp, The Guardian's sharp hide.
      */
     protected void onUseCard(AbstractSimpleCard card) {
+    }
+
+    /**
+     * This method will be called after this monster loses health due to any source. Example usage: Slime splitting, Writhing Mass.
+     */
+    protected void onLoseHealth() {
     }
 
     public void takeVulnerable(int amount) {

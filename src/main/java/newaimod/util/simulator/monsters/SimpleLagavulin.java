@@ -52,21 +52,8 @@ public class SimpleLagavulin extends SimpleMonster {
     }
 
     @Override
-    public void takeAttack(int damage) {
-        int healthBefore = health;
-        super.takeAttack(damage);
-        if (healthBefore != health) {
-            mode = MODE.AWAKE;
-        }
-    }
-
-    @Override
-    public void takeMultiAttack(int damage, int multiAmt) {
-        int healthBefore = health;
-        super.takeMultiAttack(damage, multiAmt);
-        if (healthBefore != health) {
-            mode = MODE.AWAKE;
-        }
+    protected void onLoseHealth() {
+        mode = MODE.AWAKE;
     }
 
     @Override

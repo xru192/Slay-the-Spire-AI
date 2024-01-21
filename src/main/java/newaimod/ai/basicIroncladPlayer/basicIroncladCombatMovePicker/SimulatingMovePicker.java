@@ -13,6 +13,7 @@ import newaimod.util.simulator.CombatSimulator.Future;
 import newaimod.ai.AutoPlayer.CombatMove;
 import newaimod.util.simulator.monsters.SimpleGremlinNob;
 import newaimod.util.simulator.monsters.SimpleLagavulin;
+import newaimod.util.simulator.monsters.SimpleSlimeBoss;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -51,9 +52,14 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
         return pickMoveUsingEval(evaluator);
     }
 
+    @Override
+    protected CombatMove pickMoveSlimeBoss() {
+        logger.info("Picking move (Slime Boss)");
+        return pickMoveUsingEval(this::evalStateSlimeBoss);
+    }
+
     private AutoPlayer.CombatMove pickMoveUsingEval(StateEvaluator evaluator) {
         CombatSimulator currentState = DungeonInformationManager.getInstance().getCurrentState();
-//        CombatSimulator currentState = new CombatSimulator();
         List<Future> endStates = CombatSimulator.calculateFutures(currentState);
 
         double bestEval = -100000;
@@ -129,4 +135,20 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
         return evaluator.evaluate(state);
     }
 
+    private double evalStateSlimeBoss(CombatSimulator state) {
+        BasicStateEvaluator evaluator = new BasicStateEvaluator();
+
+        if (state.monsterList.size() == 1 && state.monsterList.get(0) instanceof SimpleSlimeBoss) {
+            SimpleSlimeBoss enemy = (SimpleSlimeBoss) state.monsterList.get(0);
+            if (enemy.isSplitting()) {
+                evaluator.VBw = 0;
+                int amtUnderHalf = enemy.maxHealth / 2 - enemy.health;
+                if (amtUnderHalf < 10) {
+                    return evaluator.evaluate(state) - 10;
+                }
+            }
+        }
+
+        return evaluator.evaluate(state);
+    }
 }
