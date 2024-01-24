@@ -1,7 +1,6 @@
 package newaimod.util;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.red.Strike_Red;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
