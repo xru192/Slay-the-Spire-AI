@@ -40,12 +40,17 @@ public class SimpleTheGuardian extends SimpleMonster {
         super(m, simulator);
         this.mode = m.mode;
         this.modeShiftAmount = m.modeShiftAmount;
+        this.modeShiftThreshold = m.modeShiftThreshold;
         this.sharpHide = m.sharpHide;
     }
 
     @Override
     public SimpleMonster copy(CombatSimulator simulator) {
         return new SimpleTheGuardian(this, simulator);
+    }
+
+    public MODE getMode() {
+        return mode;
     }
 
     @Override
@@ -72,7 +77,7 @@ public class SimpleTheGuardian extends SimpleMonster {
     public String toString() {
         return "TheGuardian{" +
                 "mode=" + mode +
-                "health=" + health +
+                ", health=" + health +
                 ", block=" + block +
                 ", strength=" + strength +
                 ", intent=" + intent +

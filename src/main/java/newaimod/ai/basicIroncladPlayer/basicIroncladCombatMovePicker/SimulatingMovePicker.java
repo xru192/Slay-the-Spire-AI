@@ -14,6 +14,7 @@ import newaimod.ai.AutoPlayer.CombatMove;
 import newaimod.util.simulator.monsters.SimpleGremlinNob;
 import newaimod.util.simulator.monsters.SimpleLagavulin;
 import newaimod.util.simulator.monsters.SimpleSlimeBoss;
+import newaimod.util.simulator.monsters.SimpleTheGuardian;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -56,6 +57,12 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
     protected CombatMove pickMoveSlimeBoss() {
         logger.info("Picking move (Slime Boss)");
         return pickMoveUsingEval(this::evalStateSlimeBoss);
+    }
+
+    @Override
+    protected CombatMove pickMoveTheGuardian() {
+        logger.info("Picking move (The Guardian)");
+        return pickMoveUsingEval(this::evalStateTheGuardian);
     }
 
     private AutoPlayer.CombatMove pickMoveUsingEval(StateEvaluator evaluator) {
@@ -151,4 +158,19 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
 
         return evaluator.evaluate(state);
     }
+
+    private double evalStateTheGuardian(CombatSimulator state) {
+        BasicStateEvaluator evaluator = new BasicStateEvaluator();
+
+        assert state.monsterList.size() == 1 && state.monsterList.get(0) instanceof SimpleTheGuardian;
+        SimpleTheGuardian.MODE mode = ((SimpleTheGuardian)state.monsterList.get(0)).getMode();
+        if (mode == SimpleTheGuardian.MODE.DEFENSIVE) {
+            if (state.player.health < 40) {
+                evaluator.TMHw = -1.0 / 10;
+            }
+        }
+
+        return evaluator.evaluate(state);
+    }
+
 }
