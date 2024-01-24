@@ -89,7 +89,7 @@ public class BasicIroncladCardRewardPlayer {
         };
 
         String[] attacks = {
-                TwinStrike.ID, Whirlwind.ID, Headbutt.ID, Carnage.ID, Cleave.ID, IronWave.ID, PommelStrike.ID, Uppercut.ID
+                TwinStrike.ID, Whirlwind.ID, Headbutt.ID, BodySlam.ID, Carnage.ID, Cleave.ID, IronWave.ID, PommelStrike.ID, Uppercut.ID
         };
 
         int numGoodDamage = deck.countTotalCopies(goodDamage);
@@ -141,6 +141,17 @@ public class BasicIroncladCardRewardPlayer {
             case PommelStrike.ID:
                 if (numAttacksAdded <= 4) {
                     return 47;
+                }
+                return -1;
+            case BodySlam.ID:
+                if (deck.containsCard(BodySlam.ID)) {
+                    return -1;
+                }
+                if (card.upgraded) {
+                    return 48.5;
+                }
+                if (numAttacksAdded <= 4) {
+                    return 46.5;
                 }
                 return -1;
             case Uppercut.ID:

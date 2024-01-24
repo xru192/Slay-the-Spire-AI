@@ -17,8 +17,10 @@ public class BasicIroncladGridPlayer extends AbstractGridAutoPlayer {
                 return 100;
             case Whirlwind.ID:
                 return 99;
-            case Uppercut.ID:
+            case BodySlam.ID:
                 return 98;
+            case Uppercut.ID:
+                return 97;
             case Bash.ID:
                 return 50;
             case TwinStrike.ID:

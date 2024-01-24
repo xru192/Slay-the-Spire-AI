@@ -47,6 +47,19 @@ class CombatSimulatorTest {
     }
 
     @Test
+    void testBodySlam() {
+        AbstractSimpleCard defend = new SimpleDefend_Red(simulator, 1, false);
+        AbstractSimpleCard bodySlam = new SimpleBodySlam(simulator, 1, false);
+        player.hand.add(defend);
+        player.hand.add(bodySlam);
+
+        simulator.playCard(defend, null);
+        simulator.playCard(bodySlam, monster1);
+        assertEquals(MONSTER_START_HEALTH - 5, monster1.health);
+        assertEquals(1, player.energy);
+    }
+
+    @Test
     void testCarnage() {
         AbstractSimpleCard card = new SimpleCarnage(simulator, 2, false);
         player.hand.add(card);

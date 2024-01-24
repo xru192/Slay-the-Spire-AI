@@ -94,6 +94,8 @@ public class CombatSimulator {
                 return new SimpleDefend_Red(this, (Defend_Red) card);
             case Bash.ID:
                 return new SimpleBash(this, (Bash) card);
+            case BodySlam.ID:
+                return new SimpleBodySlam(this, card);
             case TwinStrike.ID:
                 return new SimpleTwinStrike(this, (TwinStrike) card);
             case IronWave.ID:
