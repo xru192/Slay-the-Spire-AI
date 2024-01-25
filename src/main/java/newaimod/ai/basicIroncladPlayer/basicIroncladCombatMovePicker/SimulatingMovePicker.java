@@ -115,31 +115,28 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
 
         SimpleLagavulin lagavulin = (SimpleLagavulin) state.monsterList.get(0);
         SimpleLagavulin.MODE mode = lagavulin.getMode();
-        int healthMissing = lagavulin.maxHealth - lagavulin.health;
-        int vulnerable = lagavulin.vulnerable;
-        int weak = lagavulin.weak;
 
         BasicStateEvaluator evaluator = new BasicStateEvaluator();
+        evaluator.TMHw = -1.0 / 2;
+        double lagBonus = 0;
         switch (mode) {
             case SLEEP_ONE:
-            case SLEEP_TWO:
-                // prefer not damaging Lagavulin if we have powers we can draw
                 if (hasDemonForm || hasInflame || hasMetallicize) {
-                    evaluator.TMHw = 50;
+                    lagBonus = 40;
                 } else {
-                    // otherwise, only damage Lagavulin if we can deal a solid amount this turn
-                    int vulnerableBonus = Math.max(0, vulnerable - 1) * 8;
-                    int weakBonus = Math.max(0, weak - 1) * 5;
-                    if (vulnerableBonus + weakBonus + healthMissing <= 15) {
-                        evaluator.TMHw = 50;
-                    }
+                    lagBonus = 8;
                 }
                 break;
-            case SLEEP_THREE:
-            case AWAKE:
-                evaluator.TMHw = -1.0 / 2;
+            case SLEEP_TWO:
+                // prefer not damaging Lagavulin if we have powers we can draw
+                if (hasDemonForm || hasInflame) {
+                    lagBonus = 40;
+                } else {
+                    // otherwise, only damage Lagavulin if we can deal a solid amount this turn
+                    lagBonus = 8;
+                }
         }
-        return evaluator.evaluate(state);
+        return evaluator.evaluate(state) + lagBonus;
     }
 
     private double evalStateSlimeBoss(CombatSimulator state) {
