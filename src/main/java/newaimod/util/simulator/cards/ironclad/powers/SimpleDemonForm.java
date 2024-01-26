@@ -1,27 +1,27 @@
-package newaimod.util.simulator.cards.ironclad.skills;
+package newaimod.util.simulator.cards.ironclad.powers;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.red.ShrugItOff;
+import com.megacrit.cardcrawl.cards.red.DemonForm;
 import newaimod.util.simulator.cards.AbstractSimpleCard;
 import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.SimpleMonster;
 
-public class SimpleShrugItOff extends AbstractSimpleCard {
-    public static final String ID = ShrugItOff.ID;
-    public static final AbstractCard.CardType TYPE = AbstractCard.CardType.SKILL;
+public class SimpleDemonForm extends AbstractSimpleCard {
+    public static final String ID = DemonForm.ID;
+    public static final AbstractCard.CardType TYPE = AbstractCard.CardType.POWER;
     public static final boolean TARGETSONE = false;
 
-    public SimpleShrugItOff(CombatSimulator simulator, AbstractCard card) {
+    public SimpleDemonForm(CombatSimulator simulator, AbstractCard card) {
         super(simulator, ID, TYPE, card.costForTurn, TARGETSONE);
-        this.block = 8;
+        this.magicNumber = 2;
         if (card.upgraded) {
             upgrade();
         }
     }
 
-    public SimpleShrugItOff(CombatSimulator simulator, int cost, boolean upgraded) {
+    public SimpleDemonForm(CombatSimulator simulator, int cost, boolean upgraded) {
         super(simulator, ID, TYPE, cost, TARGETSONE);
-        this.block = 8;
+        this.magicNumber = 2;
         if (upgraded) {
             upgrade();
         }
@@ -34,19 +34,18 @@ public class SimpleShrugItOff extends AbstractSimpleCard {
 
     @Override
     public void play(SimpleMonster target) {
-        int modifiedBlock = simulator.player.getModifiedBlock(this.block);
-        simulator.player.block += modifiedBlock;
+        simulator.player.demonForm += this.magicNumber;
         simulator.player.payForAndUseCard(this);
-        simulator.player.drawCards(1);
     }
 
     @Override
     public void upgrade() {
-        this.block = 11;
+        this.isUpgraded = true;
+        this.magicNumber = 3;
     }
 
     @Override
     public AbstractSimpleCard copy(CombatSimulator simulator) {
-        return new SimpleShrugItOff(simulator, this.cost, this.isUpgraded);
+        return new SimpleDemonForm(simulator, this.cost, this.isUpgraded);
     }
 }

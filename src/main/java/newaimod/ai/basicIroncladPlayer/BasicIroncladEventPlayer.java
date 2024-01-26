@@ -43,10 +43,10 @@ public class BasicIroncladEventPlayer extends AbstractEventAutoPlayer {
                 choose("enemies in your next three combats have 1 hp");
             } else if (choices.contains("obtain a random rare card")) {
                 choose("obtain a random rare card");
-            } else if (choices.contains("transform a card")) {
-                choose("transform a card");
             } else if (choices.contains("choose a colorless card to obtain")) {
                 choose("choose a colorless card to obtain");
+            } else if (choices.contains("transform a card")) {
+                choose("transform a card");
             } else {
                 choose(choices.get(0)); // choose one of the non-drawback ones
             }
@@ -378,8 +378,8 @@ public class BasicIroncladEventPlayer extends AbstractEventAutoPlayer {
 
     @Override
     public void executeTransmogrifier() {
-        // always transform a card
-        choose("pray");
+        // always do not transform a card
+        choose("leave");
     }
 
     @Override

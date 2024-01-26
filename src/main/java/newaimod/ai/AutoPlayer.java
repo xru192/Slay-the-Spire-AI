@@ -1,6 +1,6 @@
 package newaimod.ai;
 
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import newaimod.util.simulator.SimpleMonster;
 
 /**
  * An AutoPlayer implements functionality to progress the game at any point.
@@ -71,9 +71,9 @@ public interface AutoPlayer {
         public final TYPE type;
         public final int index; // index of the card/potion to be used
 
-        public final AbstractMonster target; // target of card/potion to be used
+        public final SimpleMonster target; // target of card/potion to be used
 
-        public CombatMove(TYPE t, int index, AbstractMonster target) {
+        public CombatMove(TYPE t, int index, SimpleMonster target) {
             type = t;
             this.index = index;
             this.target = target;
@@ -105,7 +105,7 @@ public interface AutoPlayer {
             return "Move{" +
                     "type=" + type +
                     ", index=" + index +
-                    ", target=" + target.name +
+                    ", target=" + target +
                     '}';
         }
 

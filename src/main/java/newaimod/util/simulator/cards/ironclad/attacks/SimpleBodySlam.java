@@ -1,32 +1,26 @@
 package newaimod.util.simulator.cards.ironclad.attacks;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.red.PommelStrike;
+import com.megacrit.cardcrawl.cards.red.BodySlam;
 import newaimod.util.simulator.cards.AbstractSimpleCard;
 import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.SimpleMonster;
 
-public class SimplePommelStrike extends AbstractSimpleCard {
-    public static final String ID = PommelStrike.ID;
+public class SimpleBodySlam extends AbstractSimpleCard {
+    public static final String ID = BodySlam.ID;
     public static final AbstractCard.CardType TYPE = AbstractCard.CardType.ATTACK;
     public static final boolean TARGETSONE = true;
 
-    public SimplePommelStrike(CombatSimulator simulator, AbstractCard card) {
+    public SimpleBodySlam(CombatSimulator simulator, AbstractCard card) {
         super(simulator, ID, TYPE, card.costForTurn, TARGETSONE);
-        this.damage = 9;
-        this.magicNumber = 1;
         if (card.upgraded) {
-            upgrade();
+            this.isUpgraded = true;
         }
     }
 
-    public SimplePommelStrike(CombatSimulator simulator, int cost, boolean upgraded) {
+    public SimpleBodySlam(CombatSimulator simulator, int cost, boolean upgraded) {
         super(simulator, ID, TYPE, cost, TARGETSONE);
-        this.damage = 9;
-        this.magicNumber = 1;
-        if (upgraded) {
-            upgrade();
-        }
+        this.isUpgraded = upgraded;
     }
 
     @Override
@@ -36,24 +30,20 @@ public class SimplePommelStrike extends AbstractSimpleCard {
 
     @Override
     public void play(SimpleMonster target) {
-        int playerModifiedDamage = simulator.player.getModifiedDamage(this.damage);
+        int playerModifiedDamage = simulator.player.getModifiedDamage(simulator.player.block);
         target.takeAttack(playerModifiedDamage);
         simulator.player.payForAndUseCard(this);
-        simulator.player.drawCards(this.magicNumber);
     }
 
     @Override
     public void upgrade() {
         this.isUpgraded = true;
-        this.damage = 10;
-        this.magicNumber = 2;
+        this.cost = 0;
     }
 
     @Override
     public AbstractSimpleCard copy(CombatSimulator simulator) {
-        return new SimplePommelStrike(simulator, this.cost, this.isUpgraded);
+        return new SimpleBodySlam(simulator, this.cost, this.isUpgraded);
     }
-
-
 
 }

@@ -1,27 +1,27 @@
 package newaimod.util.simulator.cards.ironclad.skills;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.red.ShrugItOff;
+import com.megacrit.cardcrawl.cards.red.BattleTrance;
 import newaimod.util.simulator.cards.AbstractSimpleCard;
 import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.SimpleMonster;
 
-public class SimpleShrugItOff extends AbstractSimpleCard {
-    public static final String ID = ShrugItOff.ID;
+public class SimpleBattleTrance extends AbstractSimpleCard {
+    public static final String ID = BattleTrance.ID;
     public static final AbstractCard.CardType TYPE = AbstractCard.CardType.SKILL;
     public static final boolean TARGETSONE = false;
 
-    public SimpleShrugItOff(CombatSimulator simulator, AbstractCard card) {
+    public SimpleBattleTrance(CombatSimulator simulator, AbstractCard card) {
         super(simulator, ID, TYPE, card.costForTurn, TARGETSONE);
-        this.block = 8;
+        this.magicNumber = 3;
         if (card.upgraded) {
             upgrade();
         }
     }
 
-    public SimpleShrugItOff(CombatSimulator simulator, int cost, boolean upgraded) {
+    public SimpleBattleTrance(CombatSimulator simulator, int cost, boolean upgraded) {
         super(simulator, ID, TYPE, cost, TARGETSONE);
-        this.block = 8;
+        this.magicNumber = 3;
         if (upgraded) {
             upgrade();
         }
@@ -34,19 +34,19 @@ public class SimpleShrugItOff extends AbstractSimpleCard {
 
     @Override
     public void play(SimpleMonster target) {
-        int modifiedBlock = simulator.player.getModifiedBlock(this.block);
-        simulator.player.block += modifiedBlock;
         simulator.player.payForAndUseCard(this);
-        simulator.player.drawCards(1);
+        simulator.player.drawCards(this.magicNumber);
+        simulator.player.gainNoDraw();
     }
 
     @Override
     public void upgrade() {
-        this.block = 11;
+        this.isUpgraded = true;
+        this.magicNumber = 4;
     }
 
     @Override
     public AbstractSimpleCard copy(CombatSimulator simulator) {
-        return new SimpleShrugItOff(simulator, this.cost, this.isUpgraded);
+        return new SimpleBattleTrance(simulator, this.cost, this.isUpgraded);
     }
 }

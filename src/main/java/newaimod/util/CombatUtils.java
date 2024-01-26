@@ -4,6 +4,8 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
+import newaimod.util.simulator.CombatSimulator;
+import newaimod.util.simulator.SimpleMonster;
 
 public class CombatUtils {
     /**
@@ -18,6 +20,22 @@ public class CombatUtils {
             for (AbstractMonster m : AbstractDungeon.getCurrRoom().monsters.monsters) {
                 if (m.currentHealth > 0 && m.currentHealth < minHealth) {
                     minHealth = m.currentHealth;
+                    weakest = m;
+                }
+            }
+        } catch (NullPointerException e) {
+            return null;
+        }
+        return weakest;
+    }
+
+    public static SimpleMonster getWeakestTarget(CombatSimulator state) {
+        int minHealth = 1000;
+        SimpleMonster weakest = null;
+        try {
+            for (SimpleMonster m : state.monsterList) {
+                if (m.health > 0 && m.health < minHealth) {
+                    minHealth = m.health;
                     weakest = m;
                 }
             }

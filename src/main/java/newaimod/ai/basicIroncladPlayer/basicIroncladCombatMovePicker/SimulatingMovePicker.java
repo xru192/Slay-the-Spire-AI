@@ -1,16 +1,24 @@
 package newaimod.ai.basicIroncladPlayer.basicIroncladCombatMovePicker;
 
-import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.red.DemonForm;
+import com.megacrit.cardcrawl.cards.red.Inflame;
+import com.megacrit.cardcrawl.cards.red.Metallicize;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import newaimod.ai.AbstractCombatMovePicker;
 import newaimod.ai.AutoPlayer;
+import newaimod.util.DungeonInformationManager;
 import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.CombatSimulator.Future;
-import newaimod.util.simulator.SimpleMonster;
 import newaimod.ai.AutoPlayer.CombatMove;
+import newaimod.util.simulator.monsters.SimpleGremlinNob;
+import newaimod.util.simulator.monsters.SimpleLagavulin;
+import newaimod.util.simulator.monsters.SimpleSlimeBoss;
+import newaimod.util.simulator.monsters.SimpleTheGuardian;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SimulatingMovePicker extends AbstractCombatMovePicker {
@@ -19,47 +27,53 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
     @Override
     public AutoPlayer.CombatMove pickMoveDefault() {
         logger.info("Picking move (default)");
-        CombatSimulator currentState = new CombatSimulator();
-        List<Future> endStates = CombatSimulator.calculateFutures(currentState);
-
-        double bestEval = -100000;
-        CombatMove bestMove = null;
-        CombatSimulator bestState = null;
-        for (Future future : endStates) {
-            double eval = evalState(future.state);
-            if (eval > bestEval) {
-                bestEval = eval;
-                bestMove = future.move;
-                bestState = future.state;
-            }
-        }
-        logger.info("Best move: " + bestMove);
-        logger.info("Best state: " + bestState);
-        logger.info("Best eval: " + bestEval);
-        assert bestState != null;
-
-        return bestMove;
+        return pickMoveUsingEval(new BasicStateEvaluator());
     }
 
 
     @Override
     protected CombatMove pickMoveGremlinNob() {
         logger.info("Picking move (Gremlin Nob)");
-        CombatSimulator currentState = new CombatSimulator();
+        return pickMoveUsingEval(this::evalStateGremlinNob);
+    }
+
+    @Override
+    protected CombatMove pickMoveLagavulin() {
+        logger.info("Picking move (Lagavulin)");
+        return pickMoveUsingEval(this::evalStateLagavulin);
+    }
+
+    @Override
+    protected CombatMove pickMove3Sentries() {
+        BasicStateEvaluator evaluator = new BasicStateEvaluator();
+        CombatSimulator current = DungeonInformationManager.getInstance().getCurrentState();
+        if (current.countAliveMonsters() == 3) {
+            evaluator.TMHw = -2.0 / 3;
+        }
+        return pickMoveUsingEval(evaluator);
+    }
+
+    @Override
+    protected CombatMove pickMoveSlimeBoss() {
+        logger.info("Picking move (Slime Boss)");
+        return pickMoveUsingEval(this::evalStateSlimeBoss);
+    }
+
+    @Override
+    protected CombatMove pickMoveTheGuardian() {
+        logger.info("Picking move (The Guardian)");
+        return pickMoveUsingEval(this::evalStateTheGuardian);
+    }
+
+    private AutoPlayer.CombatMove pickMoveUsingEval(StateEvaluator evaluator) {
+        CombatSimulator currentState = DungeonInformationManager.getInstance().getCurrentState();
         List<Future> endStates = CombatSimulator.calculateFutures(currentState);
 
         double bestEval = -100000;
         CombatMove bestMove = null;
         CombatSimulator bestState = null;
         for (Future future : endStates) {
-            // Don't consider playing skills past turn 1
-            if (GameActionManager.turn > 1 && future.move.type == CombatMove.TYPE.CARD) {
-                if (currentState.player.hand.get(future.move.index).type == AbstractCard.CardType.SKILL) {
-                    continue;
-                }
-            }
-
-            double eval = evalState(future.state);
+            double eval = evaluator.evaluate(future.state);
             if (eval > bestEval) {
                 bestEval = eval;
                 bestMove = future.move;
@@ -70,47 +84,90 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
         logger.info("Best state: " + bestState);
         logger.info("Best eval: " + bestEval);
         assert bestState != null;
+
         return bestMove;
     }
 
-
-    private int vulnerableBonus(CombatSimulator state) {
-        int totalBonus = 0;
-        for (SimpleMonster m : state.monsterList) {
-            if (m.isAlive() && m.health >= 5 && m.vulnerable > 1) {
-                int bonus = m.vulnerable == 2 ? 3 : 8;
-                totalBonus += bonus;
-            }
+    private double evalStateGremlinNob(CombatSimulator state) {
+        StateEvaluator evaluator = new BasicStateEvaluator();
+        double basicEval = evaluator.evaluate(state);
+        if (state.combatOver()) {
+            return basicEval;
         }
-        return totalBonus;
+
+        assert state.monsterList.size() == 1 && state.monsterList.get(0) instanceof SimpleGremlinNob;
+        int GNS = ((SimpleGremlinNob) state.monsterList.get(0)).getStrength(); // Gremlin Nob strength
+        double GNSw = -3;
+        return basicEval + GNS * GNSw;
     }
 
-    public double evalState(CombatSimulator state) {
-        if (state.combatOver()) {
-            return 1000;
+    private double evalStateLagavulin(CombatSimulator state) {
+        assert state.monsterList.size() == 1 && state.monsterList.get(0) instanceof SimpleLagavulin;
+        ArrayList<AbstractCard> drawPile = AbstractDungeon.player.drawPile.group;
+        boolean hasDemonForm = false;
+        boolean hasInflame = false;
+        boolean hasMetallicize = false;
+        for (AbstractCard card : drawPile) {
+            hasDemonForm |= card.cardID.equals(DemonForm.ID);
+            hasInflame |= card.cardID.equals(Inflame.ID);
+            hasMetallicize |= card.cardID.equals(Metallicize.ID);
         }
 
-        state.triggerEndTurnEffects();
-        int PH = state.getPlayerHealth();                                  // player health
-        int AM = state.countAliveMonsters();                               // alive monsters
-        int TMH = state.getTotalMonsterEffectiveHealth();                  // total monster health
-        int PS = state.player.strength;                                    // player strength
-        int ES = state.player.getExhaustedSlimed();                        // exhausted Slimed
-        int VB = vulnerableBonus(state);                                   // vulnerable bonus
+        SimpleLagavulin lagavulin = (SimpleLagavulin) state.monsterList.get(0);
+        SimpleLagavulin.MODE mode = lagavulin.getMode();
 
-        double PHw = 1.0;
-        double AMw = -6;
-        double TMHw = -1.0 / 3;
-        double PSw = 5;
-        double ESw = 0.001;
-        double VBw = 1.0 / 3;
+        BasicStateEvaluator evaluator = new BasicStateEvaluator();
+        evaluator.TMHw = -1.0 / 2;
+        double lagBonus = 0;
+        switch (mode) {
+            case SLEEP_ONE:
+                if (hasDemonForm || hasInflame || hasMetallicize) {
+                    lagBonus = 40;
+                } else {
+                    lagBonus = 8;
+                }
+                break;
+            case SLEEP_TWO:
+                // prefer not damaging Lagavulin if we have powers we can draw
+                if (hasDemonForm || hasInflame) {
+                    lagBonus = 40;
+                } else {
+                    // otherwise, only damage Lagavulin if we can deal a solid amount this turn
+                    lagBonus = 8;
+                }
+        }
+        return evaluator.evaluate(state) + lagBonus;
+    }
 
-        double eval = (PH * PHw) + (AM * AMw) + (TMH * TMHw) + (PS * PSw) + (ES * ESw) + (VB * VBw);
-        if (PH <= 0) {
-            eval -= 1000;
+    private double evalStateSlimeBoss(CombatSimulator state) {
+        BasicStateEvaluator evaluator = new BasicStateEvaluator();
+
+        if (state.monsterList.size() == 1 && state.monsterList.get(0) instanceof SimpleSlimeBoss) {
+            SimpleSlimeBoss enemy = (SimpleSlimeBoss) state.monsterList.get(0);
+            if (enemy.isSplitting()) {
+                evaluator.VBw = 0;
+                int amtUnderHalf = enemy.maxHealth / 2 - enemy.health;
+                if (amtUnderHalf < 10) {
+                    return evaluator.evaluate(state) - 10;
+                }
+            }
         }
 
-        return eval;
+        return evaluator.evaluate(state);
+    }
+
+    private double evalStateTheGuardian(CombatSimulator state) {
+        BasicStateEvaluator evaluator = new BasicStateEvaluator();
+
+        assert state.monsterList.size() == 1 && state.monsterList.get(0) instanceof SimpleTheGuardian;
+        SimpleTheGuardian.MODE mode = ((SimpleTheGuardian)state.monsterList.get(0)).getMode();
+        if (mode == SimpleTheGuardian.MODE.DEFENSIVE) {
+            if (state.player.health < 40) {
+                evaluator.TMHw = -1.0 / 10;
+            }
+        }
+
+        return evaluator.evaluate(state);
     }
 
 }

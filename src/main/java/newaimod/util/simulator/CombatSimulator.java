@@ -6,18 +6,17 @@ import com.megacrit.cardcrawl.cards.status.Slimed;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.MonsterHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.monsters.beyond.AwakenedOne;
 import com.megacrit.cardcrawl.monsters.city.SphericGuardian;
 import newaimod.ai.AutoPlayer;
-import newaimod.NewAIMod;
 import newaimod.util.simulator.cards.AbstractSimpleCard;
 import newaimod.util.simulator.cards.Filler;
 import newaimod.util.simulator.cards.ironclad.attacks.*;
+import newaimod.util.simulator.cards.ironclad.powers.SimpleDemonForm;
 import newaimod.util.simulator.cards.ironclad.powers.SimpleInflame;
-import newaimod.util.simulator.cards.ironclad.skills.SimpleArmaments;
-import newaimod.util.simulator.cards.ironclad.skills.SimpleDefend_Red;
-import newaimod.util.simulator.cards.ironclad.skills.SimpleFlameBarrier;
-import newaimod.util.simulator.cards.ironclad.skills.SimpleShrugItOff;
-import newaimod.util.simulator.cards.Neutral.status.SimpleSlimed;
+import newaimod.util.simulator.cards.ironclad.powers.SimpleMetallicize;
+import newaimod.util.simulator.cards.ironclad.skills.*;
+import newaimod.util.simulator.cards.neutral.status.SimpleSlimed;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -27,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
+
 /**
  * A CombatSimulator simulates a simplified version of Slay the Spire combat. An instance represents a state of combat,
  * with information about the player and monsters. It supports the playing of cards, which modifies the state.
@@ -35,23 +35,16 @@ public class CombatSimulator {
     public static final Logger logger = LogManager.getLogger(CombatSimulator.class.getName());
 
     @NotNull
-    public SimplePlayer player;
-    public List<SimpleMonster> monsterList;
+    public final SimplePlayer player;
+    @NotNull
+    public final List<SimpleMonster> monsterList;
 
     /**
-     * CombatSimulator which represents the current state of combat.
+     * CombatSimulator which represents a "default" state. The default state has a "default" player and no monsters.
      */
     public CombatSimulator() {
-        assert NewAIMod.inBattle;
         player = new SimplePlayer(this);
         monsterList = new ArrayList<>();
-
-        List<AbstractMonster> roomMonsters = AbstractDungeon.getCurrRoom().monsters.monsters;
-        for (AbstractMonster m : roomMonsters) {
-            if (!m.isDeadOrEscaped()) {
-                monsterList.add(new SimpleMonster(m, this));
-            }
-        }
     }
 
     /**
@@ -63,7 +56,7 @@ public class CombatSimulator {
         player = new SimplePlayer(simulator.player, this);
         monsterList = new ArrayList<>();
         for (SimpleMonster m : simulator.monsterList) {
-            monsterList.add(new SimpleMonster(m, this));
+            monsterList.add(m.copy(this));
         }
     }
 
@@ -81,6 +74,9 @@ public class CombatSimulator {
         }
 
         card.play(target);
+        for (SimpleMonster m : monsterList) {
+            m.onUseCard(card);
+        }
         return true;
     }
 
@@ -98,6 +94,8 @@ public class CombatSimulator {
                 return new SimpleDefend_Red(this, (Defend_Red) card);
             case Bash.ID:
                 return new SimpleBash(this, (Bash) card);
+            case BodySlam.ID:
+                return new SimpleBodySlam(this, card);
             case TwinStrike.ID:
                 return new SimpleTwinStrike(this, (TwinStrike) card);
             case IronWave.ID:
@@ -106,8 +104,12 @@ public class CombatSimulator {
                 return new SimpleShrugItOff(this, card);
             case Headbutt.ID:
                 return new SimpleHeadbutt(this, card);
+            case DemonForm.ID:
+                return new SimpleDemonForm(this, card);
             case Inflame.ID:
                 return new SimpleInflame(this, card);
+            case Metallicize.ID:
+                return new SimpleMetallicize(this, card);
             case Cleave.ID:
                 return new SimpleCleave(this, card);
             case PommelStrike.ID:
@@ -122,10 +124,18 @@ public class CombatSimulator {
                 return new SimpleWhirlwind(this, card);
             case Armaments.ID:
                 return new SimpleArmaments(this, card);
+            case BattleTrance.ID:
+                return new SimpleBattleTrance(this, card);
             case Slimed.ID:
                 return new SimpleSlimed(this, card);
         }
         return new Filler(this, card.type, card.cost);
+    }
+
+    public void addMonster(SimpleMonster monster) {
+        monsterList.add(monster);
+        assert monster.simulator == null;
+        monster.simulator = this;
     }
 
     /**
@@ -134,7 +144,7 @@ public class CombatSimulator {
     private void aliveMonstersAttackPlayer() {
         for (SimpleMonster m : monsterList) {
             if (m.isAttacking()) {
-                assert m.intentHits >= 1 && m.intentDamage >= 0;
+                assert m.intentHits >= 1 && m.intentBaseDamage >= 0;
                 for (int i = 0; i < m.intentHits; ++i) {
                     player.takeAttack(m.getModifiedDamage());
                 }
@@ -147,6 +157,7 @@ public class CombatSimulator {
      * the end of turn will trigger, and then any alive monsters will attack the player.
      */
     public void triggerEndTurnEffects() {
+        player.triggerEndTurnPowers();
         aliveMonstersAttackPlayer();
     }
 
@@ -167,7 +178,12 @@ public class CombatSimulator {
      * @return whether the combat is over
      */
     public boolean combatOver() {
-        assert !AbstractDungeon.lastCombatMetricKey.equals(MonsterHelper.AWAKENED_ENC);
+        if (AbstractDungeon.lastCombatMetricKey.equals(MonsterHelper.AWAKENED_ENC)) {
+            assert AbstractDungeon.getCurrRoom().monsters.monsters.size() == 3;
+            AbstractMonster m = AbstractDungeon.getCurrRoom().monsters.monsters.get(2);
+            assert m instanceof AwakenedOne;
+            return countAliveMonsters() == 0 && !m.halfDead;
+        }
         return countAliveMonsters() == 0;
     }
 
@@ -246,7 +262,7 @@ public class CombatSimulator {
                 for (int m_index = 0; m_index < startState.monsterList.size(); ++m_index) {
                     SimpleMonster m = startState.monsterList.get(m_index);
                     if (card.canPlay(m)) {
-                        AutoPlayer.CombatMove firstMove = new AutoPlayer.CombatMove(AutoPlayer.CombatMove.TYPE.CARD, i, m.originalMonster);
+                        AutoPlayer.CombatMove firstMove = new AutoPlayer.CombatMove(AutoPlayer.CombatMove.TYPE.CARD, i, m);
                         CombatSimulator state = new CombatSimulator(startState);
                         state.playCard(state.player.hand.get(i), state.monsterList.get(m_index));
                         firstStates.add(new Future(firstMove, state));
