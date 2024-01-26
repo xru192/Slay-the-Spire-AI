@@ -14,15 +14,13 @@ public class SimpleBodySlam extends AbstractSimpleCard {
     public SimpleBodySlam(CombatSimulator simulator, AbstractCard card) {
         super(simulator, ID, TYPE, card.costForTurn, TARGETSONE);
         if (card.upgraded) {
-            upgrade();
+            this.isUpgraded = true;
         }
     }
 
     public SimpleBodySlam(CombatSimulator simulator, int cost, boolean upgraded) {
         super(simulator, ID, TYPE, cost, TARGETSONE);
-        if (upgraded) {
-            upgrade();
-        }
+        this.isUpgraded = upgraded;
     }
 
     @Override
