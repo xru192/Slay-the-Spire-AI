@@ -32,7 +32,11 @@ public class DoCombatMoveAction extends AbstractGameAction {
         switch (combatMove.type) {
             case CARD:
                 ArrayList<AbstractCard> cards = AbstractDungeon.player.hand.group;
-
+                if (cards.size() <= combatMove.index) {
+                    isDone = true;
+                    logger.error("Move failed (index too high): " + combatMove);
+                    return;
+                }
                 AbstractCard toPlay = cards.get(combatMove.index);
                 if (combatMove.target == null && !toPlay.canUse(AbstractDungeon.player, null)) {
                     isDone = true;
