@@ -22,10 +22,10 @@ Ironclad on Ascension 0/1.
 
 ### Performance (Basic)
 
-- [ ] Consistently (95+%) reaches Act I boss
+- [X] Consistently (95+%) reaches Act I boss
 - [ ] Often (80+%) defeats Act I boss
 - [ ] Frequently (50+%) reaches Act II boss
-- [ ] Occasionally (20+%) defeats Act II boss
+- [X] Occasionally (20+%) defeats Act II boss
 
 ### Performance (Decent)
 
@@ -61,4 +61,4 @@ Ironclad on Ascension 0/1.
 | Version | Runs | Average Floors Cleared | Reached Act I Boss | Defeated Act I Boss | Reached Act II Boss | Defeated Act II Boss | Reached Act III Boss | Defeated Act III Boss |
 |:-------:|:----:|:----------------------:|:------------------:|:-------------------:|:-------------------:|:--------------------:|:--------------------:|:---------------------:|
 |  0.0.0  |  20  |          23.4          |         18         |         11          |          6          |          1           |          0           |           0           |
-
+|  0.0.1  |  20  |         28.65          |         20         |         13          |          9          |          4           |          4           |           3           |
