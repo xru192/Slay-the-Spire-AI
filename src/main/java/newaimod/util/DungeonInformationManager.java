@@ -214,7 +214,7 @@ public class DungeonInformationManager {
          * @return the number of unupgraded copies of the card in the deck
          */
         public int countUnupgradedCopies(String cardID) {
-            return unupgraded.getOrDefault(unupgraded, 0);
+            return unupgraded.getOrDefault(cardID, 0);
         }
 
         /**
@@ -224,7 +224,7 @@ public class DungeonInformationManager {
          * @return the number of upgraded copies of the card in the deck
          */
         public int countUpgradedCopies(String cardID) {
-            return upgraded.getOrDefault(upgraded, 0);
+            return upgraded.getOrDefault(cardID, 0);
         }
 
         /**
