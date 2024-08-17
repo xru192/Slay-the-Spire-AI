@@ -5,9 +5,16 @@ import basemod.BaseMod;
 import basemod.ModPanel;
 import basemod.devcommands.ConsoleCommand;
 import basemod.interfaces.*;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.actions.GameActionManager;
+import com.megacrit.cardcrawl.characters.AbstractPlayer;
+import com.megacrit.cardcrawl.characters.CharacterManager;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.SeedHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import communicationmod.ChoiceScreenUtils;
 import communicationmod.GameStateListener;
@@ -24,6 +31,7 @@ import com.evacipated.cardcrawl.modthespire.Loader;
 import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.evacipated.cardcrawl.modthespire.Patcher;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.scannotation.AnnotationDB;
@@ -37,7 +45,8 @@ public class NewAIMod implements
         OnStartBattleSubscriber,
         PostBattleSubscriber,
         PostDeathSubscriber,
-        StartGameSubscriber {
+        StartGameSubscriber,
+        PostRenderSubscriber {
     public static ModInfo info;
     public static String modID; //Edit your pom.xml to change this
 
@@ -52,6 +61,7 @@ public class NewAIMod implements
     public static boolean inBattle;     // whether user is in a combat
     public static boolean inGame;       // whether user is in the game
 
+    private static boolean starting;    // whether game is in process of starting
     private static int waitCounter = 0;
     private static boolean stateChanged = false;
 
@@ -59,7 +69,7 @@ public class NewAIMod implements
     private AutoPlayer autoPlayer;
     public static AutoPlayer.CombatMove move = null;
     private static boolean creating = false;
-
+    private static final Queue<ImmutablePair<AbstractPlayer.PlayerClass, Integer>> gameQueue = new ArrayDeque<>();
 
     // This will be called by ModTheSpire because of the @SpireInitializer annotation at the top of the class.
     public static void initialize() {
@@ -78,6 +88,7 @@ public class NewAIMod implements
         ConsoleCommand.addCommand("monsterinfo", MonsterInfoCommand.class);
         ConsoleCommand.addCommand("settings", SettingsCommand.class);
         ConsoleCommand.addCommand("mapinfo", MapInfoCommand.class);
+        ConsoleCommand.addCommand("startgame", StartGameCommand.class);
     }
 
     @Override
@@ -230,9 +241,54 @@ public class NewAIMod implements
         logger.info("Start Game received");
         inBattle = false;
         inGame = true;
+        starting = false;
         autoPlayer = new BasicIroncladPlayer();
     }
 
+    @Override
+    public void receivePostRender(SpriteBatch spriteBatch) {
+        if (myPropertyManager.enabled && !inGame) {
+            tryStartGameInQueue();
+        }
+    }
+
+    public static void enqueueGame(AbstractPlayer.PlayerClass character, int ascension) {
+        gameQueue.add(ImmutablePair.of(character, ascension));
+    }
+
+    public static void tryStartGameInQueue() {
+        if (isStartCommandAvailable() && !starting && !gameQueue.isEmpty()) {
+            logger.info("Starting game from Queue");
+            starting = true;
+            ImmutablePair<AbstractPlayer.PlayerClass, Integer> pair = gameQueue.remove();
+            startGameAtMainMenu(pair.left, pair.right);
+        }
+    }
+
+    private static void startGameAtMainMenu(AbstractPlayer.PlayerClass character, int ascensionLevel) {
+        if (character != AbstractPlayer.PlayerClass.IRONCLAD) {
+            throw new RuntimeException("Chose an unsupported character: " + character.toString());
+        }
+
+        Settings.seed = SeedHelper.generateUnoffensiveSeed(new Random(System.nanoTime()));
+        AbstractDungeon.generateSeeds();
+        AbstractDungeon.ascensionLevel = ascensionLevel;
+        AbstractDungeon.isAscensionMode = ascensionLevel > 0;
+        CardCrawlGame.startOver = true;
+        CardCrawlGame.mainMenuScreen.isFadingOut = true;
+        CardCrawlGame.mainMenuScreen.fadeOutMusic();
+        new CharacterManager().setChosenCharacter(character);
+        CardCrawlGame.chosenCharacter = character;
+        GameStateListener.resetStateVariables();
+    }
+
+    private static boolean isStartCommandAvailable() {
+        return !isInDungeon() && CardCrawlGame.mainMenuScreen != null;
+    }
+
+    private static boolean isInDungeon() {
+        return CardCrawlGame.mode == CardCrawlGame.GameMode.GAMEPLAY && AbstractDungeon.isPlayerInDungeon() && AbstractDungeon.currMapNode != null;
+    }
 
     public static String resourcePath(String file) {
         return resourcesFolder + "/" + file;
