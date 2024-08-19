@@ -36,6 +36,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.scannotation.AnnotationDB;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 @SpireInitializer
@@ -54,6 +57,7 @@ public class NewAIMod implements
         loadModInfo();
     }
 
+    public static final String RUN_DATA_PATH = "/Users/ryanxu/IdeaProjects/Slay-the-Spire-AI/runData/" + NewAIMod.info.ModVersion.getOriginalValue() + ".txt";
     public static final Logger logger = LogManager.getLogger(modID); //Used to output to the console.
     private static final String resourcesFolder = "newaimod";
 
@@ -111,7 +115,7 @@ public class NewAIMod implements
     @Override
     public void receivePostDungeonUpdate() {
         if (!inGame) {
-            logger.info("Processing gameEnded");
+//            logger.info("Processing gameEnded");
             if (!GameStateListener.checkForDungeonStateChange()) {
                 return;
             }
@@ -234,6 +238,17 @@ public class NewAIMod implements
         logger.info("Post Death received");
         inBattle = false;
         inGame = false;
+
+        // Save stats for this run
+        // TODO handle stats for heart victories
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(RUN_DATA_PATH, true));
+            int floor = AbstractDungeon.floorNum;
+            writer.write("Died at floor: " + floor + "\n");
+            writer.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
