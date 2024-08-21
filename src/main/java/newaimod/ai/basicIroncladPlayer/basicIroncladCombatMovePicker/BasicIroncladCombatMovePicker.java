@@ -8,7 +8,7 @@ import newaimod.ai.AbstractCombatMovePicker;
 import newaimod.ai.AutoPlayer.CombatMove;
 import newaimod.util.CombatUtils;
 import basemod.ReflectionHacks;
-import newaimod.util.DungeonInformationManager;
+import newaimod.util.dungeonInfo.RealDungeonInformationProvider;
 import newaimod.util.simulator.CombatSimulator;
 
 import java.util.ArrayList;
@@ -69,7 +69,7 @@ public class BasicIroncladCombatMovePicker extends AbstractCombatMovePicker {
         }
 
         assert hand.contains(toPlay);
-        CombatSimulator currentState = DungeonInformationManager.getInstance().getCurrentState();
+        CombatSimulator currentState = RealDungeonInformationProvider.getInstance().getCurrentState();
         return new CombatMove(CombatMove.TYPE.CARD, hand.indexOf(toPlay), CombatUtils.getWeakestTarget(currentState));
     }
 }

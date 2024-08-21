@@ -5,7 +5,8 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.red.*;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import communicationmod.ChoiceScreenUtils;
-import newaimod.util.DungeonInformationManager;
+import newaimod.util.dungeonInfo.DungeonInformationProvider;
+import newaimod.util.dungeonInfo.RealDungeonInformationProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -68,10 +69,10 @@ public class BasicIroncladCardRewardPlayer {
      * @return evaluation of the card
      */
     private double evalCard(AbstractCard card) {
-        final int ACT = DungeonInformationManager.getInstance().getActNumber();
+        final int ACT = RealDungeonInformationProvider.getInstance().getActNumber();
         switch (ACT) {
             case 1:
-                return evalCardActI(card, DungeonInformationManager.getInstance().getActBoss());
+                return evalCardActI(card, RealDungeonInformationProvider.getInstance().getActBoss());
             case 2:
                 return evalCardActII(card);
             case 3:
@@ -81,9 +82,9 @@ public class BasicIroncladCardRewardPlayer {
         }
     }
 
-    private double evalCardActI(AbstractCard card, DungeonInformationManager.BOSSKEY boss) {
-        DungeonInformationManager.DeckInfo deck = DungeonInformationManager.getInstance().getCurrentDeckInfo();
-        int floor = DungeonInformationManager.getInstance().getFloorNum();
+    private double evalCardActI(AbstractCard card, DungeonInformationProvider.BOSSKEY boss) {
+        DungeonInformationProvider.DeckInfo deck = RealDungeonInformationProvider.getInstance().getCurrentDeckInfo();
+        int floor = RealDungeonInformationProvider.getInstance().getFloorNum();
         String[] goodDamage = {
                 TwinStrike.ID, Whirlwind.ID, Headbutt.ID, PommelStrike.ID
         };

@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.cards.red.Metallicize;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import newaimod.ai.AbstractCombatMovePicker;
 import newaimod.ai.AutoPlayer;
-import newaimod.util.DungeonInformationManager;
+import newaimod.util.dungeonInfo.RealDungeonInformationProvider;
 import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.CombatSimulator.Future;
 import newaimod.ai.AutoPlayer.CombatMove;
@@ -46,7 +46,7 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
     @Override
     protected CombatMove pickMove3Sentries() {
         BasicStateEvaluator evaluator = new BasicStateEvaluator();
-        CombatSimulator current = DungeonInformationManager.getInstance().getCurrentState();
+        CombatSimulator current = RealDungeonInformationProvider.getInstance().getCurrentState();
         if (current.countAliveMonsters() == 3) {
             evaluator.TMHw = -2.0 / 3;
         }
@@ -66,7 +66,7 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
     }
 
     private AutoPlayer.CombatMove pickMoveUsingEval(StateEvaluator evaluator) {
-        CombatSimulator currentState = DungeonInformationManager.getInstance().getCurrentState();
+        CombatSimulator currentState = RealDungeonInformationProvider.getInstance().getCurrentState();
         List<Future> endStates = CombatSimulator.calculateFutures(currentState);
 
         double bestEval = -100000;
