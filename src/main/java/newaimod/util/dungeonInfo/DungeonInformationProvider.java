@@ -44,6 +44,25 @@ public interface DungeonInformationProvider {
      */
     DungeonInformationProvider.BOSSKEY getActBoss();
 
+    enum COMBAT_KEY {
+        GREMLIN_NOB_COMBAT,
+        LAGAVULIN_COMBAT,
+        THREE_SENTRY_COMBAT,
+        GUARDIAN_COMBAT,
+        HEXAGHOST_COMBAT,
+        SLIME_BOSS_COMBAT,
+        SPHERE_GUARDIAN_COMBAT,
+        SENTRY_SPHERE_COMBAT,
+        GENERIC_COMBAT, // catch-all
+    }
+
+    /**
+     * Returns the key for the current combat
+     *
+     * @return key for current combat
+     */
+    COMBAT_KEY getCombatKey();
+
     /**
      * Returns an object which describes the content of the player's deck (the one the player begins a combat with).
      * This object represents the player's deck at present; it will not reflect temporary changes to the deck.

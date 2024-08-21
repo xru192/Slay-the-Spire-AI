@@ -8,6 +8,7 @@ import newaimod.ai.AbstractCombatMovePicker;
 import newaimod.ai.AutoPlayer.CombatMove;
 import newaimod.util.CombatUtils;
 import basemod.ReflectionHacks;
+import newaimod.util.dungeonInfo.DungeonInformationProvider;
 import newaimod.util.dungeonInfo.RealDungeonInformationProvider;
 import newaimod.util.simulator.CombatSimulator;
 
@@ -15,6 +16,10 @@ import java.util.ArrayList;
 
 
 public class BasicIroncladCombatMovePicker extends AbstractCombatMovePicker {
+
+    public BasicIroncladCombatMovePicker(DungeonInformationProvider dungeonInformationProvider) {
+        super(dungeonInformationProvider);
+    }
 
     @Override
     public CombatMove pickMoveDefault() {

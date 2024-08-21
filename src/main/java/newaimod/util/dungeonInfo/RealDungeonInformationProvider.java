@@ -103,6 +103,30 @@ public class RealDungeonInformationProvider implements DungeonInformationProvide
     }
 
     @Override
+    public COMBAT_KEY getCombatKey() {
+        switch (AbstractDungeon.lastCombatMetricKey) {
+            case MonsterHelper.GREMLIN_NOB_ENC:
+                return COMBAT_KEY.GREMLIN_NOB_COMBAT;
+            case MonsterHelper.LAGAVULIN_ENC:
+                return COMBAT_KEY.LAGAVULIN_COMBAT;
+            case MonsterHelper.THREE_SENTRY_ENC:
+                return COMBAT_KEY.THREE_SENTRY_COMBAT;
+            case MonsterHelper.GUARDIAN_ENC:
+                return COMBAT_KEY.GUARDIAN_COMBAT;
+            case MonsterHelper.HEXAGHOST_ENC:
+                return COMBAT_KEY.HEXAGHOST_COMBAT;
+            case MonsterHelper.SLIME_BOSS_ENC:
+                return COMBAT_KEY.SLIME_BOSS_COMBAT;
+            case MonsterHelper.SPHERE_GUARDIAN_ENC:
+                return COMBAT_KEY.SPHERE_GUARDIAN_COMBAT;
+            case MonsterHelper.SENTRY_SPHERE_ENC:
+                return COMBAT_KEY.SENTRY_SPHERE_COMBAT;
+            default:
+                return COMBAT_KEY.GENERIC_COMBAT;
+        }
+    }
+
+    @Override
     public DungeonInformationProvider.DeckInfo getCurrentDeckInfo() {
         return new DeckInfo(AbstractDungeon.player.masterDeck.group);
     }

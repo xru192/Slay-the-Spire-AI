@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.cards.red.Metallicize;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import newaimod.ai.AbstractCombatMovePicker;
 import newaimod.ai.AutoPlayer;
-import newaimod.util.dungeonInfo.RealDungeonInformationProvider;
+import newaimod.util.dungeonInfo.DungeonInformationProvider;
 import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.CombatSimulator.Future;
 import newaimod.ai.AutoPlayer.CombatMove;
@@ -24,8 +24,12 @@ import java.util.List;
 public class SimulatingMovePicker extends AbstractCombatMovePicker {
     public static final Logger logger = LogManager.getLogger(SimulatingMovePicker.class.getName());
 
+    public SimulatingMovePicker(DungeonInformationProvider dungeonInformationProvider) {
+        super(dungeonInformationProvider);
+    }
+
     @Override
-    public AutoPlayer.CombatMove pickMoveDefault() {
+    protected AutoPlayer.CombatMove pickMoveDefault() {
         logger.info("Picking move (default)");
         return pickMoveUsingEval(new BasicStateEvaluator());
     }
@@ -46,7 +50,7 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
     @Override
     protected CombatMove pickMove3Sentries() {
         BasicStateEvaluator evaluator = new BasicStateEvaluator();
-        CombatSimulator current = RealDungeonInformationProvider.getInstance().getCurrentState();
+        CombatSimulator current = dungeonInformationProvider.getCurrentState();
         if (current.countAliveMonsters() == 3) {
             evaluator.TMHw = -2.0 / 3;
         }
@@ -66,7 +70,7 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
     }
 
     private AutoPlayer.CombatMove pickMoveUsingEval(StateEvaluator evaluator) {
-        CombatSimulator currentState = RealDungeonInformationProvider.getInstance().getCurrentState();
+        CombatSimulator currentState = dungeonInformationProvider.getCurrentState();
         List<Future> endStates = CombatSimulator.calculateFutures(currentState);
 
         double bestEval = -100000;
