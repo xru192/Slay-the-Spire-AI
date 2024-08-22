@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.beyond.AwakenedOne;
 import com.megacrit.cardcrawl.monsters.city.SphericGuardian;
 import newaimod.ai.AutoPlayer;
+import newaimod.util.dungeonInfo.RelicCollection;
 import newaimod.util.simulator.cards.AbstractSimpleCard;
 import newaimod.util.simulator.cards.Filler;
 import newaimod.util.simulator.cards.ironclad.attacks.*;
@@ -38,6 +39,8 @@ public class CombatSimulator {
     public final SimplePlayer player;
     @NotNull
     public final List<SimpleMonster> monsterList;
+    @NotNull
+    public final RelicCollection relicCollection;
 
     /**
      * CombatSimulator which represents a "default" state. The default state has a "default" player and no monsters.
@@ -45,6 +48,13 @@ public class CombatSimulator {
     public CombatSimulator() {
         player = new SimplePlayer(this);
         monsterList = new ArrayList<>();
+        relicCollection = new RelicCollection();
+    }
+
+    public CombatSimulator(List<RelicCollection.RELIC> relics) {
+        player = new SimplePlayer(this);
+        monsterList = new ArrayList<>();
+        relicCollection = new RelicCollection(relics);
     }
 
     /**
@@ -58,6 +68,12 @@ public class CombatSimulator {
         for (SimpleMonster m : simulator.monsterList) {
             monsterList.add(m.copy(this));
         }
+        relicCollection = new RelicCollection(simulator.relicCollection);
+    }
+
+    public CombatSimulator withRelic(RelicCollection.RELIC relic) {
+        relicCollection.add(relic);
+        return this;
     }
 
     /**

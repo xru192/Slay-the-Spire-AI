@@ -12,6 +12,13 @@ public interface DungeonInformationProvider {
     CombatSimulator getCurrentState();
 
     /**
+     * Returns an object representing the player's current possessed relics.
+     *
+     * @return player's current relics
+     */
+    RelicCollection getCurrentRelics();
+
+    /**
      * Returns the current act number (1-4).
      *
      * @return the current act number
