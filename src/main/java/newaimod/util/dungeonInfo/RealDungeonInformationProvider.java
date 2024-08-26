@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.MonsterHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.monsters.beyond.AwakenedOne;
 import com.megacrit.cardcrawl.monsters.exordium.*;
 import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.relics.*;
@@ -159,6 +160,8 @@ public class RealDungeonInformationProvider implements DungeonInformationProvide
                 return new SimpleSlimeBoss((SlimeBoss) m);
             case TheGuardian.ID:
                 return new SimpleTheGuardian((TheGuardian) m);
+            case AwakenedOne.ID:
+                return new SimpleAwakenedOne((AwakenedOne) m);
             default:
                 return new SimpleMonster(m);
         }

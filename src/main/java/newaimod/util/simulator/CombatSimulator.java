@@ -3,10 +3,6 @@ package newaimod.util.simulator;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.red.*;
 import com.megacrit.cardcrawl.cards.status.Slimed;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.MonsterHelper;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.monsters.beyond.AwakenedOne;
 import com.megacrit.cardcrawl.monsters.city.SphericGuardian;
 import newaimod.ai.AutoPlayer;
 import newaimod.util.dungeonInfo.RelicCollection;
@@ -18,14 +14,12 @@ import newaimod.util.simulator.cards.ironclad.powers.SimpleInflame;
 import newaimod.util.simulator.cards.ironclad.powers.SimpleMetallicize;
 import newaimod.util.simulator.cards.ironclad.skills.*;
 import newaimod.util.simulator.cards.neutral.status.SimpleSlimed;
+import newaimod.util.simulator.monsters.SimpleAwakenedOne;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 
 /**
@@ -194,12 +188,13 @@ public class CombatSimulator {
      * @return whether the combat is over
      */
     public boolean combatOver() {
-        if (AbstractDungeon.lastCombatMetricKey.equals(MonsterHelper.AWAKENED_ENC)) {
-            assert AbstractDungeon.getCurrRoom().monsters.monsters.size() == 3;
-            AbstractMonster m = AbstractDungeon.getCurrRoom().monsters.monsters.get(2);
-            assert m instanceof AwakenedOne;
-            return countAliveMonsters() == 0 && !m.halfDead;
+        Optional<SimpleMonster> optionalAwakenedOne = monsterList.stream()
+                .filter(m -> m instanceof SimpleAwakenedOne)
+                .findFirst();
+        if (optionalAwakenedOne.isPresent()) {
+            return ((SimpleAwakenedOne) optionalAwakenedOne.get()).isTrulyDead();
         }
+
         return countAliveMonsters() == 0;
     }
 

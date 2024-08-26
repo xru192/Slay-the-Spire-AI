@@ -171,10 +171,21 @@ public class SimpleMonster {
         return isAlive() && !CombatUtils.isNotAttack(intent);
     }
 
+    /**
+     * Returns whether this monster visibly has at least 1 health.
+     * Note that self-reviving monsters are not alive while reviving.
+     *
+     * @return whether this monster is alive
+     */
     public boolean isAlive() {
         return health > 0;
     }
 
+    /**
+     * Returns whether this monster can be targeted. This is equivalent to whether it visibly has at least 1 health.
+     *
+     * @return whether this monster can be targeted
+     */
     public boolean isTargetable() {
         return health > 0;
     }
