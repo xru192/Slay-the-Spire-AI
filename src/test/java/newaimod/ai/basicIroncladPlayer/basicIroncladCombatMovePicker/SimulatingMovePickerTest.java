@@ -9,6 +9,7 @@ import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.SimpleMonster;
 import newaimod.util.simulator.cards.ironclad.attacks.SimpleStrike_Red;
 import newaimod.util.simulator.cards.ironclad.skills.SimpleDefend_Red;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,6 +19,11 @@ class SimulatingMovePickerTest {
     CombatSimulator state;
     CustomDungeonInformationProvider provider;
     AutoPlayer.CombatMove movePicked;
+
+    @BeforeAll
+    static void setUpBeforeAll() {
+        SimulatingMovePicker.doLogging = false;
+    }
 
     @Test
     void shouldPreferKillOverBlock() {
