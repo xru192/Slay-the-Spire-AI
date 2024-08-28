@@ -7,7 +7,7 @@ import newaimod.util.simulator.exceptions.CombatlessCardException;
 
 public abstract class AbstractSimpleCard {
 
-    public final CombatSimulator simulator;  // the simulator this card can be played in, null if not in combat
+    public CombatSimulator simulator;  // the simulator this card can be played in, null if not in combat
     public final String cardID;
     public boolean targetsOne;  // whether this card targets a single monster (not multi/self/random target)
     public final AbstractCard.CardType type;

@@ -76,8 +76,8 @@ public class CombatSimulator {
     }
 
     public CombatSimulator withPlayerCard(AbstractSimpleCard card) {
-        AbstractSimpleCard cardCopy = card.copy(this);
-        player.hand.add(cardCopy);
+        player.hand.add(card);
+        card.simulator = this;
         return this;
     }
 
