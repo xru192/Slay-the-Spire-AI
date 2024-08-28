@@ -204,14 +204,9 @@ public class CombatSimulator {
      * @return whether the combat is over
      */
     public boolean combatOver() {
-        Optional<SimpleMonster> optionalAwakenedOne = monsterList.stream()
-                .filter(m -> m instanceof SimpleAwakenedOne)
-                .findFirst();
-        if (optionalAwakenedOne.isPresent()) {
-            return ((SimpleAwakenedOne) optionalAwakenedOne.get()).isTrulyDead();
-        }
-
-        return countAliveMonsters() == 0;
+        return monsterList.stream()
+                .noneMatch(m -> m.isAlive() && !m.isMinion()
+                        || m instanceof SimpleAwakenedOne && !((SimpleAwakenedOne) m).isTrulyDead());
     }
 
     /**

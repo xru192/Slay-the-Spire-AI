@@ -3,6 +3,7 @@ package newaimod.util.simulator;
 import basemod.ReflectionHacks;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.EnemyMoveInfo;
+import com.megacrit.cardcrawl.powers.MinionPower;
 import com.megacrit.cardcrawl.powers.StrengthPower;
 import com.megacrit.cardcrawl.powers.VulnerablePower;
 import com.megacrit.cardcrawl.powers.WeakPower;
@@ -35,6 +36,8 @@ public class SimpleMonster {
     public int weak;
     protected int strength;
 
+    private boolean isMinion;
+
     /**
      * SimpleMonster which represents the current state of the specified AbstractMonster in combat.
      */
@@ -51,6 +54,7 @@ public class SimpleMonster {
         vulnerable = amountOfPower(monster, VulnerablePower.POWER_ID);
         weak = amountOfPower(monster, WeakPower.POWER_ID);
         strength = amountOfPower(monster, StrengthPower.POWER_ID);
+        isMinion = monster.hasPower(MinionPower.POWER_ID);
     }
 
     public SimpleMonster(SimpleMonster m, CombatSimulator simulator) {
@@ -65,6 +69,7 @@ public class SimpleMonster {
         this.vulnerable = m.vulnerable;
         this.weak = m.weak;
         this.strength = m.strength;
+        this.isMinion = m.isMinion;
     }
 
     public SimpleMonster(int health, int block, AbstractMonster.Intent intent, int baseDamage, int hits) {
@@ -179,6 +184,10 @@ public class SimpleMonster {
      */
     public boolean isAlive() {
         return health > 0;
+    }
+
+    public boolean isMinion() {
+        return isMinion;
     }
 
     @Override
