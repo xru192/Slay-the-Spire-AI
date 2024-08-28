@@ -7,7 +7,7 @@ import newaimod.util.simulator.SimpleMonster;
 
 public class SimpleAwakenedOne extends SimpleMonster {
 
-    private boolean unawakened;
+    private final boolean unawakened;
     private boolean trulyDead;
 
     public SimpleAwakenedOne(AwakenedOne monster) {
@@ -26,8 +26,10 @@ public class SimpleAwakenedOne extends SimpleMonster {
         return trulyDead;
     }
 
-    public boolean isUnawakened() {
-        return unawakened;
+    @Override
+    protected void onLoseHealth() {
+        super.onLoseHealth();
+        trulyDead = !unawakened && health <= 0;
     }
 
     @Override
