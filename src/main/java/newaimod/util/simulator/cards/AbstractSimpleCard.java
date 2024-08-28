@@ -3,10 +3,11 @@ package newaimod.util.simulator.cards;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.SimpleMonster;
+import newaimod.util.simulator.exceptions.CombatlessCardException;
 
 public abstract class AbstractSimpleCard {
 
-    public final CombatSimulator simulator;  // the simulator this card belongs to
+    public final CombatSimulator simulator;  // the simulator this card can be played in, null if not in combat
     public final String cardID;
     public boolean targetsOne;  // whether this card targets a single monster (not multi/self/random target)
     public final AbstractCard.CardType type;
@@ -41,14 +42,17 @@ public abstract class AbstractSimpleCard {
     abstract public AbstractSimpleCard copy(CombatSimulator simulator);
 
     public final boolean meetsEnoughEnergy(int cost) {
+        if (simulator == null) throw new CombatlessCardException();
         return simulator.player.energy >= cost;
     }
 
     public final boolean meetsNotEntangled() {
+        if (simulator == null) throw new CombatlessCardException();
         return !simulator.player.isEntangled();
     }
 
     public final boolean meetsTargetable(SimpleMonster m) {
+        if (simulator == null) throw new CombatlessCardException();
         return m != null && m.isTargetable();
     }
 

@@ -70,6 +70,22 @@ public class CombatSimulator {
         return this;
     }
 
+    public CombatSimulator withPlayerEnergy(int energy) {
+        player.energy = energy;
+        return this;
+    }
+
+    public CombatSimulator withPlayerCard(AbstractSimpleCard card) {
+        AbstractSimpleCard cardCopy = card.copy(this);
+        player.hand.add(cardCopy);
+        return this;
+    }
+
+    public CombatSimulator withMonster(SimpleMonster monster) {
+        addMonster(monster);
+        return this;
+    }
+
     /**
      * Tries to modify the state of combat by playing the specified card with a specified target. Returns whether the
      * card was successfully played.
