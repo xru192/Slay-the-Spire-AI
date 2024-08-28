@@ -31,7 +31,7 @@ public class SimplePommelStrike extends AbstractSimpleCard {
 
     @Override
     public boolean canPlay(SimpleMonster target) {
-        return meetsTargetable(target) && meetsEnoughEnergy(cost) && meetsNotEntangled();
+        return meetsAlive(target) && meetsEnoughEnergy(cost) && meetsNotEntangled();
     }
 
     @Override

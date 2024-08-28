@@ -181,15 +181,6 @@ public class SimpleMonster {
         return health > 0;
     }
 
-    /**
-     * Returns whether this monster can be targeted. This is equivalent to whether it visibly has at least 1 health.
-     *
-     * @return whether this monster can be targeted
-     */
-    public boolean isTargetable() {
-        return health > 0;
-    }
-
     @Override
     public String toString() {
         return "SimpleMonster{" +

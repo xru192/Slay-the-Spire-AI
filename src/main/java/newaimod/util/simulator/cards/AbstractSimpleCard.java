@@ -51,9 +51,9 @@ public abstract class AbstractSimpleCard {
         return !simulator.player.isEntangled();
     }
 
-    public final boolean meetsTargetable(SimpleMonster m) {
+    public final boolean meetsAlive(SimpleMonster m) {
         if (simulator == null) throw new CombatlessCardException();
-        return m != null && m.isTargetable();
+        return m != null && m.isAlive();
     }
 
     @Override
