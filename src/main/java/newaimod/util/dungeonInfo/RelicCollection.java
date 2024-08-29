@@ -35,6 +35,21 @@ public class RelicCollection {
         return orderedRelics.contains(relic);
     }
 
+    /**
+     * Returns the value of the counter on the specified relic.
+     * Returns -1 if the relic is not present, or has no counter value.
+     *
+     * @param relic the relic to get the counter value for
+     * @return the counter on the specified relic
+     */
+    public int getCounter(RELIC relic) {
+        return orderedRelics.stream()
+                .filter(r -> r.name().equals(relic.name()))
+                .map(RELIC::getCounter)
+                .findFirst()
+                .orElse(-1);
+    }
+
     public enum RELIC {
         // Ironclad
         BURNING_BLOOD,
@@ -193,6 +208,29 @@ public class RelicCollection {
         THE_ABACUS,
         TOOLBOX,
         // Fallback
-        FILLER
+        FILLER;
+
+        private int counter;
+
+        RELIC() {
+            counter = -1;
+        }
+
+        public RELIC withCounter(int counter) {
+            setCounter(counter);
+            return this;
+        }
+
+        public int getCounter() {
+            return counter;
+        }
+
+        public void setCounter(int counter) {
+            this.counter = counter;
+        }
+
+        public void incrementCounter() {
+            counter += 1;
+        }
     }
 }

@@ -194,7 +194,7 @@ public class CombatSimulator {
      * @return whether the player is allowed to play cards
      */
     public boolean playerCanPlayCards() {
-        return countAliveMonsters() > 0;
+        return countAliveMonsters() > 0 && relicCollection.getCounter(RelicCollection.RELIC.VELVET_CHOKER) != 6;
     }
 
     /**
@@ -271,6 +271,8 @@ public class CombatSimulator {
     public static List<Future> calculateFutures(CombatSimulator startState) {
         List<Future> futures = new ArrayList<>();
         futures.add(new Future(new AutoPlayer.CombatMove(AutoPlayer.CombatMove.TYPE.PASS), startState));
+
+        if (!startState.playerCanPlayCards()) return futures;
 
         // Compute states we can reach by playing exactly one card
 
