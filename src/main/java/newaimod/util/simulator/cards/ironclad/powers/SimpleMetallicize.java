@@ -34,7 +34,7 @@ public class SimpleMetallicize extends AbstractSimpleCard {
 
     @Override
     public void play(SimpleMonster target) {
-        simulator.player.metallicize += this.magicNumber;
+        simulator.player.gainMetallicize(this.magicNumber);
         simulator.player.payForAndUseCard(this);
     }
 

@@ -46,20 +46,20 @@ public class RealDungeonInformationProvider implements DungeonInformationProvide
             currentPlayer.hand.add(currentState.convertCard(card));
         }
         currentPlayer.energy = CombatUtils.usableEnergy();
-        currentPlayer.strength = CombatUtils.amountOfPower(p, StrengthPower.POWER_ID);
-        currentPlayer.dexterity = CombatUtils.amountOfPower(p, DexterityPower.POWER_ID);
-        currentPlayer.weakened = p.hasPower(WeakPower.POWER_ID);
-        currentPlayer.frail = p.hasPower(FrailPower.POWER_ID);
-        currentPlayer.metallicize = CombatUtils.amountOfPower(p, MetallicizePower.POWER_ID);
-        currentPlayer.demonForm = CombatUtils.amountOfPower(p, DemonFormPower.POWER_ID);
-        currentPlayer.entangled = p.hasPower(EntanglePower.POWER_ID);
-        currentPlayer.vulnerable = p.hasPower(VulnerablePower.POWER_ID);
-        currentPlayer.noDraw = p.hasPower(NoDrawPower.POWER_ID);
-        currentPlayer.exhaustedSlimed = 0;
-        currentPlayer.cardsDrawnWith0Energy = 0;
-        currentPlayer.cardsDrawnWith1Energy = 0;
-        currentPlayer.cardsDrawnWith2Energy = 0;
-        currentPlayer.cardsDrawnWith3Energy = 0;
+        currentPlayer.setStrength(CombatUtils.amountOfPower(p, StrengthPower.POWER_ID));
+        currentPlayer.setDexterity(CombatUtils.amountOfPower(p, DexterityPower.POWER_ID));
+        currentPlayer.setWeakened(p.hasPower(WeakPower.POWER_ID));
+        currentPlayer.setFrail(p.hasPower(FrailPower.POWER_ID));
+        currentPlayer.setMetallicize(CombatUtils.amountOfPower(p, MetallicizePower.POWER_ID));
+        currentPlayer.setDemonForm(CombatUtils.amountOfPower(p, DemonFormPower.POWER_ID));
+        currentPlayer.setEntangled(p.hasPower(EntanglePower.POWER_ID));
+        currentPlayer.setVulnerable(p.hasPower(VulnerablePower.POWER_ID));
+        currentPlayer.setNoDraw(p.hasPower(NoDrawPower.POWER_ID));
+        currentPlayer.setExhaustedSlimed(0);
+        currentPlayer.setCardsDrawnWith0Energy(0);
+        currentPlayer.setCardsDrawnWith1Energy(0);
+        currentPlayer.setCardsDrawnWith2Energy(0);
+        currentPlayer.setCardsDrawnWith3Energy(0);
 
         for (AbstractMonster m : AbstractDungeon.getCurrRoom().monsters.monsters) {
             if (!m.isDeadOrEscaped()) {

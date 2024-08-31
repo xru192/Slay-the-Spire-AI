@@ -34,7 +34,7 @@ public class SimpleInflame extends AbstractSimpleCard {
 
     @Override
     public void play(SimpleMonster target) {
-        simulator.player.strength += this.magicNumber;
+        simulator.player.gainStrength(this.magicNumber);
         simulator.player.payForAndUseCard(this);
     }
 

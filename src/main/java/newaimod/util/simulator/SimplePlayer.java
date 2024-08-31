@@ -16,20 +16,20 @@ public class SimplePlayer {
     public int energy;
     public int health;
     public int block;
-    public int strength;
-    public int dexterity;
-    public boolean weakened;
-    public boolean frail;
-    public int metallicize;
-    public int demonForm;
-    public boolean entangled;
-    public boolean vulnerable;
-    public boolean noDraw;
-    public int exhaustedSlimed;
-    public int cardsDrawnWith0Energy;      // # cards drawn while player has at least 1 energy left (after simulator start)
-    public int cardsDrawnWith1Energy;      // # cards drawn while player has at least 1 energy left (after simulator start)
-    public int cardsDrawnWith2Energy;      // # cards drawn while player has at least 2 energy left (after simulator start)
-    public int cardsDrawnWith3Energy;      // # cards drawn while player has at least 3 energy left (after simulator start)
+    private int strength;
+    private int dexterity;
+    private boolean weakened;
+    private boolean frail;
+    private int metallicize;
+    private int demonForm;
+    private boolean entangled;
+    private boolean vulnerable;
+    private boolean noDraw;
+    private int exhaustedSlimed;
+    private int cardsDrawnWith0Energy;      // # cards drawn while player has at least 1 energy left (after simulator start)
+    private int cardsDrawnWith1Energy;      // # cards drawn while player has at least 1 energy left (after simulator start)
+    private int cardsDrawnWith2Energy;      // # cards drawn while player has at least 2 energy left (after simulator start)
+    private int cardsDrawnWith3Energy;      // # cards drawn while player has at least 3 energy left (after simulator start)
 
     /**
      * A "default" SimplePlayer. The default player has 80 health, 0 block, 3 energy, an empty hand, and no powers.
@@ -163,19 +163,6 @@ public class SimplePlayer {
     }
 
     /**
-     * Returns the number of Slimed cards this player has exhausted.
-     *
-     * @return the number of Slimed cards this player has exhausted
-     */
-    public int getExhaustedSlimed() {
-        return exhaustedSlimed;
-    }
-
-    public void gainNoDraw() {
-        noDraw = true;
-    }
-
-    /**
      * Have this player draw cards from the draw pile. If the source of draw is from a card, this method should be
      * called after the card is paid for.
      *
@@ -199,20 +186,154 @@ public class SimplePlayer {
 
     }
 
+    public int getEnergy() {
+        return energy;
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public int getBlock() {
+        return block;
+    }
+
+    public void setBlock(int block) {
+        this.block = block;
+    }
+
+    public int getStrength() {
+        return strength;
+    }
+
+    public void setStrength(int strength) {
+        this.strength = strength;
+    }
+
+    public void gainStrength(int strength) {
+        this.strength += strength;
+    }
+
+    public int getDexterity() {
+        return dexterity;
+    }
+
+    public void setDexterity(int dexterity) {
+        this.dexterity = dexterity;
+    }
+
+    public boolean isWeakened() {
+        return weakened;
+    }
+
+    public void setWeakened(boolean weakened) {
+        this.weakened = weakened;
+    }
+
+    public boolean isFrail() {
+        return frail;
+    }
+
+    public void setFrail(boolean frail) {
+        this.frail = frail;
+    }
+
+    public int getMetallicize() {
+        return metallicize;
+    }
+
+    public void setMetallicize(int metallicize) {
+        this.metallicize = metallicize;
+    }
+
+    public void gainMetallicize(int metallicize) {
+        this.metallicize += metallicize;
+    }
+
+    public int getDemonForm() {
+        return demonForm;
+    }
+
+    public void setDemonForm(int demonForm) {
+        this.demonForm = demonForm;
+    }
+
+    public void gainDemonForm(int demonForm) {
+        this.demonForm += demonForm;
+    }
+
+
+    public void setEntangled(boolean entangled) {
+        this.entangled = entangled;
+    }
+
+    public boolean isVulnerable() {
+        return vulnerable;
+    }
+
+    public void setVulnerable(boolean vulnerable) {
+        this.vulnerable = vulnerable;
+    }
+
+    public boolean hasNoDraw() {
+        return noDraw;
+    }
+
+    public void setNoDraw(boolean noDraw) {
+        this.noDraw = noDraw;
+    }
+
+    /**
+     * Returns the number of Slimed cards this player has exhausted.
+     *
+     * @return the number of Slimed cards this player has exhausted
+     */
+    public int getExhaustedSlimed() {
+        return exhaustedSlimed;
+    }
+
+    public void setExhaustedSlimed(int exhaustedSlimed) {
+        this.exhaustedSlimed = exhaustedSlimed;
+    }
+
     public int getCardsDrawnWith0Energy() {
         return cardsDrawnWith0Energy;
+    }
+
+    public void setCardsDrawnWith0Energy(int cardsDrawnWith0Energy) {
+        this.cardsDrawnWith0Energy = cardsDrawnWith0Energy;
     }
 
     public int getCardsDrawnWith1Energy() {
         return cardsDrawnWith1Energy;
     }
 
+    public void setCardsDrawnWith1Energy(int cardsDrawnWith1Energy) {
+        this.cardsDrawnWith1Energy = cardsDrawnWith1Energy;
+    }
+
     public int getCardsDrawnWith2Energy() {
         return cardsDrawnWith2Energy;
     }
 
+    public void setCardsDrawnWith2Energy(int cardsDrawnWith2Energy) {
+        this.cardsDrawnWith2Energy = cardsDrawnWith2Energy;
+    }
+
     public int getCardsDrawnWith3Energy() {
         return cardsDrawnWith3Energy;
+    }
+
+    public void setCardsDrawnWith3Energy(int cardsDrawnWith3Energy) {
+        this.cardsDrawnWith3Energy = cardsDrawnWith3Energy;
     }
 
     public boolean isEntangled() {

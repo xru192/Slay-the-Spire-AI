@@ -36,7 +36,7 @@ public class SimpleBattleTrance extends AbstractSimpleCard {
     public void play(SimpleMonster target) {
         simulator.player.payForAndUseCard(this);
         simulator.player.drawCards(this.magicNumber);
-        simulator.player.gainNoDraw();
+        simulator.player.setNoDraw(true);
     }
 
     @Override
