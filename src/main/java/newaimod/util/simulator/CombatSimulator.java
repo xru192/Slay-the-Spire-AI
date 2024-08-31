@@ -71,7 +71,7 @@ public class CombatSimulator {
     }
 
     public CombatSimulator withPlayerEnergy(int energy) {
-        player.energy = energy;
+        player.setEnergy(energy);
         return this;
     }
 
@@ -100,6 +100,7 @@ public class CombatSimulator {
         }
 
         card.play(target);
+        player.onUseCard(card);
         for (SimpleMonster m : monsterList) {
             m.onUseCard(card);
         }
@@ -216,8 +217,7 @@ public class CombatSimulator {
      * @return the health of the player
      */
     public int getPlayerHealth() {
-        assert player.health >= 0;
-        return player.health;
+        return player.getHealth();
     }
 
     /**

@@ -30,7 +30,7 @@ public class SimpleBodySlam extends AbstractSimpleCard {
 
     @Override
     public void play(SimpleMonster target) {
-        int playerModifiedDamage = simulator.player.getModifiedDamage(simulator.player.block);
+        int playerModifiedDamage = simulator.player.getModifiedDamage(simulator.player.getBlock());
         target.takeAttack(playerModifiedDamage);
         simulator.player.payForAndUseCard(this);
     }

@@ -38,8 +38,7 @@ public class SimpleIronWave extends AbstractSimpleCard {
     public void play(SimpleMonster target) {
         int playerModifiedDamage = simulator.player.getModifiedDamage(this.damage);
         target.takeAttack(playerModifiedDamage);
-        int playerModifiedBlock = simulator.player.getModifiedBlock(this.block);
-        simulator.player.block += playerModifiedBlock;
+        simulator.player.gainBlockFromCard(this.block);
         simulator.player.payForAndUseCard(this);
     }
 

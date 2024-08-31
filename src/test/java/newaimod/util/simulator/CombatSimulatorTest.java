@@ -42,7 +42,7 @@ class CombatSimulatorTest {
         player.hand.add(card);
         simulator.playCard(card, monster1);
         assertEquals(MONSTER_START_HEALTH - 8, monster1.health);
-        assertEquals(1, player.energy);
+        assertEquals(1, player.getEnergy());
         assertEquals(2, monster1.vulnerable);
     }
 
@@ -56,7 +56,7 @@ class CombatSimulatorTest {
         simulator.playCard(defend, null);
         simulator.playCard(bodySlam, monster1);
         assertEquals(MONSTER_START_HEALTH - 5, monster1.health);
-        assertEquals(1, player.energy);
+        assertEquals(1, player.getEnergy());
     }
 
     @Test
@@ -65,7 +65,7 @@ class CombatSimulatorTest {
         player.hand.add(card);
         simulator.playCard(card, monster1);
         assertEquals(MONSTER_START_HEALTH - 20, monster1.health);
-        assertEquals(1, player.energy);
+        assertEquals(1, player.getEnergy());
     }
 
     @Test
@@ -75,7 +75,7 @@ class CombatSimulatorTest {
         simulator.playCard(card, null);
         assertEquals(MONSTER_START_HEALTH - 8, monster1.health);
         assertEquals(MONSTER_START_HEALTH - 8, monster2.health);
-        assertEquals(2, player.energy);
+        assertEquals(2, player.getEnergy());
     }
 
     @Test
@@ -84,7 +84,7 @@ class CombatSimulatorTest {
         player.hand.add(card);
         simulator.playCard(card, monster2);
         assertEquals(MONSTER_START_HEALTH - 9, monster2.health);
-        assertEquals(2, player.energy);
+        assertEquals(2, player.getEnergy());
     }
 
     @Test
@@ -93,8 +93,8 @@ class CombatSimulatorTest {
         player.hand.add(card);
         simulator.playCard(card, monster1);
         assertEquals(MONSTER_START_HEALTH - 5, monster1.health);
-        assertEquals(5, player.block);
-        assertEquals(2, player.energy);
+        assertEquals(5, player.getBlock());
+        assertEquals(2, player.getEnergy());
     }
 
     @Test
@@ -107,7 +107,7 @@ class CombatSimulatorTest {
         assertEquals(1, player.getCardsDrawnWith1Energy());
         assertEquals(1, player.getCardsDrawnWith2Energy());
         assertEquals(0, player.getCardsDrawnWith3Energy());
-        assertEquals(2, player.energy);
+        assertEquals(2, player.getEnergy());
     }
 
     @Test
@@ -116,7 +116,7 @@ class CombatSimulatorTest {
         player.hand.add(card);
         simulator.playCard(card, monster1);
         assertEquals(MONSTER_START_HEALTH - 6, monster1.health);
-        assertEquals(2, player.energy);
+        assertEquals(2, player.getEnergy());
     }
 
     @Test
@@ -125,7 +125,7 @@ class CombatSimulatorTest {
         player.hand.add(card);
         simulator.playCard(card, monster1);
         assertEquals(MONSTER_START_HEALTH - 10, monster1.health);
-        assertEquals(2, player.energy);
+        assertEquals(2, player.getEnergy());
     }
 
     @Test
@@ -136,7 +136,7 @@ class CombatSimulatorTest {
         assertEquals(MONSTER_START_HEALTH - 13, monster1.health);
         assertEquals(1, monster1.vulnerable);
         assertEquals(1, monster1.weak);
-        assertEquals(2, player.energy);
+        assertEquals(2, player.getEnergy());
     }
 
     @Test
@@ -146,7 +146,7 @@ class CombatSimulatorTest {
         simulator.playCard(card, null);
         assertEquals(MONSTER_START_HEALTH - 15, monster1.health);
         assertEquals(MONSTER_START_HEALTH - 15, monster2.health);
-        assertEquals(0, player.energy);
+        assertEquals(0, player.getEnergy());
     }
 
     @Test
@@ -155,7 +155,7 @@ class CombatSimulatorTest {
         player.hand.add(card);
         simulator.playCard(card, null);
         assertEquals(2, player.getDemonForm());
-        assertEquals(0, player.energy);
+        assertEquals(0, player.getEnergy());
     }
 
     @Test
@@ -164,7 +164,7 @@ class CombatSimulatorTest {
         player.hand.add(card);
         simulator.playCard(card, null);
         assertEquals(2, player.getStrength());
-        assertEquals(2, player.energy);
+        assertEquals(2, player.getEnergy());
     }
 
     @Test
@@ -173,7 +173,7 @@ class CombatSimulatorTest {
         player.hand.add(card);
         simulator.playCard(card, null);
         assertEquals(3, player.getMetallicize());
-        assertEquals(2, player.energy);
+        assertEquals(2, player.getEnergy());
     }
 
     @Test
@@ -186,7 +186,7 @@ class CombatSimulatorTest {
         assertEquals(3, player.getCardsDrawnWith2Energy());
         assertEquals(3, player.getCardsDrawnWith3Energy());
         assertTrue(player.hasNoDraw());
-        assertEquals(3, player.energy);
+        assertEquals(3, player.getEnergy());
     }
 
     @Test
@@ -194,8 +194,8 @@ class CombatSimulatorTest {
         AbstractSimpleCard card = new SimpleDefend_Red(simulator, 1, false);
         player.hand.add(card);
         simulator.playCard(card, null);
-        assertEquals(5, player.block);
-        assertEquals(2, player.energy);
+        assertEquals(5, player.getBlock());
+        assertEquals(2, player.getEnergy());
     }
 
     @Test
@@ -203,8 +203,8 @@ class CombatSimulatorTest {
         AbstractSimpleCard card = new SimpleFlameBarrier(simulator, 2, false);
         player.hand.add(card);
         simulator.playCard(card, null);
-        assertEquals(12, player.block);
-        assertEquals(1, player.energy);
+        assertEquals(12, player.getBlock());
+        assertEquals(1, player.getEnergy());
     }
 
     @Test
@@ -212,11 +212,11 @@ class CombatSimulatorTest {
         AbstractSimpleCard card = new SimpleShrugItOff(simulator, 1, false);
         player.hand.add(card);
         simulator.playCard(card, null);
-        assertEquals(8, player.block);
+        assertEquals(8, player.getBlock());
         assertEquals(1, player.getCardsDrawnWith0Energy());
         assertEquals(1, player.getCardsDrawnWith1Energy());
         assertEquals(1, player.getCardsDrawnWith2Energy());
         assertEquals(0, player.getCardsDrawnWith3Energy());
-        assertEquals(2, player.energy);
+        assertEquals(2, player.getEnergy());
     }
 }

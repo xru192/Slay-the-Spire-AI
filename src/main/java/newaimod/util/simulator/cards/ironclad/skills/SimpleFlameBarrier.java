@@ -36,8 +36,7 @@ public class SimpleFlameBarrier extends AbstractSimpleCard {
 
     @Override
     public void play(SimpleMonster target) {
-        int modifiedBlock = simulator.player.getModifiedBlock(this.block);
-        simulator.player.block += modifiedBlock;
+        simulator.player.gainBlockFromCard(this.block);
         simulator.player.payForAndUseCard(this);
         // TODO secondary effect
     }

@@ -169,7 +169,7 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
         assert state.monsterList.size() == 1 && state.monsterList.get(0) instanceof SimpleTheGuardian;
         SimpleTheGuardian.MODE mode = ((SimpleTheGuardian) state.monsterList.get(0)).getMode();
         if (mode == SimpleTheGuardian.MODE.DEFENSIVE) {
-            if (state.player.health < 40) {
+            if (state.getPlayerHealth() < 40) {
                 evaluator.TMHw = -1.0 / 10;
             }
         }

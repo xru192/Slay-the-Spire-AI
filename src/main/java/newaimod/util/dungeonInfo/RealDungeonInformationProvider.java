@@ -40,12 +40,12 @@ public class RealDungeonInformationProvider implements DungeonInformationProvide
         SimplePlayer currentPlayer = currentState.player;
 
         AbstractPlayer p = AbstractDungeon.player;
-        currentPlayer.health = p.currentHealth;
-        currentPlayer.block = p.currentBlock;
+        currentPlayer.setHealth(p.currentHealth);
+        currentPlayer.setBlock(p.currentBlock);
         for (AbstractCard card : p.hand.group) {
             currentPlayer.hand.add(currentState.convertCard(card));
         }
-        currentPlayer.energy = CombatUtils.usableEnergy();
+        currentPlayer.setEnergy(CombatUtils.usableEnergy());
         currentPlayer.setStrength(CombatUtils.amountOfPower(p, StrengthPower.POWER_ID));
         currentPlayer.setDexterity(CombatUtils.amountOfPower(p, DexterityPower.POWER_ID));
         currentPlayer.setWeakened(p.hasPower(WeakPower.POWER_ID));

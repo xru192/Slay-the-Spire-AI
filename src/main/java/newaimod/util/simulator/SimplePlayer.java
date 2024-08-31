@@ -13,9 +13,9 @@ public class SimplePlayer {
     @NotNull
     public final CombatSimulator simulator;
     public ArrayList<AbstractSimpleCard> hand;
-    public int energy;
-    public int health;
-    public int block;
+    private int energy;
+    private int health;
+    private int block;
     private int strength;
     private int dexterity;
     private boolean weakened;
@@ -87,6 +87,13 @@ public class SimplePlayer {
         assert hand.contains(card);
         hand.remove(card);
         energy -= card.cost;
+    }
+
+    /**
+     * Trigger any powers or relics which occur on the player plays a card.
+     */
+    public void onUseCard(AbstractSimpleCard card) {
+        // TODO add relic effects
     }
 
     /**
@@ -208,6 +215,19 @@ public class SimplePlayer {
 
     public void setBlock(int block) {
         this.block = block;
+    }
+
+    /**
+     * Have this player gain block from a card. The amount of block will be affected by player powers.
+     *
+     * @param base the amount of block the card grants without any modifiers
+     */
+    public void gainBlockFromCard(int base) {
+        this.block += getModifiedBlock(base);
+    }
+
+    public void gainRawBlock(int block) {
+        this.block += block;
     }
 
     public int getStrength() {

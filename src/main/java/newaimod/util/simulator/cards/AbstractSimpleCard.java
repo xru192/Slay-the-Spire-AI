@@ -43,7 +43,7 @@ public abstract class AbstractSimpleCard {
 
     public final boolean meetsEnoughEnergy(int cost) {
         if (simulator == null) throw new CombatlessCardException();
-        return simulator.player.energy >= cost;
+        return simulator.player.getEnergy() >= cost;
     }
 
     public final boolean meetsNotEntangled() {
