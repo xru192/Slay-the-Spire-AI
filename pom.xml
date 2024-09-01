@@ -206,6 +206,36 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.12</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <!-- attached to Maven test phase -->
+                            <execution>
+                                <id>report</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <excludes>
+                                <exclude>communicationmod/**/*.class</exclude>
+                                <exclude>newaimod/actions/**/*.class</exclude>
+                                <exclude>newaimod/commands/**/*.class</exclude>
+                                <exclude>newaimod/properties/**/*.class</exclude>
+                                <exclude>newaimod/NewAIMod*.class</exclude>
+                                <exclude>newaimod/util/dungeonInfo/RealDungeonInformationProvider*.class</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
                 </plugins>
 
             </build>
