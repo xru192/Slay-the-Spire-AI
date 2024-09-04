@@ -69,7 +69,7 @@ public class NewAIMod implements
     private static int waitCounter = 0;
     private static boolean stateChanged = false;
 
-    public static int WAIT = 10;       // wait time (frames) between auto actions
+    public static int WAIT = 20;       // wait time (frames) between auto actions
     private AutoPlayer autoPlayer;
     public static AutoPlayer.CombatMove move = null;
     private static boolean creating = false;
