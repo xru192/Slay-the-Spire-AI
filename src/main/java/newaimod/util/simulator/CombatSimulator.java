@@ -253,6 +253,19 @@ public class CombatSimulator {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CombatSimulator)) return false;
+        CombatSimulator that = (CombatSimulator) o;
+        return Objects.equals(player, that.player) && Objects.equals(monsterList, that.monsterList) && Objects.equals(relicCollection, that.relicCollection);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(player, monsterList, relicCollection);
+    }
+
+    @Override
     public String toString() {
         return "CombatSimulator{" +
                 "player=" + player +
@@ -302,11 +315,20 @@ public class CombatSimulator {
             }
         }
 
+        HashSet<Future> seenFutures = new HashSet<>();
+
         // Compute states we can reach by playing multiple cards
         Queue<Future> queue = new ArrayDeque<>(firstStates);
         while (!queue.isEmpty()) {
             Future future = queue.poll();
+
+            if (seenFutures.contains(future)) {
+                continue;
+            }
+
             futures.add(future);
+            seenFutures.add(future);
+
             CombatSimulator thisState = future.state;
             if (!thisState.playerCanPlayCards()) {
                 continue;
@@ -342,6 +364,19 @@ public class CombatSimulator {
         Future(AutoPlayer.CombatMove move, CombatSimulator state) {
             this.move = move;
             this.state = state;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Future)) return false;
+            Future future = (Future) o;
+            return Objects.equals(state, future.state);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(state);
         }
 
         @Override

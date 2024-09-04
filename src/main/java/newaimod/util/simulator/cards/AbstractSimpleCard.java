@@ -5,6 +5,8 @@ import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.SimpleMonster;
 import newaimod.util.simulator.exceptions.CombatlessCardException;
 
+import java.util.Objects;
+
 public abstract class AbstractSimpleCard {
 
     public CombatSimulator simulator;  // the simulator this card can be played in, null if not in combat
@@ -55,6 +57,31 @@ public abstract class AbstractSimpleCard {
         if (simulator == null) throw new CombatlessCardException();
         return m != null && m.isAlive();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AbstractSimpleCard)) return false;
+        AbstractSimpleCard that = (AbstractSimpleCard) o;
+        // generally, two cards are equal iff they have the same upgrade status, cost, and name
+        return isUpgraded == that.isUpgraded && cost == that.cost && Objects.equals(cardID, that.cardID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cardID, isUpgraded, cost);
+    }
+
+    /**
+     * Returns a string for this card which is unique to instances of this card considered 'equal' to this one.
+     * For most cards, two cards are equal iff they have the same upgrade status, cost, and name.
+     *
+     * @return a string which uniquely identifies this card (and those equal to it)
+     */
+    public String toIdentifyingString() {
+        return cardID + isUpgraded + cost;
+    }
+
 
     @Override
     public String toString() {

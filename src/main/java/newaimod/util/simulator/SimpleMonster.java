@@ -13,6 +13,8 @@ import newaimod.util.simulator.cards.AbstractSimpleCard;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Objects;
+
 import static newaimod.util.CombatUtils.amountOfPower;
 import static newaimod.util.CombatUtils.isNotAttack;
 
@@ -188,6 +190,21 @@ public class SimpleMonster {
 
     public boolean isMinion() {
         return isMinion;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        // auto-generated, but omits comparison of CombatSimulator
+        if (this == o) return true;
+        if (!(o instanceof SimpleMonster)) return false;
+        SimpleMonster that = (SimpleMonster) o;
+        return maxHealth == that.maxHealth && health == that.health && block == that.block && intentBaseDamage == that.intentBaseDamage && intentHits == that.intentHits && vulnerable == that.vulnerable && weak == that.weak && strength == that.strength && isMinion == that.isMinion && Objects.equals(originalMonster, that.originalMonster) && intent == that.intent;
+    }
+
+    @Override
+    public int hashCode() {
+        // auto-generated, but omits CombatSimulator
+        return Objects.hash(maxHealth, health, block, originalMonster, intent, intentBaseDamage, intentHits, vulnerable, weak, strength, isMinion);
     }
 
     @Override

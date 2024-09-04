@@ -6,6 +6,10 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
 import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.SimpleMonster;
+import newaimod.util.simulator.cards.AbstractSimpleCard;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CombatUtils {
     /**
@@ -75,5 +79,25 @@ public class CombatUtils {
      */
     public static int amountOfPower(AbstractCreature c, String id) {
         return c.hasPower(id) ? c.getPower(id).amount : 0;
+    }
+
+    /**
+     * Returns whether two hands of cards contain the same multiset of cards.
+     *
+     * @return whether the specified hands contain the same cards
+     */
+    public static boolean handsEqual(List<AbstractSimpleCard> hand1, List<AbstractSimpleCard> hand2) {
+        List<String> sortedList1 = hand1.stream()
+                .map(AbstractSimpleCard::toIdentifyingString)
+                .sorted()
+                .collect(Collectors.toList());
+
+        List<String> sortedList2 = hand2.stream()
+                .map(AbstractSimpleCard::toIdentifyingString)
+                .sorted()
+                .collect(Collectors.toList());
+
+        // Compare the sorted lists
+        return sortedList1.equals(sortedList2);
     }
 }

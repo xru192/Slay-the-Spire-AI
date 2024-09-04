@@ -4,6 +4,9 @@ import newaimod.util.simulator.cards.AbstractSimpleCard;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Objects;
+
+import static newaimod.util.CombatUtils.handsEqual;
 
 /**
  * A SimplePlayer represents a simplified version of the state of the player during combat. This includes health, a
@@ -290,6 +293,9 @@ public class SimplePlayer {
         this.demonForm += demonForm;
     }
 
+    public boolean isEntangled() {
+        return entangled;
+    }
 
     public void setEntangled(boolean entangled) {
         this.entangled = entangled;
@@ -356,10 +362,21 @@ public class SimplePlayer {
         this.cardsDrawnWith3Energy = cardsDrawnWith3Energy;
     }
 
-    public boolean isEntangled() {
-        return entangled;
+    @Override
+    public boolean equals(Object o) {
+        // auto-generated, but omits comparison of CombatSimulator and uses custom comparison for hands
+        if (this == o) return true;
+        if (!(o instanceof SimplePlayer)) return false;
+        SimplePlayer that = (SimplePlayer) o;
+        return energy == that.energy && health == that.health && block == that.block && strength == that.strength && dexterity == that.dexterity && weakened == that.weakened && frail == that.frail && metallicize == that.metallicize && demonForm == that.demonForm && entangled == that.entangled && vulnerable == that.vulnerable && noDraw == that.noDraw && exhaustedSlimed == that.exhaustedSlimed && cardsDrawnWith0Energy == that.cardsDrawnWith0Energy && cardsDrawnWith1Energy == that.cardsDrawnWith1Energy && cardsDrawnWith2Energy == that.cardsDrawnWith2Energy && cardsDrawnWith3Energy == that.cardsDrawnWith3Energy
+                && handsEqual(hand, that.hand);
     }
 
+    @Override
+    public int hashCode() {
+        // auto-generated, but omits CombatSimulator
+        return Objects.hash(hand, energy, health, block, strength, dexterity, weakened, frail, metallicize, demonForm, entangled, vulnerable, noDraw, exhaustedSlimed, cardsDrawnWith0Energy, cardsDrawnWith1Energy, cardsDrawnWith2Energy, cardsDrawnWith3Energy);
+    }
 
     @Override
     public String toString() {

@@ -2,6 +2,7 @@ package newaimod.util.dungeonInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A RelicCollection represents the list of relics that the player possesses during a run.
@@ -48,6 +49,19 @@ public class RelicCollection {
                 .map(RELIC::getCounter)
                 .findFirst()
                 .orElse(-1);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RelicCollection)) return false;
+        RelicCollection that = (RelicCollection) o;
+        return Objects.equals(orderedRelics, that.orderedRelics);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(orderedRelics);
     }
 
     public enum RELIC {
