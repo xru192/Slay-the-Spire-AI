@@ -36,7 +36,7 @@ public class SimpleWhirlwind extends AbstractSimpleCard {
     @Override
     public void play(SimpleMonster target) {
         int playerModifiedDamage = simulator.player.getModifiedDamage(this.damage);
-        int energy = simulator.player.energy;
+        int energy = simulator.player.getEnergy();
         for (int i = 0; i < energy; ++i) {
             for (SimpleMonster m : simulator.monsterList) {
                 if (m.isAlive()) {
@@ -44,7 +44,7 @@ public class SimpleWhirlwind extends AbstractSimpleCard {
                 }
             }
         }
-        simulator.player.energy -= energy;
+        simulator.player.setEnergy(0);
         simulator.player.payForAndUseCard(this);
     }
 

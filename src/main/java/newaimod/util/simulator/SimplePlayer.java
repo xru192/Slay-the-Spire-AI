@@ -4,6 +4,9 @@ import newaimod.util.simulator.cards.AbstractSimpleCard;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Objects;
+
+import static newaimod.util.CombatUtils.handsEqual;
 
 /**
  * A SimplePlayer represents a simplified version of the state of the player during combat. This includes health, a
@@ -13,23 +16,23 @@ public class SimplePlayer {
     @NotNull
     public final CombatSimulator simulator;
     public ArrayList<AbstractSimpleCard> hand;
-    public int energy;
-    public int health;
-    public int block;
-    public int strength;
-    public int dexterity;
-    public boolean weakened;
-    public boolean frail;
-    public int metallicize;
-    public int demonForm;
-    public boolean entangled;
-    public boolean vulnerable;
-    public boolean noDraw;
-    public int exhaustedSlimed;
-    public int cardsDrawnWith0Energy;      // # cards drawn while player has at least 1 energy left (after simulator start)
-    public int cardsDrawnWith1Energy;      // # cards drawn while player has at least 1 energy left (after simulator start)
-    public int cardsDrawnWith2Energy;      // # cards drawn while player has at least 2 energy left (after simulator start)
-    public int cardsDrawnWith3Energy;      // # cards drawn while player has at least 3 energy left (after simulator start)
+    private int energy;
+    private int health;
+    private int block;
+    private int strength;
+    private int dexterity;
+    private boolean weakened;
+    private boolean frail;
+    private int metallicize;
+    private int demonForm;
+    private boolean entangled;
+    private boolean vulnerable;
+    private boolean noDraw;
+    private int exhaustedSlimed;
+    private int cardsDrawnWith0Energy;      // # cards drawn while player has at least 1 energy left (after simulator start)
+    private int cardsDrawnWith1Energy;      // # cards drawn while player has at least 1 energy left (after simulator start)
+    private int cardsDrawnWith2Energy;      // # cards drawn while player has at least 2 energy left (after simulator start)
+    private int cardsDrawnWith3Energy;      // # cards drawn while player has at least 3 energy left (after simulator start)
 
     /**
      * A "default" SimplePlayer. The default player has 80 health, 0 block, 3 energy, an empty hand, and no powers.
@@ -87,6 +90,13 @@ public class SimplePlayer {
         assert hand.contains(card);
         hand.remove(card);
         energy -= card.cost;
+    }
+
+    /**
+     * Trigger any powers or relics which occur on the player plays a card.
+     */
+    public void onUseCard(AbstractSimpleCard card) {
+        // TODO add relic effects
     }
 
     /**
@@ -163,19 +173,6 @@ public class SimplePlayer {
     }
 
     /**
-     * Returns the number of Slimed cards this player has exhausted.
-     *
-     * @return the number of Slimed cards this player has exhausted
-     */
-    public int getExhaustedSlimed() {
-        return exhaustedSlimed;
-    }
-
-    public void gainNoDraw() {
-        noDraw = true;
-    }
-
-    /**
      * Have this player draw cards from the draw pile. If the source of draw is from a card, this method should be
      * called after the card is paid for.
      *
@@ -199,26 +196,187 @@ public class SimplePlayer {
 
     }
 
-    public int getCardsDrawnWith0Energy() {
-        return cardsDrawnWith0Energy;
+    public int getEnergy() {
+        return energy;
     }
 
-    public int getCardsDrawnWith1Energy() {
-        return cardsDrawnWith1Energy;
+    public void setEnergy(int energy) {
+        this.energy = energy;
     }
 
-    public int getCardsDrawnWith2Energy() {
-        return cardsDrawnWith2Energy;
+    public int getHealth() {
+        return health;
     }
 
-    public int getCardsDrawnWith3Energy() {
-        return cardsDrawnWith3Energy;
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public int getBlock() {
+        return block;
+    }
+
+    public void setBlock(int block) {
+        this.block = block;
+    }
+
+    /**
+     * Have this player gain block from a card. The amount of block will be affected by player powers.
+     *
+     * @param base the amount of block the card grants without any modifiers
+     */
+    public void gainBlockFromCard(int base) {
+        this.block += getModifiedBlock(base);
+    }
+
+    public void gainRawBlock(int block) {
+        this.block += block;
+    }
+
+    public int getStrength() {
+        return strength;
+    }
+
+    public void setStrength(int strength) {
+        this.strength = strength;
+    }
+
+    public void gainStrength(int strength) {
+        this.strength += strength;
+    }
+
+    public int getDexterity() {
+        return dexterity;
+    }
+
+    public void setDexterity(int dexterity) {
+        this.dexterity = dexterity;
+    }
+
+    public boolean isWeakened() {
+        return weakened;
+    }
+
+    public void setWeakened(boolean weakened) {
+        this.weakened = weakened;
+    }
+
+    public boolean isFrail() {
+        return frail;
+    }
+
+    public void setFrail(boolean frail) {
+        this.frail = frail;
+    }
+
+    public int getMetallicize() {
+        return metallicize;
+    }
+
+    public void setMetallicize(int metallicize) {
+        this.metallicize = metallicize;
+    }
+
+    public void gainMetallicize(int metallicize) {
+        this.metallicize += metallicize;
+    }
+
+    public int getDemonForm() {
+        return demonForm;
+    }
+
+    public void setDemonForm(int demonForm) {
+        this.demonForm = demonForm;
+    }
+
+    public void gainDemonForm(int demonForm) {
+        this.demonForm += demonForm;
     }
 
     public boolean isEntangled() {
         return entangled;
     }
 
+    public void setEntangled(boolean entangled) {
+        this.entangled = entangled;
+    }
+
+    public boolean isVulnerable() {
+        return vulnerable;
+    }
+
+    public void setVulnerable(boolean vulnerable) {
+        this.vulnerable = vulnerable;
+    }
+
+    public boolean hasNoDraw() {
+        return noDraw;
+    }
+
+    public void setNoDraw(boolean noDraw) {
+        this.noDraw = noDraw;
+    }
+
+    /**
+     * Returns the number of Slimed cards this player has exhausted.
+     *
+     * @return the number of Slimed cards this player has exhausted
+     */
+    public int getExhaustedSlimed() {
+        return exhaustedSlimed;
+    }
+
+    public void setExhaustedSlimed(int exhaustedSlimed) {
+        this.exhaustedSlimed = exhaustedSlimed;
+    }
+
+    public int getCardsDrawnWith0Energy() {
+        return cardsDrawnWith0Energy;
+    }
+
+    public void setCardsDrawnWith0Energy(int cardsDrawnWith0Energy) {
+        this.cardsDrawnWith0Energy = cardsDrawnWith0Energy;
+    }
+
+    public int getCardsDrawnWith1Energy() {
+        return cardsDrawnWith1Energy;
+    }
+
+    public void setCardsDrawnWith1Energy(int cardsDrawnWith1Energy) {
+        this.cardsDrawnWith1Energy = cardsDrawnWith1Energy;
+    }
+
+    public int getCardsDrawnWith2Energy() {
+        return cardsDrawnWith2Energy;
+    }
+
+    public void setCardsDrawnWith2Energy(int cardsDrawnWith2Energy) {
+        this.cardsDrawnWith2Energy = cardsDrawnWith2Energy;
+    }
+
+    public int getCardsDrawnWith3Energy() {
+        return cardsDrawnWith3Energy;
+    }
+
+    public void setCardsDrawnWith3Energy(int cardsDrawnWith3Energy) {
+        this.cardsDrawnWith3Energy = cardsDrawnWith3Energy;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        // auto-generated, but omits comparison of CombatSimulator and uses custom comparison for hands
+        if (this == o) return true;
+        if (!(o instanceof SimplePlayer)) return false;
+        SimplePlayer that = (SimplePlayer) o;
+        return energy == that.energy && health == that.health && block == that.block && strength == that.strength && dexterity == that.dexterity && weakened == that.weakened && frail == that.frail && metallicize == that.metallicize && demonForm == that.demonForm && entangled == that.entangled && vulnerable == that.vulnerable && noDraw == that.noDraw && exhaustedSlimed == that.exhaustedSlimed && cardsDrawnWith0Energy == that.cardsDrawnWith0Energy && cardsDrawnWith1Energy == that.cardsDrawnWith1Energy && cardsDrawnWith2Energy == that.cardsDrawnWith2Energy && cardsDrawnWith3Energy == that.cardsDrawnWith3Energy
+                && handsEqual(hand, that.hand);
+    }
+
+    @Override
+    public int hashCode() {
+        // auto-generated, but omits CombatSimulator
+        return Objects.hash(hand, energy, health, block, strength, dexterity, weakened, frail, metallicize, demonForm, entangled, vulnerable, noDraw, exhaustedSlimed, cardsDrawnWith0Energy, cardsDrawnWith1Energy, cardsDrawnWith2Energy, cardsDrawnWith3Energy);
+    }
 
     @Override
     public String toString() {

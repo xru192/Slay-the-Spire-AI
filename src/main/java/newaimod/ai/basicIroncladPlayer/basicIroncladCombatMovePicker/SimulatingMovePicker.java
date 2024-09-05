@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.cards.red.Metallicize;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import newaimod.ai.AbstractCombatMovePicker;
 import newaimod.ai.AutoPlayer;
-import newaimod.util.DungeonInformationManager;
+import newaimod.util.dungeonInfo.DungeonInformationProvider;
 import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.CombatSimulator.Future;
 import newaimod.ai.AutoPlayer.CombatMove;
@@ -22,31 +22,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimulatingMovePicker extends AbstractCombatMovePicker {
+    public static boolean doLogging = true;
     public static final Logger logger = LogManager.getLogger(SimulatingMovePicker.class.getName());
 
+    public SimulatingMovePicker(DungeonInformationProvider dungeonInformationProvider) {
+        super(dungeonInformationProvider);
+    }
+
     @Override
-    public AutoPlayer.CombatMove pickMoveDefault() {
-        logger.info("Picking move (default)");
+    protected AutoPlayer.CombatMove pickMoveDefault() {
+        if (doLogging) logger.info("Picking move (default)");
         return pickMoveUsingEval(new BasicStateEvaluator());
     }
 
 
     @Override
     protected CombatMove pickMoveGremlinNob() {
-        logger.info("Picking move (Gremlin Nob)");
+        if (doLogging) logger.info("Picking move (Gremlin Nob)");
         return pickMoveUsingEval(this::evalStateGremlinNob);
     }
 
     @Override
     protected CombatMove pickMoveLagavulin() {
-        logger.info("Picking move (Lagavulin)");
+        if (doLogging) logger.info("Picking move (Lagavulin)");
         return pickMoveUsingEval(this::evalStateLagavulin);
     }
 
     @Override
     protected CombatMove pickMove3Sentries() {
         BasicStateEvaluator evaluator = new BasicStateEvaluator();
-        CombatSimulator current = DungeonInformationManager.getInstance().getCurrentState();
+        CombatSimulator current = dungeonInformationProvider.getCurrentState();
         if (current.countAliveMonsters() == 3) {
             evaluator.TMHw = -2.0 / 3;
         }
@@ -55,18 +60,18 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
 
     @Override
     protected CombatMove pickMoveSlimeBoss() {
-        logger.info("Picking move (Slime Boss)");
+        if (doLogging) logger.info("Picking move (Slime Boss)");
         return pickMoveUsingEval(this::evalStateSlimeBoss);
     }
 
     @Override
     protected CombatMove pickMoveTheGuardian() {
-        logger.info("Picking move (The Guardian)");
+        if (doLogging) logger.info("Picking move (The Guardian)");
         return pickMoveUsingEval(this::evalStateTheGuardian);
     }
 
     private AutoPlayer.CombatMove pickMoveUsingEval(StateEvaluator evaluator) {
-        CombatSimulator currentState = DungeonInformationManager.getInstance().getCurrentState();
+        CombatSimulator currentState = dungeonInformationProvider.getCurrentState();
         List<Future> endStates = CombatSimulator.calculateFutures(currentState);
 
         double bestEval = -100000;
@@ -80,9 +85,11 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
                 bestState = future.state;
             }
         }
-        logger.info("Best move: " + bestMove);
-        logger.info("Best state: " + bestState);
-        logger.info("Best eval: " + bestEval);
+        if (doLogging) {
+            logger.info("Best move: {}", bestMove);
+            logger.info("Best state: {}", bestState);
+            logger.info("Best eval: {}", bestEval);
+        }
         assert bestState != null;
 
         return bestMove;
@@ -160,9 +167,9 @@ public class SimulatingMovePicker extends AbstractCombatMovePicker {
         BasicStateEvaluator evaluator = new BasicStateEvaluator();
 
         assert state.monsterList.size() == 1 && state.monsterList.get(0) instanceof SimpleTheGuardian;
-        SimpleTheGuardian.MODE mode = ((SimpleTheGuardian)state.monsterList.get(0)).getMode();
+        SimpleTheGuardian.MODE mode = ((SimpleTheGuardian) state.monsterList.get(0)).getMode();
         if (mode == SimpleTheGuardian.MODE.DEFENSIVE) {
-            if (state.player.health < 40) {
+            if (state.getPlayerHealth() < 40) {
                 evaluator.TMHw = -1.0 / 10;
             }
         }

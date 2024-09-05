@@ -2,6 +2,7 @@ package newaimod.ai.basicIroncladPlayer;
 
 import newaimod.ai.*;
 import newaimod.ai.basicIroncladPlayer.basicIroncladCombatMovePicker.SimulatingMovePicker;
+import newaimod.util.dungeonInfo.RealDungeonInformationProvider;
 
 public class BasicIroncladPlayer implements AutoPlayer {
 
@@ -28,7 +29,7 @@ public class BasicIroncladPlayer implements AutoPlayer {
         bossRewardPlayer = new BasicIroncladBossRewardPlayer();
         gridPlayer = new BasicIroncladGridPlayer();
         handSelectPlayer = new BasicIroncladHandSelectPlayer();
-        combatPlayer = new SimulatingMovePicker();
+        combatPlayer = new SimulatingMovePicker(RealDungeonInformationProvider.getInstance());
     }
 
     @Override

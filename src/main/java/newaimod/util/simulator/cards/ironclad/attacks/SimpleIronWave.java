@@ -31,15 +31,14 @@ public class SimpleIronWave extends AbstractSimpleCard {
 
     @Override
     public boolean canPlay(SimpleMonster target) {
-        return meetsTargetable(target) && meetsEnoughEnergy(cost) && meetsNotEntangled();
+        return meetsAlive(target) && meetsEnoughEnergy(cost) && meetsNotEntangled();
     }
 
     @Override
     public void play(SimpleMonster target) {
         int playerModifiedDamage = simulator.player.getModifiedDamage(this.damage);
         target.takeAttack(playerModifiedDamage);
-        int playerModifiedBlock = simulator.player.getModifiedBlock(this.block);
-        simulator.player.block += playerModifiedBlock;
+        simulator.player.gainBlockFromCard(this.block);
         simulator.player.payForAndUseCard(this);
     }
 

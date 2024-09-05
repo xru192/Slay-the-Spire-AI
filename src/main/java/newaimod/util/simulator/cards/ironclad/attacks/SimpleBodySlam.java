@@ -25,12 +25,12 @@ public class SimpleBodySlam extends AbstractSimpleCard {
 
     @Override
     public boolean canPlay(SimpleMonster target) {
-        return meetsTargetable(target) && meetsEnoughEnergy(cost) && meetsNotEntangled();
+        return meetsAlive(target) && meetsEnoughEnergy(cost) && meetsNotEntangled();
     }
 
     @Override
     public void play(SimpleMonster target) {
-        int playerModifiedDamage = simulator.player.getModifiedDamage(simulator.player.block);
+        int playerModifiedDamage = simulator.player.getModifiedDamage(simulator.player.getBlock());
         target.takeAttack(playerModifiedDamage);
         simulator.player.payForAndUseCard(this);
     }

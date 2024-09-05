@@ -29,7 +29,7 @@ public class TemplateSkill extends AbstractSimpleCard {
     @Override
     public boolean canPlay(SimpleMonster target) {
         // TODO depends on TARGETSONE
-//        return meetsTargetable(target) && meetsEnoughEnergy(this.cost);
+//        return meetsAlive(target) && meetsEnoughEnergy(this.cost);
         return meetsEnoughEnergy(this.cost);
     }
 

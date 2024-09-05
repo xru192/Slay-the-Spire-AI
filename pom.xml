@@ -20,7 +20,7 @@
 
     <!-- This information will be displayed in ModTheSpire, the modded launcher. -->
     <name>New STS AI</name>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <!-- Avoid using \ in this description, as they can cause the description to fail to load. -->
     <!-- If you really want to use them, you'll need to "escape" them by putting another one in front, like \\ -->
     <description>Adds AI gameplay.</description>
@@ -205,6 +205,36 @@
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.12</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <!-- attached to Maven test phase -->
+                            <execution>
+                                <id>report</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <excludes>
+                                <exclude>communicationmod/**/*.class</exclude>
+                                <exclude>newaimod/actions/**/*.class</exclude>
+                                <exclude>newaimod/commands/**/*.class</exclude>
+                                <exclude>newaimod/properties/**/*.class</exclude>
+                                <exclude>newaimod/NewAIMod*.class</exclude>
+                                <exclude>newaimod/util/dungeonInfo/RealDungeonInformationProvider*.class</exclude>
+                            </excludes>
+                        </configuration>
                     </plugin>
                 </plugins>
 

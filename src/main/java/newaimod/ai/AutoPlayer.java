@@ -2,6 +2,8 @@ package newaimod.ai;
 
 import newaimod.util.simulator.SimpleMonster;
 
+import java.util.Objects;
+
 /**
  * An AutoPlayer implements functionality to progress the game at any point.
  */
@@ -91,6 +93,19 @@ public interface AutoPlayer {
             if (t != TYPE.PASS) {
                 throw new IllegalArgumentException("Not enough Move information.");
             }
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof CombatMove)) return false;
+            CombatMove that = (CombatMove) o;
+            return index == that.index && type == that.type && Objects.equals(target, that.target);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(type, index, target);
         }
 
         @Override

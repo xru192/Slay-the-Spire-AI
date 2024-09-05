@@ -34,7 +34,7 @@ public class SimpleDemonForm extends AbstractSimpleCard {
 
     @Override
     public void play(SimpleMonster target) {
-        simulator.player.demonForm += this.magicNumber;
+        simulator.player.gainDemonForm(this.magicNumber);
         simulator.player.payForAndUseCard(this);
     }
 

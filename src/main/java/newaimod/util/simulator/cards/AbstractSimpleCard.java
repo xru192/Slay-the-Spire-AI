@@ -3,10 +3,13 @@ package newaimod.util.simulator.cards;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.SimpleMonster;
+import newaimod.util.simulator.exceptions.CombatlessCardException;
+
+import java.util.Objects;
 
 public abstract class AbstractSimpleCard {
 
-    public final CombatSimulator simulator;  // the simulator this card belongs to
+    public CombatSimulator simulator;  // the simulator this card can be played in, null if not in combat
     public final String cardID;
     public boolean targetsOne;  // whether this card targets a single monster (not multi/self/random target)
     public final AbstractCard.CardType type;
@@ -41,16 +44,44 @@ public abstract class AbstractSimpleCard {
     abstract public AbstractSimpleCard copy(CombatSimulator simulator);
 
     public final boolean meetsEnoughEnergy(int cost) {
-        return simulator.player.energy >= cost;
+        if (simulator == null) throw new CombatlessCardException();
+        return simulator.player.getEnergy() >= cost;
     }
 
     public final boolean meetsNotEntangled() {
+        if (simulator == null) throw new CombatlessCardException();
         return !simulator.player.isEntangled();
     }
 
-    public final boolean meetsTargetable(SimpleMonster m) {
-        return m != null && m.isTargetable();
+    public final boolean meetsAlive(SimpleMonster m) {
+        if (simulator == null) throw new CombatlessCardException();
+        return m != null && m.isAlive();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AbstractSimpleCard)) return false;
+        AbstractSimpleCard that = (AbstractSimpleCard) o;
+        // generally, two cards are equal iff they have the same upgrade status, cost, and name
+        return isUpgraded == that.isUpgraded && cost == that.cost && Objects.equals(cardID, that.cardID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cardID, isUpgraded, cost);
+    }
+
+    /**
+     * Returns a string for this card which is unique to instances of this card considered 'equal' to this one.
+     * For most cards, two cards are equal iff they have the same upgrade status, cost, and name.
+     *
+     * @return a string which uniquely identifies this card (and those equal to it)
+     */
+    public String toIdentifyingString() {
+        return cardID + isUpgraded + cost;
+    }
+
 
     @Override
     public String toString() {

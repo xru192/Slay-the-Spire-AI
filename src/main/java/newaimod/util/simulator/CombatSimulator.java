@@ -3,12 +3,9 @@ package newaimod.util.simulator;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.red.*;
 import com.megacrit.cardcrawl.cards.status.Slimed;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.MonsterHelper;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.monsters.beyond.AwakenedOne;
 import com.megacrit.cardcrawl.monsters.city.SphericGuardian;
 import newaimod.ai.AutoPlayer;
+import newaimod.util.dungeonInfo.RelicCollection;
 import newaimod.util.simulator.cards.AbstractSimpleCard;
 import newaimod.util.simulator.cards.Filler;
 import newaimod.util.simulator.cards.ironclad.attacks.*;
@@ -17,14 +14,12 @@ import newaimod.util.simulator.cards.ironclad.powers.SimpleInflame;
 import newaimod.util.simulator.cards.ironclad.powers.SimpleMetallicize;
 import newaimod.util.simulator.cards.ironclad.skills.*;
 import newaimod.util.simulator.cards.neutral.status.SimpleSlimed;
+import newaimod.util.simulator.monsters.SimpleAwakenedOne;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 
 /**
@@ -38,6 +33,8 @@ public class CombatSimulator {
     public final SimplePlayer player;
     @NotNull
     public final List<SimpleMonster> monsterList;
+    @NotNull
+    public final RelicCollection relicCollection;
 
     /**
      * CombatSimulator which represents a "default" state. The default state has a "default" player and no monsters.
@@ -45,6 +42,13 @@ public class CombatSimulator {
     public CombatSimulator() {
         player = new SimplePlayer(this);
         monsterList = new ArrayList<>();
+        relicCollection = new RelicCollection();
+    }
+
+    public CombatSimulator(List<RelicCollection.RELIC> relics) {
+        player = new SimplePlayer(this);
+        monsterList = new ArrayList<>();
+        relicCollection = new RelicCollection(relics);
     }
 
     /**
@@ -58,6 +62,28 @@ public class CombatSimulator {
         for (SimpleMonster m : simulator.monsterList) {
             monsterList.add(m.copy(this));
         }
+        relicCollection = new RelicCollection(simulator.relicCollection);
+    }
+
+    public CombatSimulator withRelic(RelicCollection.RELIC relic) {
+        relicCollection.add(relic);
+        return this;
+    }
+
+    public CombatSimulator withPlayerEnergy(int energy) {
+        player.setEnergy(energy);
+        return this;
+    }
+
+    public CombatSimulator withPlayerCard(AbstractSimpleCard card) {
+        player.hand.add(card);
+        card.simulator = this;
+        return this;
+    }
+
+    public CombatSimulator withMonster(SimpleMonster monster) {
+        addMonster(monster);
+        return this;
     }
 
     /**
@@ -74,6 +100,7 @@ public class CombatSimulator {
         }
 
         card.play(target);
+        player.onUseCard(card);
         for (SimpleMonster m : monsterList) {
             m.onUseCard(card);
         }
@@ -168,7 +195,7 @@ public class CombatSimulator {
      * @return whether the player is allowed to play cards
      */
     public boolean playerCanPlayCards() {
-        return countAliveMonsters() > 0;
+        return countAliveMonsters() > 0 && relicCollection.getCounter(RelicCollection.RELIC.VELVET_CHOKER) != 6;
     }
 
     /**
@@ -178,13 +205,9 @@ public class CombatSimulator {
      * @return whether the combat is over
      */
     public boolean combatOver() {
-        if (AbstractDungeon.lastCombatMetricKey.equals(MonsterHelper.AWAKENED_ENC)) {
-            assert AbstractDungeon.getCurrRoom().monsters.monsters.size() == 3;
-            AbstractMonster m = AbstractDungeon.getCurrRoom().monsters.monsters.get(2);
-            assert m instanceof AwakenedOne;
-            return countAliveMonsters() == 0 && !m.halfDead;
-        }
-        return countAliveMonsters() == 0;
+        return monsterList.stream()
+                .noneMatch(m -> m.isAlive() && !m.isMinion()
+                        || m instanceof SimpleAwakenedOne && !((SimpleAwakenedOne) m).isTrulyDead());
     }
 
     /**
@@ -194,8 +217,7 @@ public class CombatSimulator {
      * @return the health of the player
      */
     public int getPlayerHealth() {
-        assert player.health >= 0;
-        return player.health;
+        return player.getHealth();
     }
 
     /**
@@ -231,6 +253,19 @@ public class CombatSimulator {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CombatSimulator)) return false;
+        CombatSimulator that = (CombatSimulator) o;
+        return Objects.equals(player, that.player) && Objects.equals(monsterList, that.monsterList) && Objects.equals(relicCollection, that.relicCollection);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(player, monsterList, relicCollection);
+    }
+
+    @Override
     public String toString() {
         return "CombatSimulator{" +
                 "player=" + player +
@@ -249,6 +284,8 @@ public class CombatSimulator {
     public static List<Future> calculateFutures(CombatSimulator startState) {
         List<Future> futures = new ArrayList<>();
         futures.add(new Future(new AutoPlayer.CombatMove(AutoPlayer.CombatMove.TYPE.PASS), startState));
+
+        if (!startState.playerCanPlayCards()) return futures;
 
         // Compute states we can reach by playing exactly one card
 
@@ -278,11 +315,20 @@ public class CombatSimulator {
             }
         }
 
+        HashSet<Future> seenFutures = new HashSet<>();
+
         // Compute states we can reach by playing multiple cards
         Queue<Future> queue = new ArrayDeque<>(firstStates);
         while (!queue.isEmpty()) {
             Future future = queue.poll();
+
+            if (seenFutures.contains(future)) {
+                continue;
+            }
+
             futures.add(future);
+            seenFutures.add(future);
+
             CombatSimulator thisState = future.state;
             if (!thisState.playerCanPlayCards()) {
                 continue;
@@ -318,6 +364,19 @@ public class CombatSimulator {
         Future(AutoPlayer.CombatMove move, CombatSimulator state) {
             this.move = move;
             this.state = state;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Future)) return false;
+            Future future = (Future) o;
+            return Objects.equals(state, future.state);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(state);
         }
 
         @Override

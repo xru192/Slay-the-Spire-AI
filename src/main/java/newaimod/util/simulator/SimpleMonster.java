@@ -3,6 +3,7 @@ package newaimod.util.simulator;
 import basemod.ReflectionHacks;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.EnemyMoveInfo;
+import com.megacrit.cardcrawl.powers.MinionPower;
 import com.megacrit.cardcrawl.powers.StrengthPower;
 import com.megacrit.cardcrawl.powers.VulnerablePower;
 import com.megacrit.cardcrawl.powers.WeakPower;
@@ -11,6 +12,8 @@ import newaimod.util.CombatUtils;
 import newaimod.util.simulator.cards.AbstractSimpleCard;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Objects;
 
 import static newaimod.util.CombatUtils.amountOfPower;
 import static newaimod.util.CombatUtils.isNotAttack;
@@ -35,6 +38,8 @@ public class SimpleMonster {
     public int weak;
     protected int strength;
 
+    private boolean isMinion;
+
     /**
      * SimpleMonster which represents the current state of the specified AbstractMonster in combat.
      */
@@ -51,6 +56,7 @@ public class SimpleMonster {
         vulnerable = amountOfPower(monster, VulnerablePower.POWER_ID);
         weak = amountOfPower(monster, WeakPower.POWER_ID);
         strength = amountOfPower(monster, StrengthPower.POWER_ID);
+        isMinion = monster.hasPower(MinionPower.POWER_ID);
     }
 
     public SimpleMonster(SimpleMonster m, CombatSimulator simulator) {
@@ -65,6 +71,7 @@ public class SimpleMonster {
         this.vulnerable = m.vulnerable;
         this.weak = m.weak;
         this.strength = m.strength;
+        this.isMinion = m.isMinion;
     }
 
     public SimpleMonster(int health, int block, AbstractMonster.Intent intent, int baseDamage, int hits) {
@@ -171,12 +178,33 @@ public class SimpleMonster {
         return isAlive() && !CombatUtils.isNotAttack(intent);
     }
 
+    /**
+     * Returns whether this monster visibly has at least 1 health.
+     * Note that self-reviving monsters are not alive while reviving.
+     *
+     * @return whether this monster is alive
+     */
     public boolean isAlive() {
         return health > 0;
     }
 
-    public boolean isTargetable() {
-        return health > 0;
+    public boolean isMinion() {
+        return isMinion;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        // auto-generated, but omits comparison of CombatSimulator
+        if (this == o) return true;
+        if (!(o instanceof SimpleMonster)) return false;
+        SimpleMonster that = (SimpleMonster) o;
+        return maxHealth == that.maxHealth && health == that.health && block == that.block && intentBaseDamage == that.intentBaseDamage && intentHits == that.intentHits && vulnerable == that.vulnerable && weak == that.weak && strength == that.strength && isMinion == that.isMinion && Objects.equals(originalMonster, that.originalMonster) && intent == that.intent;
+    }
+
+    @Override
+    public int hashCode() {
+        // auto-generated, but omits CombatSimulator
+        return Objects.hash(maxHealth, health, block, originalMonster, intent, intentBaseDamage, intentHits, vulnerable, weak, strength, isMinion);
     }
 
     @Override

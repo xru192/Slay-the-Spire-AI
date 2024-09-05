@@ -1,8 +1,7 @@
 package newaimod.ai;
 
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.MonsterHelper;
 import newaimod.ai.AutoPlayer.CombatMove;
+import newaimod.util.dungeonInfo.DungeonInformationProvider;
 
 /**
  * An AbstractCombatMovePicker implementation picks a move to be executed in any combat state, and against any group of
@@ -11,24 +10,30 @@ import newaimod.ai.AutoPlayer.CombatMove;
  */
 public abstract class AbstractCombatMovePicker {
 
+    protected final DungeonInformationProvider dungeonInformationProvider;
+
+    protected AbstractCombatMovePicker(DungeonInformationProvider dungeonInformationProvider) {
+        this.dungeonInformationProvider = dungeonInformationProvider;
+    }
+
     public final CombatMove pickMove() {
-        String key = AbstractDungeon.lastCombatMetricKey;
+        DungeonInformationProvider.COMBAT_KEY key = dungeonInformationProvider.getCombatKey();
         switch (key) {
-            case MonsterHelper.GREMLIN_NOB_ENC:
+            case GREMLIN_NOB_COMBAT:
                 return pickMoveGremlinNob();
-            case MonsterHelper.LAGAVULIN_ENC:
+            case LAGAVULIN_COMBAT:
                 return pickMoveLagavulin();
-            case MonsterHelper.THREE_SENTRY_ENC:
+            case THREE_SENTRY_COMBAT:
                 return pickMove3Sentries();
-            case MonsterHelper.GUARDIAN_ENC:
+            case GUARDIAN_COMBAT:
                 return pickMoveTheGuardian();
-            case MonsterHelper.HEXAGHOST_ENC:
+            case HEXAGHOST_COMBAT:
                 return pickMoveHexaghost();
-            case MonsterHelper.SLIME_BOSS_ENC:
+            case SLIME_BOSS_COMBAT:
                 return pickMoveSlimeBoss();
-            case MonsterHelper.SPHERE_GUARDIAN_ENC:
+            case SPHERE_GUARDIAN_COMBAT:
                 return pickMoveSphericGuardian();
-            case MonsterHelper.SENTRY_SPHERE_ENC:
+            case SENTRY_SPHERE_COMBAT:
                 return pickMoveSentrySphere();
             default:
                 return pickMoveDefault();
@@ -41,7 +46,7 @@ public abstract class AbstractCombatMovePicker {
      *
      * @return move to be executed in the current combat state.
      */
-    abstract public CombatMove pickMoveDefault();
+    abstract protected CombatMove pickMoveDefault();
 
     /**
      * Returns a move to be executed in the current combat state versus a Gremlin Nob encounter. Can be overridden to
