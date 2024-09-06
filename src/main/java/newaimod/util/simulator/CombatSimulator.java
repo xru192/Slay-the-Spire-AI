@@ -45,7 +45,7 @@ public class CombatSimulator {
         relicCollection = new RelicCollection();
     }
 
-    public CombatSimulator(List<RelicCollection.RELIC> relics) {
+    public CombatSimulator(List<RelicCollection.Relic> relics) {
         player = new SimplePlayer(this);
         monsterList = new ArrayList<>();
         relicCollection = new RelicCollection(relics);
@@ -65,8 +65,8 @@ public class CombatSimulator {
         relicCollection = new RelicCollection(simulator.relicCollection);
     }
 
-    public CombatSimulator withRelic(RelicCollection.RELIC relic) {
-        relicCollection.add(relic);
+    public CombatSimulator withRelic(RelicCollection.RELIC_ID relicId, int counter) {
+        relicCollection.add(new RelicCollection.Relic(relicId, counter));
         return this;
     }
 
@@ -195,7 +195,7 @@ public class CombatSimulator {
      * @return whether the player is allowed to play cards
      */
     public boolean playerCanPlayCards() {
-        return countAliveMonsters() > 0 && relicCollection.getCounter(RelicCollection.RELIC.VELVET_CHOKER) != 6;
+        return countAliveMonsters() > 0 && relicCollection.getCounter(RelicCollection.RELIC_ID.VELVET_CHOKER) != 6;
     }
 
     /**

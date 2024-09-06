@@ -167,315 +167,315 @@ public class RealDungeonInformationProvider implements DungeonInformationProvide
         }
     }
 
-    private RelicCollection.RELIC convertRelic(AbstractRelic relic) {
+    private RelicCollection.Relic convertRelic(AbstractRelic relic) {
         int counter = relic.counter;
         // Ironclad relics
         if (relic instanceof BurningBlood) {
-            return RelicCollection.RELIC.BURNING_BLOOD.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.BURNING_BLOOD, counter);
         } else if (relic instanceof RedSkull) {
-            return RelicCollection.RELIC.RED_SKULL.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.RED_SKULL, counter);
         } else if (relic instanceof PaperFrog) {
-            return RelicCollection.RELIC.PAPER_PHROG.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.PAPER_PHROG, counter);
         } else if (relic instanceof SelfFormingClay) {
-            return RelicCollection.RELIC.SELF_FORMING_CLAY.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.SELF_FORMING_CLAY, counter);
         } else if (relic instanceof ChampionsBelt) {
-            return RelicCollection.RELIC.CHAMPION_BELT.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.CHAMPION_BELT, counter);
         } else if (relic instanceof CharonsAshes) {
-            return RelicCollection.RELIC.CHARONS_ASHES.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.CHARONS_ASHES, counter);
         } else if (relic instanceof MagicFlower) {
-            return RelicCollection.RELIC.MAGIC_FLOWER.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.MAGIC_FLOWER, counter);
         } else if (relic instanceof Brimstone) {
-            return RelicCollection.RELIC.BRIMSTONE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.BRIMSTONE, counter);
         } else if (relic instanceof BlackBlood) {
-            return RelicCollection.RELIC.BLACK_BLOOD.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.BLACK_BLOOD, counter);
         } else if (relic instanceof MarkOfPain) {
-            return RelicCollection.RELIC.MARK_OF_PAIN.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.MARK_OF_PAIN, counter);
         } else if (relic instanceof RunicCube) {
-            return RelicCollection.RELIC.RUNIC_CUBE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.RUNIC_CUBE, counter);
         // Common relics
         } else if (relic instanceof Akabeko) {
-            return RelicCollection.RELIC.AKABEKO.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.AKABEKO, counter);
         } else if (relic instanceof Anchor) {
-            return RelicCollection.RELIC.ANCHOR.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.ANCHOR, counter);
         } else if (relic instanceof AncientTeaSet) {
-            return RelicCollection.RELIC.ANCIENT_TEA_SET.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.ANCIENT_TEA_SET, counter);
         } else if (relic instanceof ArtOfWar) {
-            return RelicCollection.RELIC.ART_OF_WAR.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.ART_OF_WAR, counter);
         } else if (relic instanceof BagOfMarbles) {
-            return RelicCollection.RELIC.BAG_OF_MARBLES.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.BAG_OF_MARBLES, counter);
         } else if (relic instanceof BagOfPreparation) {
-            return RelicCollection.RELIC.BAG_OF_PREPARATION.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.BAG_OF_PREPARATION, counter);
         } else if (relic instanceof BloodVial) {
-            return RelicCollection.RELIC.BLOOD_VIAL.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.BLOOD_VIAL, counter);
         } else if (relic instanceof BronzeScales) {
-            return RelicCollection.RELIC.BRONZE_SCALES.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.BRONZE_SCALES, counter);
         } else if (relic instanceof CentennialPuzzle) {
-            return RelicCollection.RELIC.CENTENNIAL_PUZZLE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.CENTENNIAL_PUZZLE, counter);
         } else if (relic instanceof CeramicFish) {
-            return RelicCollection.RELIC.CERAMIC_FISH.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.CERAMIC_FISH, counter);
         } else if (relic instanceof DreamCatcher) {
-            return RelicCollection.RELIC.DREAM_CATCHER.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.DREAM_CATCHER, counter);
         } else if (relic instanceof HappyFlower) {
-            return RelicCollection.RELIC.HAPPY_FLOWER.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.HAPPY_FLOWER, counter);
         } else if (relic instanceof JuzuBracelet) {
-            return RelicCollection.RELIC.JUZU_BRACELET.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.JUZU_BRACELET, counter);
         } else if (relic instanceof Lantern) {
-            return RelicCollection.RELIC.LANTERN.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.LANTERN, counter);
         } else if (relic instanceof MawBank) {
-            return RelicCollection.RELIC.MAW_BANK.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.MAW_BANK, counter);
         } else if (relic instanceof MealTicket) {
-            return RelicCollection.RELIC.MEAL_TICKET.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.MEAL_TICKET, counter);
         } else if (relic instanceof Nunchaku) {
-            return RelicCollection.RELIC.NUNCHAKU.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.NUNCHAKU, counter);
         } else if (relic instanceof OddlySmoothStone) {
-            return RelicCollection.RELIC.ODDLY_SMOOTH_STONE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.ODDLY_SMOOTH_STONE, counter);
         } else if (relic instanceof Omamori) {
-            return RelicCollection.RELIC.OMAMORI.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.OMAMORI, counter);
         } else if (relic instanceof Orichalcum) {
-            return RelicCollection.RELIC.ORICHALCUM.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.ORICHALCUM, counter);
         } else if (relic instanceof PenNib) {
-            return RelicCollection.RELIC.PEN_NIB.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.PEN_NIB, counter);
         } else if (relic instanceof PotionBelt) {
-            return RelicCollection.RELIC.POTION_BELT.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.POTION_BELT, counter);
         } else if (relic instanceof PreservedInsect) {
-            return RelicCollection.RELIC.PRESERVED_INSECT.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.PRESERVED_INSECT, counter);
         } else if (relic instanceof RegalPillow) {
-            return RelicCollection.RELIC.REGAL_PILLOW.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.REGAL_PILLOW, counter);
         } else if (relic instanceof SmilingMask) {
-            return RelicCollection.RELIC.SMILING_MASK.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.SMILING_MASK, counter);
         } else if (relic instanceof Strawberry) {
-            return RelicCollection.RELIC.STRAWBERRY.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.STRAWBERRY, counter);
         } else if (relic instanceof Boot) {
-            return RelicCollection.RELIC.THE_BOOT.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.THE_BOOT, counter);
         } else if (relic instanceof TinyChest) {
-            return RelicCollection.RELIC.TINY_CHEST.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.TINY_CHEST, counter);
         } else if (relic instanceof ToyOrnithopter) {
-            return RelicCollection.RELIC.TOY_ORNITHOPTER.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.TOY_ORNITHOPTER, counter);
         } else if (relic instanceof Vajra) {
-            return RelicCollection.RELIC.VAJRA.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.VAJRA, counter);
         } else if (relic instanceof WarPaint) {
-            return RelicCollection.RELIC.WAR_PAINT.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.WAR_PAINT, counter);
         } else if (relic instanceof Whetstone) {
-            return RelicCollection.RELIC.WHETSTONE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.WHETSTONE, counter);
         // Uncommon relics
         } else if (relic instanceof BlueCandle) {
-            return RelicCollection.RELIC.BLUE_CANDLE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.BLUE_CANDLE, counter);
         } else if (relic instanceof BottledFlame) {
-            return RelicCollection.RELIC.BOTTLED_FLAME.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.BOTTLED_FLAME, counter);
         } else if (relic instanceof BottledLightning) {
-            return RelicCollection.RELIC.BOTTLED_LIGHTNING.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.BOTTLED_LIGHTNING, counter);
         } else if (relic instanceof BottledTornado) {
-            return RelicCollection.RELIC.BOTTLED_TORNADO.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.BOTTLED_TORNADO, counter);
         } else if (relic instanceof DarkstonePeriapt) {
-            return RelicCollection.RELIC.DARKSTONE_PERIAPT.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.DARKSTONE_PERIAPT, counter);
         } else if (relic instanceof EternalFeather) {
-            return RelicCollection.RELIC.ETERNAL_FEATHER.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.ETERNAL_FEATHER, counter);
         } else if (relic instanceof FrozenEgg2) {
-            return RelicCollection.RELIC.FROZEN_EGG.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.FROZEN_EGG, counter);
         } else if (relic instanceof GremlinHorn) {
-            return RelicCollection.RELIC.GREMLIN_HORN.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.GREMLIN_HORN, counter);
         } else if (relic instanceof HornCleat) {
-            return RelicCollection.RELIC.HORN_CLEAT.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.HORN_CLEAT, counter);
         } else if (relic instanceof InkBottle) {
-            return RelicCollection.RELIC.INK_BOTTLE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.INK_BOTTLE, counter);
         } else if (relic instanceof Kunai) {
-            return RelicCollection.RELIC.KUNAI.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.KUNAI, counter);
         } else if (relic instanceof LetterOpener) {
-            return RelicCollection.RELIC.LETTER_OPENER.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.LETTER_OPENER, counter);
         } else if (relic instanceof Matryoshka) {
-            return RelicCollection.RELIC.MATRYOSHKA.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.MATRYOSHKA, counter);
         } else if (relic instanceof MeatOnTheBone) {
-            return RelicCollection.RELIC.MEAT_ON_THE_BONE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.MEAT_ON_THE_BONE, counter);
         } else if (relic instanceof MercuryHourglass) {
-            return RelicCollection.RELIC.MERCURY_HOURGLASS.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.MERCURY_HOURGLASS, counter);
         } else if (relic instanceof MoltenEgg2) {
-            return RelicCollection.RELIC.MOLTEN_EGG.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.MOLTEN_EGG, counter);
         } else if (relic instanceof MummifiedHand) {
-            return RelicCollection.RELIC.MUMMIFIED_HAND.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.MUMMIFIED_HAND, counter);
         } else if (relic instanceof OrnamentalFan) {
-            return RelicCollection.RELIC.ORNAMENTAL_FAN.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.ORNAMENTAL_FAN, counter);
         } else if (relic instanceof Pantograph) {
-            return RelicCollection.RELIC.PANTOGRAPH.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.PANTOGRAPH, counter);
         } else if (relic instanceof Pear) {
-            return RelicCollection.RELIC.PEAR.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.PEAR, counter);
         } else if (relic instanceof QuestionCard) {
-            return RelicCollection.RELIC.QUESTION_CARD.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.QUESTION_CARD, counter);
         } else if (relic instanceof Shuriken) {
-            return RelicCollection.RELIC.SHURIKEN.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.SHURIKEN, counter);
         } else if (relic instanceof SingingBowl) {
-            return RelicCollection.RELIC.SINGING_BOWL.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.SINGING_BOWL, counter);
         } else if (relic instanceof StrikeDummy) {
-            return RelicCollection.RELIC.STRIKE_DUMMY.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.STRIKE_DUMMY, counter);
         } else if (relic instanceof Sundial) {
-            return RelicCollection.RELIC.SUNDIAL.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.SUNDIAL, counter);
         } else if (relic instanceof Courier) {
-            return RelicCollection.RELIC.THE_COURIER.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.THE_COURIER, counter);
         } else if (relic instanceof ToxicEgg2) {
-            return RelicCollection.RELIC.TOXIC_EGG.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.TOXIC_EGG, counter);
         } else if (relic instanceof WhiteBeast) {
-            return RelicCollection.RELIC.WHITE_BEAST_STATUE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.WHITE_BEAST_STATUE, counter);
         // Rare relics
         } else if (relic instanceof BirdFacedUrn) {
-            return RelicCollection.RELIC.BIRD_FACED_URN.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.BIRD_FACED_URN, counter);
         } else if (relic instanceof Calipers) {
-            return RelicCollection.RELIC.CALIPERS.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.CALIPERS, counter);
         } else if (relic instanceof CaptainsWheel) {
-            return RelicCollection.RELIC.CAPTAINS_WHEEL.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.CAPTAINS_WHEEL, counter);
         } else if (relic instanceof DeadBranch) {
-            return RelicCollection.RELIC.DEAD_BRANCH.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.DEAD_BRANCH, counter);
         } else if (relic instanceof DuVuDoll) {
-            return RelicCollection.RELIC.DU_VU_DOLL.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.DU_VU_DOLL, counter);
         } else if (relic instanceof FossilizedHelix) {
-            return RelicCollection.RELIC.FOSSILIZED_HELIX.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.FOSSILIZED_HELIX, counter);
         } else if (relic instanceof GamblingChip) {
-            return RelicCollection.RELIC.GAMBLING_CHIP.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.GAMBLING_CHIP, counter);
         } else if (relic instanceof Ginger) {
-            return RelicCollection.RELIC.GINGER.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.GINGER, counter);
         } else if (relic instanceof Girya) {
-            return RelicCollection.RELIC.GIRYA.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.GIRYA, counter);
         } else if (relic instanceof IceCream) {
-            return RelicCollection.RELIC.ICE_CREAM.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.ICE_CREAM, counter);
         } else if (relic instanceof IncenseBurner) {
-            return RelicCollection.RELIC.INCENSE_BURNER.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.INCENSE_BURNER, counter);
         } else if (relic instanceof LizardTail) {
-            return RelicCollection.RELIC.LIZARD_TAIL.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.LIZARD_TAIL, counter);
         } else if (relic instanceof Mango) {
-            return RelicCollection.RELIC.MANGO.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.MANGO, counter);
         } else if (relic instanceof OldCoin) {
-            return RelicCollection.RELIC.OLD_COIN.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.OLD_COIN, counter);
         } else if (relic instanceof PeacePipe) {
-            return RelicCollection.RELIC.PEACE_PIPE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.PEACE_PIPE, counter);
         } else if (relic instanceof Pocketwatch) {
-            return RelicCollection.RELIC.POCKETWATCH.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.POCKETWATCH, counter);
         } else if (relic instanceof PrayerWheel) {
-            return RelicCollection.RELIC.PRAYER_WHEEL.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.PRAYER_WHEEL, counter);
         } else if (relic instanceof Shovel) {
-            return RelicCollection.RELIC.SHOVEL.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.SHOVEL, counter);
         } else if (relic instanceof StoneCalendar) {
-            return RelicCollection.RELIC.STONE_CALENDAR.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.STONE_CALENDAR, counter);
         } else if (relic instanceof ThreadAndNeedle) {
-            return RelicCollection.RELIC.THREAD_AND_NEEDLE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.THREAD_AND_NEEDLE, counter);
         } else if (relic instanceof Torii) {
-            return RelicCollection.RELIC.TORII.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.TORII, counter);
         } else if (relic instanceof TungstenRod) {
-            return RelicCollection.RELIC.TUNGSTEN_ROD.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.TUNGSTEN_ROD, counter);
         } else if (relic instanceof Turnip) {
-            return RelicCollection.RELIC.TURNIP.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.TURNIP, counter);
         } else if (relic instanceof UnceasingTop) {
-            return RelicCollection.RELIC.UNCEASING_TOP.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.UNCEASING_TOP, counter);
         } else if (relic instanceof WingBoots) {
-            return RelicCollection.RELIC.WING_BOOTS.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.WING_BOOTS, counter);
         // Boss relics
         } else if (relic instanceof Astrolabe) {
-            return RelicCollection.RELIC.ASTROLABE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.ASTROLABE, counter);
         } else if (relic instanceof BlackStar) {
-            return RelicCollection.RELIC.BLACK_STAR.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.BLACK_STAR, counter);
         } else if (relic instanceof BustedCrown) {
-            return RelicCollection.RELIC.BUSTED_CROWN.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.BUSTED_CROWN, counter);
         } else if (relic instanceof CallingBell) {
-            return RelicCollection.RELIC.CALLING_BELL.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.CALLING_BELL, counter);
         } else if (relic instanceof CoffeeDripper) {
-            return RelicCollection.RELIC.COFFEE_DRIPPER.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.COFFEE_DRIPPER, counter);
         } else if (relic instanceof CursedKey) {
-            return RelicCollection.RELIC.CURSED_KEY.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.CURSED_KEY, counter);
         } else if (relic instanceof Ectoplasm) {
-            return RelicCollection.RELIC.ECTOPLASM.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.ECTOPLASM, counter);
         } else if (relic instanceof EmptyCage) {
-            return RelicCollection.RELIC.EMPTY_CAGE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.EMPTY_CAGE, counter);
         } else if (relic instanceof FusionHammer) {
-            return RelicCollection.RELIC.FUSION_HAMMER.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.FUSION_HAMMER, counter);
         } else if (relic instanceof PandorasBox) {
-            return RelicCollection.RELIC.PANDORAS_BOX.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.PANDORAS_BOX, counter);
         } else if (relic instanceof PhilosopherStone) {
-            return RelicCollection.RELIC.PHILOSOPHERS_STONE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.PHILOSOPHERS_STONE, counter);
         } else if (relic instanceof RunicDome) {
-            return RelicCollection.RELIC.RUNIC_DOME.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.RUNIC_DOME, counter);
         } else if (relic instanceof RunicPyramid) {
-            return RelicCollection.RELIC.RUNIC_PYRAMID.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.RUNIC_PYRAMID, counter);
         } else if (relic instanceof SacredBark) {
-            return RelicCollection.RELIC.SACRED_BARK.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.SACRED_BARK, counter);
         } else if (relic instanceof SlaversCollar) {
-            return RelicCollection.RELIC.SLAVERS_COLLAR.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.SLAVERS_COLLAR, counter);
         } else if (relic instanceof SneckoEye) {
-            return RelicCollection.RELIC.SNECKO_EYE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.SNECKO_EYE, counter);
         } else if (relic instanceof Sozu) {
-            return RelicCollection.RELIC.SOZU.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.SOZU, counter);
         } else if (relic instanceof TinyHouse) {
-            return RelicCollection.RELIC.TINY_HOUSE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.TINY_HOUSE, counter);
         } else if (relic instanceof VelvetChoker) {
-            return RelicCollection.RELIC.VELVET_CHOKER.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.VELVET_CHOKER, counter);
         // Event relics
         } else if (relic instanceof BloodyIdol) {
-            return RelicCollection.RELIC.BLOODY_IDOL.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.BLOODY_IDOL, counter);
         } else if (relic instanceof CultistMask) {
-            return RelicCollection.RELIC.CULTIST_HEADPIECE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.CULTIST_HEADPIECE, counter);
         } else if (relic instanceof Enchiridion) {
-            return RelicCollection.RELIC.ENCHIRIDION.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.ENCHIRIDION, counter);
         } else if (relic instanceof FaceOfCleric) {
-            return RelicCollection.RELIC.FACE_OF_CLERIC.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.FACE_OF_CLERIC, counter);
         } else if (relic instanceof GoldenIdol) {
-            return RelicCollection.RELIC.GOLDEN_IDOL.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.GOLDEN_IDOL, counter);
         } else if (relic instanceof GremlinMask) {
-            return RelicCollection.RELIC.GREMLIN_VISAGE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.GREMLIN_VISAGE, counter);
         } else if (relic instanceof MarkOfTheBloom) {
-            return RelicCollection.RELIC.MARK_OF_THE_BLOOM.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.MARK_OF_THE_BLOOM, counter);
         } else if (relic instanceof MutagenicStrength) {
-            return RelicCollection.RELIC.MUTAGENIC_STRENGTH.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.MUTAGENIC_STRENGTH, counter);
         } else if (relic instanceof NlothsGift) {
-            return RelicCollection.RELIC.NLOTHS_GIFT.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.NLOTHS_GIFT, counter);
         } else if (relic instanceof NlothsMask) {
-            return RelicCollection.RELIC.NLOTHS_HUNGRY_FACE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.NLOTHS_HUNGRY_FACE, counter);
         } else if (relic instanceof Necronomicon) {
-            return RelicCollection.RELIC.NECRONOMICON.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.NECRONOMICON, counter);
         } else if (relic instanceof NeowsLament) {
-            return RelicCollection.RELIC.NEOWS_LAMENT.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.NEOWS_LAMENT, counter);
         } else if (relic instanceof NilrysCodex) {
-            return RelicCollection.RELIC.NILRYS_CODEX.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.NILRYS_CODEX, counter);
         } else if (relic instanceof OddMushroom) {
-            return RelicCollection.RELIC.ODD_MUSHROOM.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.ODD_MUSHROOM, counter);
         } else if (relic instanceof RedMask) {
-            return RelicCollection.RELIC.RED_MASK.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.RED_MASK, counter);
         } else if (relic instanceof SpiritPoop) {
-            return RelicCollection.RELIC.SPIRIT_POOP.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.SPIRIT_POOP, counter);
         } else if (relic instanceof SsserpentHead) {
-            return RelicCollection.RELIC.SSSERPENT_HEAD.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.SSSERPENT_HEAD, counter);
         } else if (relic instanceof WarpedTongs) {
-            return RelicCollection.RELIC.WARPED_TONGS.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.WARPED_TONGS, counter);
         // Shop relics
         } else if (relic instanceof Cauldron) {
-            return RelicCollection.RELIC.CAULDRON.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.CAULDRON, counter);
         } else if (relic instanceof ChemicalX) {
-            return RelicCollection.RELIC.CHEMICAL_X.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.CHEMICAL_X, counter);
         } else if (relic instanceof ClockworkSouvenir) {
-            return RelicCollection.RELIC.CLOCKWORK_SOUVENIR.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.CLOCKWORK_SOUVENIR, counter);
         } else if (relic instanceof DollysMirror) {
-            return RelicCollection.RELIC.DOLLYS_MIRROR.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.DOLLYS_MIRROR, counter);
         } else if (relic instanceof FrozenEye) {
-            return RelicCollection.RELIC.FROZEN_EYE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.FROZEN_EYE, counter);
         } else if (relic instanceof HandDrill) {
-            return RelicCollection.RELIC.HAND_DRILL.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.HAND_DRILL, counter);
         } else if (relic instanceof Waffle) {
-            return RelicCollection.RELIC.LEES_WAFFLE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.LEES_WAFFLE, counter);
         } else if (relic instanceof MedicalKit) {
-            return RelicCollection.RELIC.MEDICAL_KIT.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.MEDICAL_KIT, counter);
         } else if (relic instanceof MembershipCard) {
-            return RelicCollection.RELIC.MEMBERSHIP_CARD.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.MEMBERSHIP_CARD, counter);
         } else if (relic instanceof OrangePellets) {
-            return RelicCollection.RELIC.ORANGE_PELLETS.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.ORANGE_PELLETS, counter);
         } else if (relic instanceof Orrery) {
-            return RelicCollection.RELIC.ORRERY.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.ORRERY, counter);
         } else if (relic instanceof PrismaticShard) {
-            return RelicCollection.RELIC.PRISMATIC_SHARD.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.PRISMATIC_SHARD, counter);
         } else if (relic instanceof Sling) {
-            return RelicCollection.RELIC.SLING_OF_COURAGE.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.SLING_OF_COURAGE, counter);
         } else if (relic instanceof StrangeSpoon) {
-            return RelicCollection.RELIC.STRANGE_SPOON.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.STRANGE_SPOON, counter);
         } else if (relic instanceof Abacus) {
-            return RelicCollection.RELIC.THE_ABACUS.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.THE_ABACUS, counter);
         } else if (relic instanceof Toolbox) {
-            return RelicCollection.RELIC.TOOLBOX.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.TOOLBOX, counter);
         } else {
-            return RelicCollection.RELIC.FILLER.withCounter(counter);
+            return new RelicCollection.Relic(RelicCollection.RELIC_ID.FILLER, counter);
         }
     }
 }

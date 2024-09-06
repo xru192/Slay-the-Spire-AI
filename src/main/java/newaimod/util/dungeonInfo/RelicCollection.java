@@ -9,13 +9,13 @@ import java.util.Objects;
  */
 public class RelicCollection {
 
-    private final List<RELIC> orderedRelics;
+    private final List<Relic> orderedRelics;
 
     public RelicCollection() {
         orderedRelics = new ArrayList<>();
     }
 
-    public RelicCollection(List<RELIC> relics) {
+    public RelicCollection(List<Relic> relics) {
         orderedRelics = relics;
     }
 
@@ -23,32 +23,59 @@ public class RelicCollection {
         orderedRelics = new ArrayList<>(other.orderedRelics);
     }
 
-    public void add(RELIC relic) {
+    public void add(Relic relic) {
         orderedRelics.add(relic);
     }
 
-    public RelicCollection with(RELIC relic) {
-        orderedRelics.add(relic);
+    public RelicCollection with(RELIC_ID id) {
+        orderedRelics.add(new Relic(id));
         return this;
     }
 
-    public boolean hasRelic(RELIC relic) {
-        return orderedRelics.contains(relic);
+    public RelicCollection with(RELIC_ID id, int counter) {
+        orderedRelics.add(new Relic(id, counter));
+        return this;
+    }
+
+    public boolean hasRelic(RELIC_ID id) {
+        return orderedRelics.stream().anyMatch(relic -> relic.id.equals(id));
     }
 
     /**
      * Returns the value of the counter on the specified relic.
      * Returns -1 if the relic is not present, or has no counter value.
      *
-     * @param relic the relic to get the counter value for
+     * @param id the relic to get the counter value for
      * @return the counter on the specified relic
      */
-    public int getCounter(RELIC relic) {
+    public int getCounter(RELIC_ID id) {
         return orderedRelics.stream()
-                .filter(r -> r.name().equals(relic.name()))
-                .map(RELIC::getCounter)
+                .filter(r -> r.id.equals(id))
+                .map(Relic::getCounter)
                 .findFirst()
                 .orElse(-1);
+    }
+
+    /**
+     * Increments the counter on the specified relic, if present, and resets it to 0 if the critical value was reached.
+     * Returns true if the counter was reset, an false if relic is not present, or the critical value is not reached.
+     *
+     * @param relicId       the relic to increment counter value
+     * @param critical the value which the counter should reset back to 0 on (e.g. 3 for Kunai)
+     * @return whether the counter hit the critical value, resetting back to 0
+     */
+    public boolean incrementCounterWithCriticalValue(RELIC_ID relicId, int critical) {
+        Relic match = orderedRelics.stream()
+                .filter(relic -> relic.id.equals(relicId))
+                .findFirst()
+                .orElse(null);
+        if (match != null) {
+            if (++match.counter == critical) {
+                match.counter = 0;
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -64,7 +91,39 @@ public class RelicCollection {
         return Objects.hashCode(orderedRelics);
     }
 
-    public enum RELIC {
+    public static class Relic {
+        public final RELIC_ID id;
+        private int counter;
+
+        public Relic(RELIC_ID id) {
+            this.id = id;
+            counter = -1;
+        }
+
+        public Relic(RELIC_ID id, int counter) {
+            this.id = id;
+            this.counter = counter;
+        }
+
+        public int getCounter() {
+            return counter;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Relic)) return false;
+            Relic relic = (Relic) o;
+            return counter == relic.counter && id == relic.id;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id, counter);
+        }
+    }
+
+    public enum RELIC_ID {
         // Ironclad
         BURNING_BLOOD,
         RED_SKULL,
@@ -222,29 +281,6 @@ public class RelicCollection {
         THE_ABACUS,
         TOOLBOX,
         // Fallback
-        FILLER;
-
-        private int counter;
-
-        RELIC() {
-            counter = -1;
-        }
-
-        public RELIC withCounter(int counter) {
-            setCounter(counter);
-            return this;
-        }
-
-        public int getCounter() {
-            return counter;
-        }
-
-        public void setCounter(int counter) {
-            this.counter = counter;
-        }
-
-        public void incrementCounter() {
-            counter += 1;
-        }
+        FILLER
     }
 }
