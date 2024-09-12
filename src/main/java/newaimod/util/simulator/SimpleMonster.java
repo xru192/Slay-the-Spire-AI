@@ -196,7 +196,7 @@ public class SimpleMonster {
     public boolean equals(Object o) {
         // auto-generated, but omits comparison of CombatSimulator
         if (this == o) return true;
-        if (!(o instanceof SimpleMonster)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         SimpleMonster that = (SimpleMonster) o;
         return maxHealth == that.maxHealth && health == that.health && block == that.block && intentBaseDamage == that.intentBaseDamage && intentHits == that.intentHits && vulnerable == that.vulnerable && weak == that.weak && strength == that.strength && isMinion == that.isMinion && Objects.equals(originalMonster, that.originalMonster) && intent == that.intent;
     }
