@@ -162,6 +162,9 @@ public class RealDungeonInformationProvider implements DungeonInformationProvide
                 return new SimpleTheGuardian((TheGuardian) m);
             case AwakenedOne.ID:
                 return new SimpleAwakenedOne((AwakenedOne) m);
+            case LouseNormal.ID:
+            case LouseDefensive.ID:
+                return new SimpleLouse(m);
             default:
                 return new SimpleMonster(m);
         }
