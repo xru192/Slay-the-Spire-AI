@@ -7,6 +7,8 @@ import newaimod.util.CombatUtils;
 import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.SimpleMonster;
 
+import java.util.Objects;
+
 public class SimpleSentry extends SimpleMonster {
 
     private int artifact;
@@ -57,6 +59,21 @@ public class SimpleSentry extends SimpleMonster {
     public int getArtifact() {
         return artifact;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SimpleSentry that = (SimpleSentry) o;
+        return artifact == that.artifact;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), artifact);
+    }
+
 
     @Override
     public String toString() {

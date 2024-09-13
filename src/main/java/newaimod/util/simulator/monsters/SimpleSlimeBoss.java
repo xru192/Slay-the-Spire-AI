@@ -5,6 +5,8 @@ import com.megacrit.cardcrawl.monsters.exordium.SlimeBoss;
 import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.SimpleMonster;
 
+import java.util.Objects;
+
 public class SimpleSlimeBoss extends SimpleMonster {
 
     private boolean splitting;
@@ -17,6 +19,11 @@ public class SimpleSlimeBoss extends SimpleMonster {
     SimpleSlimeBoss(SimpleSlimeBoss m, CombatSimulator simulator) {
         super(m, simulator);
         this.splitting = m.splitting;
+    }
+
+    @Override
+    public SimpleMonster copy(CombatSimulator simulator) {
+        return new SimpleSlimeBoss(this, simulator);
     }
 
     public boolean isSplitting() {
@@ -34,8 +41,17 @@ public class SimpleSlimeBoss extends SimpleMonster {
     }
 
     @Override
-    public SimpleMonster copy(CombatSimulator simulator) {
-        return new SimpleSlimeBoss(this, simulator);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SimpleSlimeBoss that = (SimpleSlimeBoss) o;
+        return splitting = that.splitting;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), splitting);
     }
 
     @Override

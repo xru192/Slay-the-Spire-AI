@@ -5,6 +5,8 @@ import com.megacrit.cardcrawl.monsters.exordium.Lagavulin;
 import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.SimpleMonster;
 
+import java.util.Objects;
+
 public class SimpleLagavulin extends SimpleMonster {
     public enum MODE {
         SLEEP_ONE,  // in first turn of sleep, not damaged this turn
@@ -59,6 +61,20 @@ public class SimpleLagavulin extends SimpleMonster {
     @Override
     public SimpleMonster copy(CombatSimulator simulator) {
         return new SimpleLagavulin(this, simulator);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SimpleLagavulin that = (SimpleLagavulin) o;
+        return mode == that.mode && wasAsleep == that.wasAsleep;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), mode, wasAsleep);
     }
 
     @Override

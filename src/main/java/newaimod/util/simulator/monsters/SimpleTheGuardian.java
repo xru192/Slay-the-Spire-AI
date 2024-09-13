@@ -9,6 +9,8 @@ import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.SimpleMonster;
 import newaimod.util.simulator.cards.AbstractSimpleCard;
 
+import java.util.Objects;
+
 public class SimpleTheGuardian extends SimpleMonster {
 
     public enum MODE {
@@ -72,6 +74,21 @@ public class SimpleTheGuardian extends SimpleMonster {
             simulator.player.takeDamage(sharpHide);
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SimpleTheGuardian that = (SimpleTheGuardian) o;
+        return mode == that.mode && modeShiftAmount == that.modeShiftAmount && modeShiftThreshold == that.modeShiftThreshold && this.sharpHide == that.sharpHide;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), mode, modeShiftAmount, modeShiftThreshold, sharpHide);
+    }
+
 
     @Override
     public String toString() {

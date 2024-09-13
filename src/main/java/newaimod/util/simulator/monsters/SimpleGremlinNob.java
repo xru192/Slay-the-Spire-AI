@@ -8,6 +8,8 @@ import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.SimpleMonster;
 import newaimod.util.simulator.cards.AbstractSimpleCard;
 
+import java.util.Objects;
+
 public class SimpleGremlinNob extends SimpleMonster {
     private final int anger;
 
@@ -38,6 +40,21 @@ public class SimpleGremlinNob extends SimpleMonster {
             this.strength += anger;
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SimpleGremlinNob that = (SimpleGremlinNob) o;
+        return anger == that.anger;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), anger);
+    }
+
 
     @Override
     public String toString() {
