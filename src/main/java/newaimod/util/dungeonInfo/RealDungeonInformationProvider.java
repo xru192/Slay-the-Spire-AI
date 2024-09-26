@@ -7,6 +7,9 @@ import com.megacrit.cardcrawl.helpers.MonsterHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.beyond.AwakenedOne;
 import com.megacrit.cardcrawl.monsters.exordium.*;
+import com.megacrit.cardcrawl.potions.AbstractPotion;
+import com.megacrit.cardcrawl.potions.FearPotion;
+import com.megacrit.cardcrawl.potions.WeakenPotion;
 import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.relics.*;
 import newaimod.NewAIMod;
@@ -15,9 +18,14 @@ import newaimod.util.simulator.CombatSimulator;
 import newaimod.util.simulator.SimpleMonster;
 import newaimod.util.simulator.SimplePlayer;
 import newaimod.util.simulator.monsters.*;
+import newaimod.util.simulator.potions.AbstractSimplePotion;
+import newaimod.util.simulator.potions.potions.FillerPotion;
+import newaimod.util.simulator.potions.potions.SimpleFearPotion;
+import newaimod.util.simulator.potions.potions.SimpleWeakPotion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class RealDungeonInformationProvider implements DungeonInformationProvider {
@@ -36,7 +44,11 @@ public class RealDungeonInformationProvider implements DungeonInformationProvide
     @Override
     public CombatSimulator getCurrentState() {
         assert NewAIMod.inBattle;
-        CombatSimulator currentState = new CombatSimulator();
+        List<RelicCollection.Relic> relics = AbstractDungeon.player.relics.stream()
+                .map(this::convertRelic)
+                .collect(Collectors.toList());
+
+        CombatSimulator currentState = new CombatSimulator(relics);
         SimplePlayer currentPlayer = currentState.player;
 
         AbstractPlayer p = AbstractDungeon.player;
@@ -67,9 +79,10 @@ public class RealDungeonInformationProvider implements DungeonInformationProvide
             }
         }
 
-        AbstractDungeon.player.relics.stream()
-                .map(this::convertRelic)
-                .forEach(currentState.relicCollection::add);
+        List<AbstractPotion> potions = AbstractDungeon.player.potions;
+        for (int i = 0; i < potions.size(); i++) {
+            currentState.withPotion(convertPotion(potions.get(i)), i);
+        }
 
         return currentState;
     }
@@ -195,7 +208,7 @@ public class RealDungeonInformationProvider implements DungeonInformationProvide
             return new RelicCollection.Relic(RelicCollection.RELIC_ID.MARK_OF_PAIN, counter);
         } else if (relic instanceof RunicCube) {
             return new RelicCollection.Relic(RelicCollection.RELIC_ID.RUNIC_CUBE, counter);
-        // Common relics
+            // Common relics
         } else if (relic instanceof Akabeko) {
             return new RelicCollection.Relic(RelicCollection.RELIC_ID.AKABEKO, counter);
         } else if (relic instanceof Anchor) {
@@ -260,7 +273,7 @@ public class RealDungeonInformationProvider implements DungeonInformationProvide
             return new RelicCollection.Relic(RelicCollection.RELIC_ID.WAR_PAINT, counter);
         } else if (relic instanceof Whetstone) {
             return new RelicCollection.Relic(RelicCollection.RELIC_ID.WHETSTONE, counter);
-        // Uncommon relics
+            // Uncommon relics
         } else if (relic instanceof BlueCandle) {
             return new RelicCollection.Relic(RelicCollection.RELIC_ID.BLUE_CANDLE, counter);
         } else if (relic instanceof BottledFlame) {
@@ -317,7 +330,7 @@ public class RealDungeonInformationProvider implements DungeonInformationProvide
             return new RelicCollection.Relic(RelicCollection.RELIC_ID.TOXIC_EGG, counter);
         } else if (relic instanceof WhiteBeast) {
             return new RelicCollection.Relic(RelicCollection.RELIC_ID.WHITE_BEAST_STATUE, counter);
-        // Rare relics
+            // Rare relics
         } else if (relic instanceof BirdFacedUrn) {
             return new RelicCollection.Relic(RelicCollection.RELIC_ID.BIRD_FACED_URN, counter);
         } else if (relic instanceof Calipers) {
@@ -368,7 +381,7 @@ public class RealDungeonInformationProvider implements DungeonInformationProvide
             return new RelicCollection.Relic(RelicCollection.RELIC_ID.UNCEASING_TOP, counter);
         } else if (relic instanceof WingBoots) {
             return new RelicCollection.Relic(RelicCollection.RELIC_ID.WING_BOOTS, counter);
-        // Boss relics
+            // Boss relics
         } else if (relic instanceof Astrolabe) {
             return new RelicCollection.Relic(RelicCollection.RELIC_ID.ASTROLABE, counter);
         } else if (relic instanceof BlackStar) {
@@ -407,7 +420,7 @@ public class RealDungeonInformationProvider implements DungeonInformationProvide
             return new RelicCollection.Relic(RelicCollection.RELIC_ID.TINY_HOUSE, counter);
         } else if (relic instanceof VelvetChoker) {
             return new RelicCollection.Relic(RelicCollection.RELIC_ID.VELVET_CHOKER, counter);
-        // Event relics
+            // Event relics
         } else if (relic instanceof BloodyIdol) {
             return new RelicCollection.Relic(RelicCollection.RELIC_ID.BLOODY_IDOL, counter);
         } else if (relic instanceof CultistMask) {
@@ -444,7 +457,7 @@ public class RealDungeonInformationProvider implements DungeonInformationProvide
             return new RelicCollection.Relic(RelicCollection.RELIC_ID.SSSERPENT_HEAD, counter);
         } else if (relic instanceof WarpedTongs) {
             return new RelicCollection.Relic(RelicCollection.RELIC_ID.WARPED_TONGS, counter);
-        // Shop relics
+            // Shop relics
         } else if (relic instanceof Cauldron) {
             return new RelicCollection.Relic(RelicCollection.RELIC_ID.CAULDRON, counter);
         } else if (relic instanceof ChemicalX) {
@@ -479,6 +492,17 @@ public class RealDungeonInformationProvider implements DungeonInformationProvide
             return new RelicCollection.Relic(RelicCollection.RELIC_ID.TOOLBOX, counter);
         } else {
             return new RelicCollection.Relic(RelicCollection.RELIC_ID.FILLER, counter);
+        }
+    }
+
+    private AbstractSimplePotion convertPotion(AbstractPotion potion) {
+        switch (potion.ID) {
+            case FearPotion.POTION_ID:
+                return new SimpleFearPotion();
+            case WeakenPotion.POTION_ID:
+                return new SimpleWeakPotion();
+            default:
+                return new FillerPotion();
         }
     }
 }

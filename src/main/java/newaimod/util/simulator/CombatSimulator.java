@@ -15,6 +15,8 @@ import newaimod.util.simulator.cards.ironclad.powers.SimpleMetallicize;
 import newaimod.util.simulator.cards.ironclad.skills.*;
 import newaimod.util.simulator.cards.neutral.status.SimpleSlimed;
 import newaimod.util.simulator.monsters.SimpleAwakenedOne;
+import newaimod.util.simulator.potions.AbstractSimplePotion;
+import newaimod.util.simulator.potions.PotionCollection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +36,9 @@ public class CombatSimulator {
     @NotNull
     public final List<SimpleMonster> monsterList;
     @NotNull
-    public final RelicCollection relicCollection;
+    private final RelicCollection relicCollection;
+    @NotNull
+    private final PotionCollection potionCollection;
 
     /**
      * CombatSimulator which represents a "default" state. The default state has a "default" player and no monsters.
@@ -43,12 +47,14 @@ public class CombatSimulator {
         player = new SimplePlayer(this);
         monsterList = new ArrayList<>();
         relicCollection = new RelicCollection();
+        potionCollection = new PotionCollection(this, false, false);
     }
 
     public CombatSimulator(List<RelicCollection.Relic> relics) {
         player = new SimplePlayer(this);
         monsterList = new ArrayList<>();
         relicCollection = new RelicCollection(relics);
+        potionCollection = new PotionCollection(this, relicCollection.hasRelic(RelicCollection.RELIC_ID.POTION_BELT), relicCollection.hasRelic(RelicCollection.RELIC_ID.SACRED_BARK));
     }
 
     /**
@@ -63,10 +69,16 @@ public class CombatSimulator {
             monsterList.add(m.copy(this));
         }
         relicCollection = new RelicCollection(simulator.relicCollection);
+        potionCollection = new PotionCollection(simulator.potionCollection, this);
     }
 
     public CombatSimulator withRelic(RelicCollection.RELIC_ID relicId, int counter) {
         relicCollection.add(new RelicCollection.Relic(relicId, counter));
+        if (relicId == RelicCollection.RELIC_ID.POTION_BELT) {
+            potionCollection.enableExpandedCapacity();
+        } else if (relicId == RelicCollection.RELIC_ID.SACRED_BARK) {
+            potionCollection.enableDoubledEffects();
+        }
         return this;
     }
 
@@ -84,6 +96,31 @@ public class CombatSimulator {
     public CombatSimulator withMonster(SimpleMonster monster) {
         addMonster(monster);
         return this;
+    }
+
+    public CombatSimulator withPotion(AbstractSimplePotion potion, int index) {
+        potionCollection.addPotion(potion, index);
+        return this;
+    }
+
+    /**
+     * Returns an array with the ids of the potions in this state.
+     * Empty slots, represented by FillerPotions, are included.
+     *
+     * @return array of potion ids
+     */
+    public String[] getPotionIds() {
+        return potionCollection.getPotionIds();
+    }
+
+    /**
+     * Returns the (0-)index of the specified potion in this state. Returns -1 if not present.
+     *
+     * @param potionId id of the potion to find
+     * @return index of specified potion
+     */
+    public int indexOfPotion(String potionId) {
+        return potionCollection.indexOf(potionId);
     }
 
     /**
@@ -105,6 +142,10 @@ public class CombatSimulator {
             m.onUseCard(card);
         }
         return true;
+    }
+
+    public void usePotion(int index, SimpleMonster target) {
+        potionCollection.usePotion(index, target);
     }
 
     /**
@@ -257,12 +298,12 @@ public class CombatSimulator {
         if (this == o) return true;
         if (!(o instanceof CombatSimulator)) return false;
         CombatSimulator that = (CombatSimulator) o;
-        return Objects.equals(player, that.player) && Objects.equals(monsterList, that.monsterList) && Objects.equals(relicCollection, that.relicCollection);
+        return Objects.equals(player, that.player) && Objects.equals(monsterList, that.monsterList) && Objects.equals(relicCollection, that.relicCollection) && Objects.equals(potionCollection, that.potionCollection);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(player, monsterList, relicCollection);
+        return Objects.hash(player, monsterList, relicCollection, potionCollection);
     }
 
     @Override

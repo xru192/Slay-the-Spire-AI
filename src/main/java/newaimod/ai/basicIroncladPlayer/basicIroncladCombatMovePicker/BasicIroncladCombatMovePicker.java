@@ -11,6 +11,7 @@ import basemod.ReflectionHacks;
 import newaimod.util.dungeonInfo.DungeonInformationProvider;
 import newaimod.util.dungeonInfo.RealDungeonInformationProvider;
 import newaimod.util.simulator.CombatSimulator;
+import newaimod.util.simulator.potions.potions.SimpleWeakPotion;
 
 import java.util.ArrayList;
 
@@ -42,6 +43,19 @@ public class BasicIroncladCombatMovePicker extends AbstractCombatMovePicker {
      * Returns a move according to a basic evaluation.
      */
     private CombatMove basicMove() {
+        CombatSimulator state = dungeonInformationProvider.getCurrentState();
+        int aliveTargetIndex = -1;
+        for (int i = 0; i < state.monsterList.size(); i++) {
+            if (state.monsterList.get(i).isAlive()) {
+                aliveTargetIndex = i;
+                break;
+            }
+        }
+
+        if (state.indexOfPotion(SimpleWeakPotion.ID) != -1) {
+            return new CombatMove(CombatMove.TYPE.POTION, state.indexOfPotion(SimpleWeakPotion.ID), state.monsterList.get(aliveTargetIndex));
+        }
+
         int currentEnergy = CombatUtils.usableEnergy();
         ArrayList<AbstractCard> hand = AbstractDungeon.player.hand.group;
 
