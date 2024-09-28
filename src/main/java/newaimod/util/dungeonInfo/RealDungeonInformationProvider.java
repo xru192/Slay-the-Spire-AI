@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.MonsterHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.beyond.AwakenedOne;
+import com.megacrit.cardcrawl.monsters.city.Byrd;
 import com.megacrit.cardcrawl.monsters.exordium.*;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.potions.FearPotion;
@@ -178,6 +179,8 @@ public class RealDungeonInformationProvider implements DungeonInformationProvide
             case LouseNormal.ID:
             case LouseDefensive.ID:
                 return new SimpleLouse(m);
+            case Byrd.ID:
+                return new SimpleByrd(m);
             default:
                 return new SimpleMonster(m);
         }

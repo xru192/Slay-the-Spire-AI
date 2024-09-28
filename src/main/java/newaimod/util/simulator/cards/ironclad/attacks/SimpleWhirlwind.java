@@ -37,11 +37,9 @@ public class SimpleWhirlwind extends AbstractSimpleCard {
     public void play(SimpleMonster target) {
         int playerModifiedDamage = simulator.player.getModifiedDamage(this.damage);
         int energy = simulator.player.getEnergy();
-        for (int i = 0; i < energy; ++i) {
-            for (SimpleMonster m : simulator.monsterList) {
-                if (m.isAlive()) {
-                    m.takeAttack(playerModifiedDamage);
-                }
+        for (SimpleMonster m : simulator.monsterList) {
+            if (m.isAlive()) {
+                m.takeMultiAttack(playerModifiedDamage, energy);
             }
         }
         simulator.player.setEnergy(0);
@@ -58,5 +56,5 @@ public class SimpleWhirlwind extends AbstractSimpleCard {
     public AbstractSimpleCard copy(CombatSimulator simulator) {
         return new SimpleWhirlwind(simulator, this.isUpgraded);
     }
-    
+
 }

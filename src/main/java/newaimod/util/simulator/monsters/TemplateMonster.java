@@ -18,7 +18,7 @@ public class TemplateMonster extends SimpleMonster {
         // TODO
     }
 
-    TemplateMonster(int health, int block, AbstractMonster.Intent intent, int baseDamage, int hits) { // TODO
+    public TemplateMonster(int health, int block, AbstractMonster.Intent intent, int baseDamage, int hits) { // TODO
         super(health, block, intent, baseDamage, hits);
         // TODO
     }
