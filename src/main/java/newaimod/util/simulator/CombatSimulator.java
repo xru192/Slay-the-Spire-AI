@@ -93,6 +93,11 @@ public class CombatSimulator {
         return this;
     }
 
+    public CombatSimulator withPlayerStrength(int strength) {
+        player.setStrength(strength);
+        return this;
+    }
+
     public CombatSimulator withMonster(SimpleMonster monster) {
         addMonster(monster);
         return this;
@@ -194,6 +199,8 @@ public class CombatSimulator {
                 return new SimpleArmaments(this, card);
             case BattleTrance.ID:
                 return new SimpleBattleTrance(this, card);
+            case LimitBreak.ID:
+                return new SimpleLimitBreak(this, card);
             case Slimed.ID:
                 return new SimpleSlimed(this, card);
         }
